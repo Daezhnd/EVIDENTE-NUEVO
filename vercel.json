@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd evidente-mx && npm run build",
+  "outputDirectory": "evidente-mx/.next",
+  "installCommand": "cd evidente-mx && npm install",
+  "framework": "nextjs"
+}
