@@ -12,37 +12,51 @@ interface CategorySectionProps {
 
 const categorySlugMap: Record<ArticleCategory, string> = {
   'Destacadas': 'destacadas',
+  'Internacionales': 'internacionales',
+  'Entretenimiento': 'entretenimiento',
   'Noticias': 'noticias',
   'Deportes': 'deportes',
   'Turismo': 'turismo',
 };
 
-const categoryConfig: Record<ArticleCategory, { 
-  gradient: string; 
+const categoryConfig: Record<ArticleCategory, {
+  gradient: string;
   icon: typeof TrendingUp;
   bgLight: string;
   textColor: string;
 }> = {
-  'Destacadas': { 
-    gradient: 'from-red-500 to-orange-500', 
+  'Destacadas': {
+    gradient: 'from-red-500 to-orange-500',
     icon: TrendingUp,
     bgLight: 'bg-red-50',
     textColor: 'text-red-600'
   },
-  'Noticias': { 
-    gradient: 'from-blue-500 to-cyan-500', 
+  'Internacionales': {
+    gradient: 'from-cyan-500 to-blue-500',
+    icon: Newspaper,
+    bgLight: 'bg-cyan-50',
+    textColor: 'text-cyan-600'
+  },
+  'Entretenimiento': {
+    gradient: 'from-purple-500 to-pink-500',
+    icon: Trophy,
+    bgLight: 'bg-purple-50',
+    textColor: 'text-purple-600'
+  },
+  'Noticias': {
+    gradient: 'from-blue-500 to-cyan-500',
     icon: Newspaper,
     bgLight: 'bg-blue-50',
     textColor: 'text-blue-600'
   },
-  'Deportes': { 
-    gradient: 'from-green-500 to-emerald-500', 
+  'Deportes': {
+    gradient: 'from-green-500 to-emerald-500',
     icon: Trophy,
     bgLight: 'bg-green-50',
     textColor: 'text-green-600'
   },
-  'Turismo': { 
-    gradient: 'from-amber-500 to-yellow-500', 
+  'Turismo': {
+    gradient: 'from-amber-500 to-yellow-500',
     icon: Palmtree,
     bgLight: 'bg-amber-50',
     textColor: 'text-amber-600'
@@ -53,17 +67,17 @@ function formatTimeAgo(date: string | Date): string {
   const now = new Date();
   const articleDate = new Date(date);
   const diffInMinutes = Math.floor((now.getTime() - articleDate.getTime()) / (1000 * 60));
-  
+
   if (diffInMinutes < 60) return `${diffInMinutes}m`;
   if (diffInMinutes < 1440) return `${Math.floor(diffInMinutes / 60)}h`;
   return `${Math.floor(diffInMinutes / 1440)}d`;
 }
 
-export function CategorySection({ 
-  title, 
-  category, 
+export function CategorySection({
+  title,
+  category,
   articles,
-  showViewMore = true 
+  showViewMore = true
 }: CategorySectionProps) {
   if (articles.length === 0) return null;
 
@@ -87,7 +101,7 @@ export function CategorySection({
             <p className="text-sm text-gray-500">Las últimas noticias de {title.toLowerCase()}</p>
           </div>
         </div>
-        
+
         {showViewMore && (
           <Link
             href={`/categoria/${slug}`}
@@ -102,7 +116,7 @@ export function CategorySection({
       {/* Layout de artículos: Principal + Lista lateral */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Artículo principal */}
-        <Link 
+        <Link
           href={`/noticia/${mainArticle.slug}`}
           className="lg:col-span-2 group relative overflow-hidden rounded-3xl min-h-[400px] card-hover"
         >
@@ -113,7 +127,7 @@ export function CategorySection({
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-          
+
           {/* Badge */}
           <div className="absolute top-4 left-4">
             <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r ${config.gradient} text-white text-xs font-bold rounded-full shadow-lg`}>
