@@ -23,8 +23,8 @@ export function HeroCombo({ mainArticle, secondaryArticles }: HeroComboProps) {
   return (
     <section className="relative">
       {/* HERO PRINCIPAL - Split diagonal */}
-      <div className="relative h-[75vh] min-h-[480px] max-h-[650px] overflow-hidden">
-        
+      <div className="relative h-[85vh] min-h-[550px] max-h-[800px] overflow-hidden">
+
         {/* Lado izquierdo - IMAGEN DE LA NOTA */}
         <div className="absolute inset-0 w-full lg:w-[58%]">
           <Link href={`/noticia/${mainArticle.slug}`} className="block h-full group">
@@ -37,7 +37,7 @@ export function HeroCombo({ mainArticle, secondaryArticles }: HeroComboProps) {
             />
             {/* Overlay gradiente */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent" />
-            
+
             {/* Badge */}
             <div className="absolute top-6 left-6">
               <span className="px-4 py-2 bg-blue-900 text-white text-xs font-bold uppercase tracking-wider">
