@@ -21,15 +21,19 @@ export function Navbar() {
     <header className="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors" role="banner">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-14">
-          {/* Logo */}
-          <Link href="/" className="flex items-center" aria-label="Ir a inicio - Evidente.mx">
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
-              Evidente<span className="text-blue-900 dark:text-blue-400">.mx</span>
-            </span>
-          </Link>
+          {/* Menú móvil - Izquierda */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 text-gray-600 dark:text-gray-400"
+            aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+          >
+            {isMenuOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
+          </button>
 
-          {/* Navegación desktop */}
-          <nav className="hidden md:flex items-center gap-1" aria-label="Navegación principal">
+          {/* Navegación desktop - Centrada */}
+          <nav className="hidden md:flex flex-1 justify-center items-center gap-1" aria-label="Navegación principal">
             {categories.map((category) => (
               <Link
                 key={category.name}
@@ -52,7 +56,7 @@ export function Navbar() {
           {/* Acciones */}
           <div className="flex items-center gap-1">
             <ThemeToggleCompact />
-            
+
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-900 dark:hover:text-blue-400 transition-colors"
@@ -70,16 +74,6 @@ export function Navbar() {
               <User className="w-4 h-4" aria-hidden="true" />
               Admin
             </Link>
-
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 text-gray-600 dark:text-gray-400"
-              aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-menu"
-            >
-              {isMenuOpen ? <X className="w-5 h-5" aria-hidden="true" /> : <Menu className="w-5 h-5" aria-hidden="true" />}
-            </button>
           </div>
         </div>
 

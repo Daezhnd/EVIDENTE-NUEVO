@@ -5,13 +5,13 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { logError } from '@/lib/errors';
-import type { 
-  Article, 
-  ArticleWithAuthor, 
-  ArticleCategory, 
-  Reel, 
+import type {
+  Article,
+  ArticleWithAuthor,
+  ArticleCategory,
+  Reel,
   ReelWithAuthor,
-  PaginatedResponse 
+  PaginatedResponse
 } from '@/types/database';
 
 // Re-exportar tipos para compatibilidad con código existente
@@ -29,7 +29,7 @@ const PAGE_SIZE = 9;
  */
 export async function getFeaturedArticles(limit: number = 3): Promise<Article[]> {
   const supabase = await createClient();
-  
+
   // Primero intentar obtener de "Destacadas"
   const { data: destacadas, error } = await supabase
     .from('articles')
@@ -67,7 +67,7 @@ export async function getArticlesByCategory(
   limit: number = 3
 ): Promise<Article[]> {
   const supabase = await createClient();
-  
+
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -110,7 +110,7 @@ export async function getArticlesByCategoryPaginated(
   }
 
   const totalCount = count || 0;
-  
+
   return {
     data: data || [],
     count: totalCount,
@@ -144,7 +144,7 @@ export async function getAllArticlesPaginated(
   }
 
   const totalCount = count || 0;
-  
+
   return {
     data: data || [],
     count: totalCount,
@@ -159,7 +159,7 @@ export async function getAllArticlesPaginated(
  */
 export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor | null> {
   const supabase = await createClient();
-  
+
   const { data, error } = await supabase
     .from('articles')
     .select(`
@@ -196,9 +196,9 @@ export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor 
  */
 export async function incrementArticleViews(id: string): Promise<void> {
   const supabase = await createClient();
-  
+
   const { error } = await supabase.rpc('increment_views', { article_id: id });
-  
+
   if (error) {
     logError('incrementArticleViews', error);
   }
@@ -213,7 +213,7 @@ export async function getRelatedArticles(
   limit: number = 3
 ): Promise<Article[]> {
   const supabase = await createClient();
-  
+
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -231,6 +231,50 @@ export async function getRelatedArticles(
   return data || [];
 }
 
+/**
+ * Obtener artículos recientes para el ticker de noticias
+ * Devuelve solo id, title y slug para optimizar
+ */
+export async function getRecentArticlesForTicker(limit: number = 10): Promise<{ id: string; title: string; slug: string }[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('articles')
+    .select('id, title, slug')
+    .eq('is_published', true)
+    .order('published_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    logError('getRecentArticlesForTicker', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Obtener los artículos más recientes (mezclados, sin categoría específica)
+ * Para el feed dinámico de la página principal
+ */
+export async function getLatestArticles(limit: number = 12): Promise<Article[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('is_published', true)
+    .order('published_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    logError('getLatestArticles', error);
+    return [];
+  }
+
+  return data || [];
+}
+
 // =============================================
 // REELS
 // =============================================
@@ -240,7 +284,7 @@ export async function getRelatedArticles(
  */
 export async function getReels(limit: number = 10): Promise<Reel[]> {
   const supabase = await createClient();
-  
+
   const { data, error } = await supabase
     .from('reels')
     .select('*')
@@ -280,7 +324,7 @@ export async function getReelsPaginated(
   }
 
   const totalCount = count || 0;
-  
+
   return {
     data: data || [],
     count: totalCount,
@@ -295,7 +339,7 @@ export async function getReelsPaginated(
  */
 export async function getReelById(id: string): Promise<ReelWithAuthor | null> {
   const supabase = await createClient();
-  
+
   const { data, error } = await supabase
     .from('reels')
     .select(`
@@ -373,7 +417,7 @@ export async function searchArticles(
   }
 
   const totalCount = count || 0;
-  
+
   return {
     data: data || [],
     count: totalCount,
