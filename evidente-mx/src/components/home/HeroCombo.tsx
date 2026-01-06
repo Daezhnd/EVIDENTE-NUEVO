@@ -23,7 +23,7 @@ export function HeroCombo({ mainArticle, secondaryArticles }: HeroComboProps) {
   return (
     <section className="relative">
       {/* HERO PRINCIPAL - Split diagonal */}
-      <div className="relative h-[85vh] min-h-[550px] max-h-[800px] overflow-hidden">
+      <div className="relative h-[80vh] min-h-[500px] max-h-[720px] overflow-hidden">
 
         {/* Lado izquierdo - IMAGEN DE LA NOTA */}
         <div className="absolute inset-0 w-full lg:w-[58%]">
