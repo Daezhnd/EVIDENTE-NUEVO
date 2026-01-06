@@ -8,9 +8,8 @@ import { ThemeToggleCompact } from '@/components/ui/ThemeToggle';
 const categories = [
   { name: 'Inicio', href: '/' },
   { name: 'Destacadas', href: '/categoria/destacadas' },
-  { name: 'Noticias', href: '/categoria/noticias' },
-  { name: 'Deportes', href: '/categoria/deportes' },
-  { name: 'Turismo', href: '/categoria/turismo' },
+  { name: 'Internacionales', href: '/categoria/internacionales' },
+  { name: 'Entretenimiento', href: '/categoria/entretenimiento' },
 ];
 
 export function Navbar() {

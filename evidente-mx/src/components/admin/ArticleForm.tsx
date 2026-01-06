@@ -6,10 +6,10 @@ import Link from 'next/link';
 import { Article, ArticleCategory } from '@/types/database';
 import { generateSlug, validateArticle, ValidationError } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
-import { 
-  Save, 
-  Eye, 
-  ArrowLeft, 
+import {
+  Save,
+  Eye,
+  ArrowLeft,
   Loader2,
   X
 } from 'lucide-react';
@@ -20,7 +20,7 @@ interface ArticleFormProps {
   isEditing?: boolean;
 }
 
-const categories: ArticleCategory[] = ['Destacadas', 'Noticias', 'Deportes', 'Turismo'];
+const categories: ArticleCategory[] = ['Destacadas', 'Internacionales', 'Entretenimiento'];
 
 export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
   const router = useRouter();
@@ -28,7 +28,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
   const [isPreview, setIsPreview] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
-  
+
   const [formData, setFormData] = useState({
     title: article?.title || '',
     slug: article?.slug || '',
@@ -69,7 +69,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
 
     try {
       const supabase = createClient();
-      
+
       const articleData = {
         title: formData.title.trim(),
         slug: formData.slug || generateSlug(formData.title),
@@ -99,7 +99,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
 
         if (insertError) throw insertError;
       }
-      
+
       router.push('/admin/articulos');
       router.refresh();
     } catch (err: unknown) {
@@ -125,7 +125,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
           {error}
         </div>
       )}
-      
+
       {validationErrors.length > 0 && (
         <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
           <p className="font-medium text-amber-800 mb-2">Por favor corrige los siguientes errores:</p>
@@ -204,9 +204,9 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
                 {isPreview ? 'Editar' : 'Vista previa'}
               </button>
             </div>
-            
+
             {isPreview ? (
-              <div 
+              <div
                 className="prose max-w-none p-4 border border-gray-200 rounded-lg min-h-[300px] bg-gray-50"
                 dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-400">Sin contenido...</p>' }}
               />
@@ -269,11 +269,10 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
               {categories.map((category) => (
                 <label
                   key={category}
-                  className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
-                    formData.category === category
+                  className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${formData.category === category
                       ? 'border-blue-900 bg-blue-50'
                       : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                    }`}
                 >
                   <input
                     type="radio"

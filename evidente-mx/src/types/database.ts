@@ -1,7 +1,7 @@
 // Tipos generados para la base de datos de Supabase
 // Evidente.mx - Portal de Noticias
 
-export type ArticleCategory = 'Destacadas' | 'Noticias' | 'Deportes' | 'Turismo';
+export type ArticleCategory = 'Destacadas' | 'Internacionales' | 'Entretenimiento' | 'Noticias' | 'Deportes' | 'Turismo';
 
 export type UserRole = 'admin' | 'editor' | 'viewer';
 

@@ -18,16 +18,29 @@ function timeAgo(date: string): string {
     return `${Math.floor(diff / 1440)}d`;
 }
 
-function getCategoryColor(category: string | undefined): string {
-    if (!category) return 'text-gray-500 bg-gray-100 dark:bg-gray-800';
+// Función para mapear categorías antiguas a 'Internacionales' visualmente
+function getDisplayCategory(category: string | any): string {
+    const catName = typeof category === 'object' ? category.name : category;
+
+    if (!catName) return 'General';
+
+    // Normalizar: Si es Deportes, Turismo o Noticias -> Internacionales
+    if (['Deportes', 'Turismo', 'Noticias'].includes(catName)) {
+        return 'Internacionales';
+    }
+
+    return catName;
+}
+
+function getCategoryColor(displayCategory: string): string {
     const colors: Record<string, string> = {
         'Noticias': 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/30',
-        'Deportes': 'text-emerald-700 bg-emerald-50 dark:text-emerald-300 dark:bg-emerald-900/30',
-        'Turismo': 'text-amber-700 bg-amber-50 dark:text-amber-300 dark:bg-amber-900/30',
+        'Internacionales': 'text-cyan-700 bg-cyan-50 dark:text-cyan-300 dark:bg-cyan-900/30',
+        'Entretenimiento': 'text-purple-700 bg-purple-50 dark:text-purple-300 dark:bg-purple-900/30',
         'Destacadas': 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/30',
         'default': 'text-gray-700 bg-gray-50 dark:text-gray-300 dark:bg-gray-800',
     };
-    return colors[category] || colors['default'];
+    return colors[displayCategory] || colors['default'];
 }
 
 export function SocialFeed({ articles }: SocialFeedProps) {
@@ -46,55 +59,61 @@ export function SocialFeed({ articles }: SocialFeedProps) {
                 </div>
 
                 <div className="space-y-6">
-                    {articles.map((article) => (
-                        <article
-                            key={article.id}
-                            className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-800"
-                        >
-                            <Link href={`/noticia/${article.slug}`} className="flex flex-col md:flex-row h-full">
+                    {articles.map((article) => {
+                        // Calcular la categoría visual
+                        const displayCategory = getDisplayCategory(article.category);
+                        const tagColorClass = getCategoryColor(displayCategory);
 
-                                {/* Imagen a la izquierda (Desktop) - 40% ancho fijo */}
-                                <div className="md:w-5/12 lg:w-4/12 relative aspect-video md:aspect-auto">
-                                    <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800">
-                                        <Image
-                                            src={article.image_url || '/placeholder.svg'}
-                                            alt={article.title}
-                                            fill
-                                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                                        />
-                                        {/* Overlay sutil */}
-                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                                    </div>
-                                </div>
+                        return (
+                            <article
+                                key={article.id}
+                                className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-800"
+                            >
+                                <Link href={`/noticia/${article.slug}`} className="flex flex-col md:flex-row h-full">
 
-                                {/* Contenido a la derecha */}
-                                <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${getCategoryColor(typeof article.category === 'object' ? article.category.name : article.category)}`}>
-                                            {typeof article.category === 'object' ? article.category.name : article.category}
-                                        </span>
-                                        <div className="flex items-center gap-2 text-gray-400 text-xs font-bold tracking-widest uppercase">
-                                            <Clock className="w-4 h-4" />
-                                            <span>{timeAgo(article.published_at || article.created_at)}</span>
+                                    {/* Imagen a la izquierda (Desktop) - 40% ancho fijo */}
+                                    <div className="md:w-5/12 lg:w-4/12 relative aspect-video md:aspect-auto">
+                                        <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800">
+                                            <Image
+                                                src={article.image_url || '/placeholder.svg'}
+                                                alt={article.title}
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                            />
+                                            {/* Overlay sutil */}
+                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                                         </div>
                                     </div>
 
-                                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 leading-tight mb-4 group-hover:text-blue-900 dark:group-hover:text-blue-400 transition-colors">
-                                        {article.title}
-                                    </h2>
+                                    {/* Contenido a la derecha */}
+                                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <span className={`px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider ${tagColorClass}`}>
+                                                {displayCategory}
+                                            </span>
+                                            <div className="flex items-center gap-2 text-gray-400 text-xs font-bold tracking-widest uppercase">
+                                                <Clock className="w-4 h-4" />
+                                                <span>{timeAgo(article.published_at || article.created_at)}</span>
+                                            </div>
+                                        </div>
 
-                                    <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed line-clamp-3 mb-6 flex-1">
-                                        {article.excerpt || article.summary}
-                                    </p>
+                                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 leading-tight mb-4 group-hover:text-blue-900 dark:group-hover:text-blue-400 transition-colors">
+                                            {article.title}
+                                        </h2>
 
-                                    <div className="flex items-center text-blue-900 dark:text-blue-400 font-bold text-sm tracking-wide group-hover:translate-x-1 transition-transform w-fit">
-                                        LEER ARTÍCULO
-                                        <ArrowRight className="w-4 h-4 ml-2" />
+                                        <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed line-clamp-3 mb-6 flex-1">
+                                            {article.excerpt || article.summary}
+                                        </p>
+
+                                        <div className="flex items-center text-blue-900 dark:text-blue-400 font-bold text-sm tracking-wide group-hover:translate-x-1 transition-transform w-fit">
+                                            LEER ARTÍCULO
+                                            <ArrowRight className="w-4 h-4 ml-2" />
+                                        </div>
                                     </div>
-                                </div>
-                            </Link>
-                        </article>
-                    ))}
+                                </Link>
+                            </article>
+                        );
+                    })}
 
                     <div className="flex justify-center pt-12 pb-8 opacity-30">
                         <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce" />
