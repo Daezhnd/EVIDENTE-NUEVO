@@ -8,13 +8,17 @@ import { createClient } from '@/lib/supabase/server';
 // Mapeo de slugs a categorías
 const categoryMap: Record<string, ArticleCategory> = {
   'destacadas': 'Destacadas',
-  'noticias': 'Noticias',
-  'deportes': 'Deportes',
-  'turismo': 'Turismo',
+  'internacionales': 'Internacionales',
+  'entretenimiento': 'Entretenimiento',
+  'noticias': 'Noticias', // Legacy support
+  'deportes': 'Deportes', // Legacy support
+  'turismo': 'Turismo', // Legacy support
 };
 
 const categoryDescriptions: Record<ArticleCategory, string> = {
   'Destacadas': 'Las noticias más importantes y relevantes del momento.',
+  'Internacionales': 'Acontecimientos globales y noticias de impacto mundial.',
+  'Entretenimiento': 'Cultura, espectáculos y novedades del mundo del entretenimiento.',
   'Noticias': 'Mantente informado con las últimas noticias de México y el mundo.',
   'Deportes': 'Todo sobre fútbol, boxeo, tenis y más deportes.',
   'Turismo': 'Descubre los mejores destinos y experiencias de viaje en México.',
@@ -26,26 +30,26 @@ interface CategoryPageProps {
 }
 
 async function getArticlesByCategory(
-  category: ArticleCategory, 
-  page: number = 1, 
+  category: ArticleCategory,
+  page: number = 1,
   pageSize: number = 9
 ): Promise<{ articles: Article[]; totalPages: number; total: number }> {
   const supabase = await createClient();
-  
+
   // Obtener el total
   const { count } = await supabase
     .from('articles')
     .select('*', { count: 'exact', head: true })
     .eq('category', category)
     .eq('is_published', true);
-  
+
   const total = count || 0;
   const totalPages = Math.ceil(total / pageSize);
-  
+
   // Obtener los artículos paginados
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
-  
+
   const { data } = await supabase
     .from('articles')
     .select('*')
@@ -53,14 +57,14 @@ async function getArticlesByCategory(
     .eq('is_published', true)
     .order('published_at', { ascending: false })
     .range(from, to);
-  
+
   return { articles: data || [], totalPages, total };
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { slug } = await params;
   const category = categoryMap[slug];
-  
+
   if (!category) {
     return { title: 'Categoría no encontrada | Evidente.mx' };
   }
