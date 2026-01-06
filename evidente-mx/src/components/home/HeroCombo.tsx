@@ -1,3 +1,4 @@
+// Test: Vercel auto-deploy conectado con GitHub
 'use client';
 
 import Link from 'next/link';
