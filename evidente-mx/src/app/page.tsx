@@ -1,6 +1,7 @@
 import { HeroCombo } from '@/components/home/HeroCombo';
 import { SocialFeed } from '@/components/home/SocialFeed';
 import { ReelsSidebar } from '@/components/home/ReelsSidebar';
+import { AdBanner } from '@/components/ads/AdBanner';
 import {
   getFeaturedArticles,
   getLatestArticles,
@@ -42,6 +43,13 @@ export default async function HomePage() {
       <ReelsSidebar reels={reels} />
 
       {/* Hero: Split Imagen | Texto */}
+      <div className="max-w-7xl mx-auto px-4 mt-8 mb-12 hidden md:grid grid-cols-4 gap-4">
+        <AdBanner position="top" className="my-0 w-full" imageUrl="/ads/top-banner-1.jpg" />
+        <AdBanner position="top" className="my-0 w-full" imageUrl="/ads/top-banner-2.jpg" />
+        <AdBanner position="top" className="my-0 w-full" imageUrl="/ads/top-banner-3.jpg" />
+        <AdBanner position="top" className="my-0 w-full" imageUrl="/ads/top-banner-4.jpg" />
+      </div>
+
       <HeroCombo
         mainArticle={mainArticle}
         secondaryArticles={secondaryArticles}
@@ -49,6 +57,10 @@ export default async function HomePage() {
 
       {/* Feed Red Social - Noticias estilo feed infinito */}
       <SocialFeed articles={latestArticles} />
+
+      <div className="max-w-7xl mx-auto px-4 mb-12">
+        <AdBanner position="footer" />
+      </div>
     </div>
   );
 }

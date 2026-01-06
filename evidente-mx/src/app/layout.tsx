@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { LogoHeader } from "@/components/layout/LogoHeader";
 import { Navbar } from "@/components/layout/Navbar";
@@ -10,6 +10,12 @@ import { getRecentArticlesForTicker } from "@/lib/api";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
 });
@@ -66,6 +72,10 @@ export const metadata: Metadata = {
   },
 };
 
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
+
+// ...
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -76,8 +86,9 @@ export default async function RootLayout({
 
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors`}>
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors`}>
         <ThemeProvider>
+          <ScrollProgress />
           {/* Logo grande y centrado */}
           <LogoHeader />
           {/* Navbar sticky */}

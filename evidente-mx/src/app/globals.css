@@ -17,7 +17,19 @@
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: rgba(30, 58, 138, 0.2);
+  /* Blue-900/20 */
+  color: #1e3a8a;
+}
+
 
 body {
   background: var(--background);

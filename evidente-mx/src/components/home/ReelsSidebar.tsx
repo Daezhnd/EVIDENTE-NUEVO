@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Reel } from '@/types/database';
 import { Play, Pause, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, X, Maximize2, Minimize2, Volume2, VolumeX } from 'lucide-react';
+import { AdBanner } from '@/components/ads/AdBanner';
 
 interface ReelsSidebarProps {
   reels: Reel[];
@@ -19,7 +20,7 @@ function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'direct' {
 }
 
 export function ReelsSidebar({ reels }: ReelsSidebarProps) {
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentReelIndex, setCurrentReelIndex] = useState(0);
@@ -353,6 +354,12 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
               <h3 className="text-white font-bold">Todos los reels</h3>
               <p className="text-gray-500 text-sm">{reels.length} videos</p>
             </div>
+
+            {/* Banner publicitario en Sidebar */}
+            <div className="px-4 pt-4">
+              <AdBanner position="sidebar" className="my-0 h-[200px]" />
+            </div>
+
             <div className="p-4 space-y-3">
               {reels.map((reel, idx) => (
                 <button
