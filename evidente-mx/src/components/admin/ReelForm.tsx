@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Reel } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
+import { generateThumbnailFromUrl } from '@/lib/video-utils';
 import { VideoUploader } from './VideoUploader';
 import {
   Save,
   ArrowLeft,
   Video,
   Image as ImageIcon,
+  ImagePlus,
   Loader2,
   X,
   Play,
@@ -50,6 +52,39 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
   useEffect(() => {
     setVideoSource(detectVideoSource(formData.video_url));
   }, [formData.video_url]);
+
+  const handleGenerateThumbnail = async () => {
+    if (!formData.video_url) return;
+
+    setIsLoading(true);
+    try {
+      const blob = await generateThumbnailFromUrl(formData.video_url);
+      const supabase = createClient();
+      const timestamp = Date.now();
+      const filename = `thumbnails/manual-${timestamp}.jpg`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('videos')
+        .upload(filename, blob, {
+          contentType: 'image/jpeg',
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage
+        .from('videos')
+        .getPublicUrl(filename);
+
+      setFormData(prev => ({ ...prev, thumbnail_url: data.publicUrl }));
+    } catch (err) {
+      console.error('Error generando thumbnail:', err);
+      setError('No se pudo generar la miniatura. Verifique que la URL del video sea accesible.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent, publish: boolean = false) => {
     e.preventDefault();
@@ -216,9 +251,23 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
 
             {/* Mostrar URL actual si existe */}
             {formData.video_url && (
-              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <p className="text-xs text-green-600 font-medium mb-1">✓ Video configurado:</p>
-                <p className="text-xs text-green-700 truncate">{formData.video_url}</p>
+              <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg space-y-2">
+                <div>
+                  <p className="text-xs text-green-600 font-medium mb-1">✓ Video configurado:</p>
+                  <p className="text-xs text-green-700 truncate">{formData.video_url}</p>
+                </div>
+
+                {videoSource === 'direct' && (
+                  <button
+                    type="button"
+                    onClick={handleGenerateThumbnail}
+                    disabled={isLoading}
+                    className="flex items-center gap-2 text-xs font-medium text-green-700 hover:text-green-800 underline disabled:opacity-50"
+                  >
+                    <ImagePlus className="w-4 h-4" />
+                    Generar miniatura automáticamente
+                  </button>
+                )}
               </div>
             )}
           </div>

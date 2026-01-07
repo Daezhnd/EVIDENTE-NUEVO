@@ -53,3 +53,51 @@ export const generateVideoThumbnail = (file: File): Promise<Blob> => {
         };
     });
 };
+
+export const generateThumbnailFromUrl = (videoUrl: string): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        video.crossOrigin = 'anonymous'; // Importante para videos de Supabase/externos
+        video.preload = 'metadata';
+        video.playsInline = true;
+        video.muted = true;
+        video.src = videoUrl;
+
+        video.onloadedmetadata = () => {
+            let currentTime = Math.min(1, video.duration * 0.1);
+            if (video.duration < 1) currentTime = 0;
+            video.currentTime = currentTime;
+        };
+
+        video.onseeked = () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    reject(new Error('No se pudo crear el contexto del canvas'));
+                    return;
+                }
+
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob((blob) => {
+                    if (blob) {
+                        resolve(blob);
+                    } else {
+                        reject(new Error('No se pudo generar el blob de la imagen'));
+                    }
+                    video.remove();
+                }, 'image/jpeg', 0.85);
+            } catch (error) {
+                reject(error);
+            }
+        };
+
+        video.onerror = () => {
+            reject(new Error('Error al cargar el video. Asegúrate de que el servidor permita CORS (Access-Control-Allow-Origin).'));
+        };
+    });
+};
