@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { Reel } from '@/types/database';
-import { Play, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, X, Maximize2, Minimize2, Volume2, VolumeX } from 'lucide-react';
+import { Play, ChevronLeft, ChevronRight, Maximize2, X, Minimize2, Volume2, VolumeX } from 'lucide-react';
 import { AdBanner } from '@/components/ads/AdBanner';
 import { PhoneFrame } from '@/components/ui/PhoneFrame';
 import { ReelPlayer } from '@/components/reels/ReelPlayer';
@@ -14,17 +14,17 @@ interface ReelsSidebarProps {
 }
 
 // Detectar tipo de video
-function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'direct' {
+function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'jwplayer' | 'direct' {
   if (!url) return 'direct';
   if (url.includes('instagram.com') || url.includes('instagr.am')) return 'instagram';
   if (url.includes('tiktok.com') || url.includes('vm.tiktok.com')) return 'tiktok';
+  if (url.includes('jwplayer.com')) return 'jwplayer';
   return 'direct';
 }
 
 export function ReelsSidebar({ reels }: ReelsSidebarProps) {
   const [isHidden, setIsHidden] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [currentReelIndex, setCurrentReelIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -34,18 +34,6 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
   if (!reels || reels.length === 0) {
     return null;
   }
-
-  const visibleReels = reels.slice(currentIndex, currentIndex + 3);
-  const canScrollUp = currentIndex > 0;
-  const canScrollDown = currentIndex + 3 < reels.length;
-
-  const scrollUp = () => {
-    if (canScrollUp) setCurrentIndex(prev => prev - 1);
-  };
-
-  const scrollDown = () => {
-    if (canScrollDown) setCurrentIndex(prev => prev + 1);
-  };
 
   const currentReel = reels[currentReelIndex];
 

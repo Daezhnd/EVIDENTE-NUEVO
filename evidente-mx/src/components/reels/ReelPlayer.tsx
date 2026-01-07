@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { Reel } from '@/types/database';
 import { Play, Pause, Volume2, VolumeX, Heart, MessageCircle, Share2, AlertCircle, RefreshCw } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
@@ -103,11 +104,15 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
         >
           {/* Thumbnail o gradient */}
           {reel.thumbnail_url ? (
-            <img
-              src={reel.thumbnail_url}
-              alt={reel.caption || 'Reel de Instagram'}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+            <div className="absolute inset-0 w-full h-full">
+              <Image
+                src={reel.thumbnail_url}
+                alt={reel.caption || 'Reel de Instagram'}
+                fill
+                className="object-cover"
+                unoptimized
+              />
+            </div>
           ) : (
             <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400" />
           )}
