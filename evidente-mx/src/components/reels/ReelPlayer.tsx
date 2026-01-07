@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Reel } from '@/types/database';
 import { Play, Pause, Volume2, VolumeX, Heart, MessageCircle, Share2, AlertCircle, RefreshCw } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
+import { TikTokEmbed } from './TikTokEmbed';
 
 interface ReelPlayerProps {
   reel: Reel;
@@ -123,48 +124,11 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
         </a>
       )}
 
-      {/* TikTok - Card con link */}
+      {/* TikTok - Native Embed */}
       {videoSource === 'tiktok' && (
-        <a
-          href={reel.video_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="absolute inset-0 flex flex-col"
-        >
-          {/* Thumbnail o gradient */}
-          {reel.thumbnail_url ? (
-            <img
-              src={reel.thumbnail_url}
-              alt={reel.caption || 'Video de TikTok'}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-pink-500 to-red-500" />
-          )}
-
-          {/* Overlay oscuro */}
-          <div className="absolute inset-0 bg-black/40" />
-
-          {/* Contenido */}
-          <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4">
-            {/* TikTok icon */}
-            <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-              <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
-              </svg>
-            </div>
-
-            <span className="text-white font-bold text-lg mb-2">Ver en TikTok</span>
-            <Play className="w-12 h-12 text-white opacity-80" fill="white" />
-          </div>
-
-          {/* Caption en la parte inferior */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
-            {reel.caption && (
-              <p className="text-white text-sm line-clamp-3">{reel.caption}</p>
-            )}
-          </div>
-        </a>
+        <div className="absolute inset-0 bg-black flex items-center justify-center overflow-y-auto">
+          <TikTokEmbed url={reel.video_url} caption={reel.caption || undefined} />
+        </div>
       )}
 
       {/* Direct Video */}

@@ -224,14 +224,25 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
                   <input
                     type="url"
                     value={formData.video_url}
-                    onChange={(e) => setFormData(prev => ({ ...prev, video_url: e.target.value }))}
-                    placeholder="https://ejemplo.com/video.mp4"
+                    onChange={(e) => {
+                      let val = e.target.value;
+                      // Detectar si es un embed code de TikTok
+                      if (val.includes('<blockquote') && val.includes('tiktok.com')) {
+                        // Intentar extraer la URL del atributo cite
+                        const citeMatch = val.match(/cite="([^"]*)"/);
+                        if (citeMatch && citeMatch[1]) {
+                          val = citeMatch[1];
+                        }
+                      }
+                      setFormData(prev => ({ ...prev, video_url: val }));
+                    }}
+                    placeholder="https://ejemplo.com/video.mp4 o Código Embed de TikTok"
                     className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
                   />
                 </div>
 
                 <p className="text-sm text-gray-400 mt-3">
-                  Pega una URL directa a un archivo MP4 o WebM
+                  Pega una URL directa (MP4), enlace de TikTok/Instagram, o el <strong>Código de Insertar</strong> de TikTok.
                 </p>
 
                 {/* Video Preview para URL directa */}
