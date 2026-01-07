@@ -18,6 +18,8 @@
   --color-primary: var(--primary);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
+  --color-evident: #0066b2;
+  --color-evident-dark: #005291;
 }
 
 html {
@@ -25,9 +27,9 @@ html {
 }
 
 ::selection {
-  background-color: rgba(30, 58, 138, 0.2);
-  /* Blue-900/20 */
-  color: #1e3a8a;
+  background-color: rgba(0, 102, 178, 0.2);
+  /* Brand Blue/20 */
+  color: #0066b2;
 }
 
 

@@ -6,10 +6,10 @@ import { Menu, X, Search, User, Play } from 'lucide-react';
 import { ThemeToggleCompact } from '@/components/ui/ThemeToggle';
 
 const categories = [
-  { name: 'Inicio', href: '/', color: 'hover:border-gray-900 dark:hover:border-white' },
-  { name: 'Destacadas', href: '/categoria/destacadas', color: 'hover:border-red-600 hover:text-red-700 dark:hover:text-red-400' },
-  { name: 'Internacionales', href: '/categoria/internacionales', color: 'hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-400' },
-  { name: 'Entretenimiento', href: '/categoria/entretenimiento', color: 'hover:border-purple-500 hover:text-purple-700 dark:hover:text-purple-400' },
+  { name: 'Inicio', href: '/', color: 'hover:border-gray-900 dark:hover:border-white hover:bg-gray-100 dark:hover:bg-gray-800/50' },
+  { name: 'Destacadas', href: '/categoria/destacadas', color: 'hover:border-red-600 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20' },
+  { name: 'Internacionales', href: '/categoria/internacionales', color: 'hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-900/20' },
+  { name: 'Entretenimiento', href: '/categoria/entretenimiento', color: 'hover:border-purple-500 hover:text-purple-700 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20' },
 ];
 
 export function Navbar() {
@@ -37,14 +37,14 @@ export function Navbar() {
               <Link
                 key={category.name}
                 href={category.href}
-                className={`px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-4 border-transparent ${category.color}`}
+                className={`px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-4 border-transparent rounded-lg ${category.color}`}
               >
                 {category.name}
               </Link>
             ))}
             <Link
               href="/reels"
-              className="flex items-center gap-1.5 px-3 py-1.5 ml-2 text-sm font-bold bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-full hover:shadow-lg transition-all hover:scale-105"
+              className="flex items-center gap-1.5 px-3 py-1.5 ml-2 text-sm font-bold bg-gradient-to-r from-evident to-evident-dark text-white rounded-full hover:shadow-lg transition-all hover:scale-105"
               aria-label="Ver videos cortos (Reels)"
             >
               <Play className="w-3.5 h-3.5" aria-hidden="true" fill="currentColor" />
@@ -58,7 +58,7 @@ export function Navbar() {
 
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-900 dark:hover:text-blue-400 transition-colors"
+              className="p-2 text-gray-600 dark:text-gray-400 hover:text-evident dark:hover:text-blue-400 transition-colors"
               aria-label={isSearchOpen ? "Cerrar búsqueda" : "Abrir búsqueda"}
               aria-expanded={isSearchOpen}
             >
@@ -84,7 +84,7 @@ export function Navbar() {
                 type="search"
                 name="q"
                 placeholder="Buscar noticias..."
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-blue-900 text-sm"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-evident text-sm"
                 autoFocus
               />
             </form>

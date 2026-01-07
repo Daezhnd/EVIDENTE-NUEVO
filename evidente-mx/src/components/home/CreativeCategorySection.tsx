@@ -40,9 +40,9 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
               {title}
             </h2>
             <div className="h-px flex-1 bg-gray-300 mb-2" />
-            <Link 
-              href={`/categoria/${slug}`} 
-              className="text-sm font-medium text-gray-500 hover:text-blue-900 flex items-center gap-1 mb-2 whitespace-nowrap"
+            <Link
+              href={`/categoria/${slug}`}
+              className="text-sm font-medium text-gray-500 hover:text-evident flex items-center gap-1 mb-2 whitespace-nowrap"
             >
               Explorar sección <ArrowUpRight className="w-4 h-4" />
             </Link>
@@ -54,14 +54,14 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
             <div className="lg:col-span-7 lg:pr-8 lg:border-r border-gray-200">
               <Link href={`/noticia/${main.slug}`} className="group block">
                 <div className="relative aspect-[16/10] overflow-hidden mb-5">
-                  <Image 
-                    src={main.image_url || '/placeholder.svg'} 
-                    alt={main.title} 
-                    fill 
-                    className="object-cover group-hover:scale-[1.02] transition-transform duration-700" 
+                  <Image
+                    src={main.image_url || '/placeholder.svg'}
+                    alt={main.title}
+                    fill
+                    className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
                   />
                 </div>
-                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-blue-900 transition-colors leading-tight mb-3">
+                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-evident transition-colors leading-tight mb-3">
                   {main.title}
                 </h3>
                 <p className="text-gray-600 text-lg leading-relaxed line-clamp-2 mb-3">
@@ -79,9 +79,9 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
             <div className="lg:col-span-5 lg:pl-8 mt-8 lg:mt-0">
               <div className="space-y-0">
                 {rest.map((article, idx) => (
-                  <Link 
-                    key={article.id} 
-                    href={`/noticia/${article.slug}`} 
+                  <Link
+                    key={article.id}
+                    href={`/noticia/${article.slug}`}
                     className="group flex items-start gap-4 py-5 border-b border-gray-100 last:border-0 hover:bg-gray-50 -mx-3 px-3 transition-colors"
                   >
                     {/* Número grande */}
@@ -119,8 +119,8 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
             <h2 className="text-3xl lg:text-4xl font-black text-white tracking-tight">
               {title}
             </h2>
-            <Link 
-              href={`/categoria/${slug}`} 
+            <Link
+              href={`/categoria/${slug}`}
               className="ml-auto text-sm text-gray-500 hover:text-white flex items-center gap-1"
             >
               Ver todo <ArrowRight className="w-4 h-4" />
@@ -130,16 +130,16 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
           {/* Grid asimétrico */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
             {/* Nota principal - 2 columnas */}
-            <Link 
-              href={`/noticia/${main.slug}`} 
+            <Link
+              href={`/noticia/${main.slug}`}
               className="lg:col-span-2 lg:row-span-2 relative group overflow-hidden"
             >
               <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[300px]">
-                <Image 
-                  src={main.image_url || '/placeholder.svg'} 
-                  alt={main.title} 
-                  fill 
-                  className="object-cover group-hover:scale-105 transition-transform duration-700" 
+                <Image
+                  src={main.image_url || '/placeholder.svg'}
+                  alt={main.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-8">
@@ -159,17 +159,17 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
 
             {/* Notas secundarias - Apiladas */}
             {rest.slice(0, 2).map((article, idx) => (
-              <Link 
-                key={article.id} 
-                href={`/noticia/${article.slug}`} 
+              <Link
+                key={article.id}
+                href={`/noticia/${article.slug}`}
                 className="relative group overflow-hidden"
               >
                 <div className="relative aspect-video lg:aspect-[4/3]">
-                  <Image 
-                    src={article.image_url || '/placeholder.svg'} 
-                    alt={article.title} 
-                    fill 
-                    className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                  <Image
+                    src={article.image_url || '/placeholder.svg'}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-4">
@@ -186,17 +186,17 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
           {rest.length > 2 && (
             <div className="mt-8 pt-8 border-t border-gray-800 grid grid-cols-1 md:grid-cols-2 gap-6">
               {rest.slice(2, 4).map((article) => (
-                <Link 
-                  key={article.id} 
-                  href={`/noticia/${article.slug}`} 
+                <Link
+                  key={article.id}
+                  href={`/noticia/${article.slug}`}
                   className="group flex items-start gap-4"
                 >
                   <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">
-                    <Image 
-                      src={article.image_url || '/placeholder.svg'} 
-                      alt={article.title} 
-                      fill 
-                      className="object-cover" 
+                    <Image
+                      src={article.image_url || '/placeholder.svg'}
+                      alt={article.title}
+                      fill
+                      className="object-cover"
                     />
                   </div>
                   <div className="flex-1">
@@ -228,8 +228,8 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
             <span className="w-3 h-3 bg-blue-900 rounded-full" />
             <h2 className="text-3xl lg:text-4xl font-black text-gray-900">{title}</h2>
           </div>
-          <Link 
-            href={`/categoria/${slug}`} 
+          <Link
+            href={`/categoria/${slug}`}
             className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 text-sm font-medium hover:bg-blue-900 hover:text-white transition-colors rounded-full"
           >
             Descubrir más <ArrowRight className="w-4 h-4" />
@@ -241,15 +241,15 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
           {/* Hero de sección - Full width con texto superpuesto */}
           <Link href={`/noticia/${main.slug}`} className="group block relative">
             <div className="relative aspect-[21/9] overflow-hidden">
-              <Image 
-                src={main.image_url || '/placeholder.svg'} 
-                alt={main.title} 
-                fill 
-                className="object-cover group-hover:scale-[1.02] transition-transform duration-700" 
+              <Image
+                src={main.image_url || '/placeholder.svg'}
+                alt={main.title}
+                fill
+                className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
               />
               {/* Overlay con gradiente lateral */}
               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
-              
+
               {/* Contenido sobre la imagen */}
               <div className="absolute inset-y-0 left-0 flex flex-col justify-center p-6 lg:p-12 max-w-2xl">
                 <span className="inline-block px-3 py-1 bg-blue-900 text-white text-xs font-bold uppercase tracking-wider mb-4 w-fit">
@@ -273,17 +273,17 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
           {/* Grid de secundarias - Estilo tarjetas horizontales */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {rest.map((article, idx) => (
-              <Link 
-                key={article.id} 
-                href={`/noticia/${article.slug}`} 
+              <Link
+                key={article.id}
+                href={`/noticia/${article.slug}`}
                 className="group bg-gray-50 hover:bg-gray-100 transition-colors p-4 flex gap-4"
               >
                 <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden">
-                  <Image 
-                    src={article.image_url || '/placeholder.svg'} 
-                    alt={article.title} 
-                    fill 
-                    className="object-cover" 
+                  <Image
+                    src={article.image_url || '/placeholder.svg'}
+                    alt={article.title}
+                    fill
+                    className="object-cover"
                   />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -300,8 +300,8 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
         </div>
 
         {/* Link móvil */}
-        <Link 
-          href={`/categoria/${slug}`} 
+        <Link
+          href={`/categoria/${slug}`}
           className="md:hidden flex items-center justify-center gap-2 mt-6 py-3 bg-gray-100 text-gray-700 text-sm font-medium rounded-full"
         >
           Ver todo en {title} <ArrowRight className="w-4 h-4" />

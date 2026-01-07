@@ -15,7 +15,7 @@ export function NewsletterForm({ variant = 'card', className = '' }: NewsletterF
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !email.includes('@')) {
       setStatus('error');
       setMessage('Por favor ingresa un email válido');
@@ -58,13 +58,13 @@ export function NewsletterForm({ variant = 'card', className = '' }: NewsletterF
             onChange={(e) => setEmail(e.target.value)}
             placeholder="tu@email.com"
             disabled={status === 'loading' || status === 'success'}
-            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent disabled:bg-gray-100"
+            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-evident focus:border-transparent disabled:bg-gray-100"
           />
         </div>
         <button
           type="submit"
           disabled={status === 'loading' || status === 'success'}
-          className="px-4 py-2 bg-blue-900 text-white text-sm font-medium rounded-lg hover:bg-blue-800 transition-colors disabled:opacity-50"
+          className="px-4 py-2 bg-evident text-white text-sm font-medium rounded-lg hover:bg-evident-dark transition-colors disabled:opacity-50"
         >
           {status === 'loading' ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Suscribir'}
         </button>
@@ -73,7 +73,7 @@ export function NewsletterForm({ variant = 'card', className = '' }: NewsletterF
   }
 
   return (
-    <div className={`bg-gradient-to-br from-blue-900 to-blue-800 rounded-2xl p-6 md:p-8 text-white ${className}`}>
+    <div className={`bg-gradient-to-br from-evident to-evident-dark rounded-2xl p-6 md:p-8 text-white ${className}`}>
       <div className="flex items-center gap-3 mb-4">
         <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
           <Mail className="w-6 h-6" />
@@ -105,18 +105,18 @@ export function NewsletterForm({ variant = 'card', className = '' }: NewsletterF
               className="w-full pl-12 pr-4 py-3 bg-white text-gray-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 disabled:bg-gray-100"
             />
           </div>
-          
+
           {status === 'error' && (
             <div className="flex items-center gap-2 text-red-200 text-sm">
               <AlertCircle className="w-4 h-4" />
               {message}
             </div>
           )}
-          
+
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="w-full py-3 bg-white text-blue-900 font-semibold rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-white text-cyan-900 font-semibold rounded-xl hover:bg-gray-100 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
           >
             {status === 'loading' ? (
               <>
@@ -127,8 +127,8 @@ export function NewsletterForm({ variant = 'card', className = '' }: NewsletterF
               'Suscribirme gratis'
             )}
           </button>
-          
-          <p className="text-xs text-blue-200 text-center">
+
+          <p className="text-xs text-cyan-200 text-center">
             Sin spam. Cancela cuando quieras.
           </p>
         </form>

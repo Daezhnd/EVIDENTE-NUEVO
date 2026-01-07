@@ -21,7 +21,7 @@ export function BreakingNewsTicker({ news }: BreakingNewsTickerProps) {
   const duplicatedNews = Array(10).fill(news).flat();
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border-b border-blue-800 dark:border-gray-700">
+    <div className="relative overflow-hidden bg-gradient-to-r from-evident via-evident-dark to-evident dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border-b border-evident-dark dark:border-gray-700">
       {/* Efecto de brillo animado */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-shimmer pointer-events-none" />
 
@@ -29,7 +29,7 @@ export function BreakingNewsTicker({ news }: BreakingNewsTickerProps) {
         <div className="flex items-center h-10">
           {/* Badge ÚLTIMAS NOTICIAS */}
           <div className="flex-shrink-0 flex items-center gap-2 pr-4 border-r border-white/20">
-            <Newspaper className="w-4 h-4 text-blue-200" />
+            <Newspaper className="w-4 h-4 text-blue-100" />
             <span className="text-white font-semibold text-sm uppercase tracking-wider">
               Últimas Noticias
             </span>

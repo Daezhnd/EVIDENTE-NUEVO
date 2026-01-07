@@ -103,7 +103,7 @@ export function SocialFeed({ articles }: SocialFeedProps) {
                                                 </div>
                                             </div>
 
-                                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 leading-tight mb-4 group-hover:text-blue-900 dark:group-hover:text-blue-400 transition-colors">
+                                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 leading-tight mb-4 group-hover:text-evident dark:group-hover:text-blue-400 transition-colors">
                                                 {article.title}
                                             </h2>
 
@@ -111,7 +111,7 @@ export function SocialFeed({ articles }: SocialFeedProps) {
                                                 {article.excerpt || article.summary}
                                             </p>
 
-                                            <div className="flex items-center text-blue-900 dark:text-blue-400 font-bold text-sm tracking-wide group-hover:translate-x-1 transition-transform w-fit">
+                                            <div className="flex items-center text-evident dark:text-blue-400 font-bold text-sm tracking-wide group-hover:translate-x-1 transition-transform w-fit">
                                                 LEER ARTÍCULO
                                                 <ArrowRight className="w-4 h-4 ml-2" />
                                             </div>

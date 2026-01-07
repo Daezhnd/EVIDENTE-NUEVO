@@ -57,7 +57,7 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
       {isHidden && !isFullscreen && (
         <button
           onClick={() => setIsHidden(false)}
-          className="hidden lg:flex fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-blue-900 text-white p-2 rounded-l-lg shadow-lg hover:bg-blue-800 transition-colors items-center gap-1"
+          className="hidden lg:flex fixed right-0 top-1/2 -translate-y-1/2 z-30 bg-evident text-white p-2 rounded-l-lg shadow-lg hover:bg-evident-dark transition-colors items-center gap-1"
         >
           <Play className="w-5 h-5" fill="white" />
           <ChevronLeft className="w-4 h-4" />
@@ -69,7 +69,7 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
         <div className="hidden lg:block fixed right-0 top-1/2 -translate-y-1/2 z-30">
           <div className="bg-gray-950 rounded-l-xl shadow-2xl shadow-black/50 overflow-hidden">
             {/* Header con botones */}
-            <div className="px-2 py-2 bg-blue-900 flex items-center justify-between gap-1">
+            <div className="px-2 py-2 bg-evident flex items-center justify-between gap-1">
               <div className="flex items-center justify-center w-6">
                 <Play className="w-4 h-4 text-white" fill="white" />
               </div>

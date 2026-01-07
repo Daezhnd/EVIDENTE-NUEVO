@@ -18,11 +18,10 @@ export function ThemeToggle() {
         <button
           key={value}
           onClick={() => setTheme(value)}
-          className={`p-2 rounded-md transition-colors ${
-            theme === value
-              ? 'bg-white dark:bg-gray-700 text-blue-900 dark:text-blue-400 shadow-sm'
+          className={`p-2 rounded-md transition-colors ${theme === value
+              ? 'bg-white dark:bg-gray-700 text-evident dark:text-blue-400 shadow-sm'
               : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
-          }`}
+            }`}
           title={label}
           aria-label={`Cambiar a modo ${label}`}
         >
@@ -44,7 +43,7 @@ export function ThemeToggleCompact() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-900 dark:hover:text-blue-400 transition-colors"
+      className="p-2 text-gray-600 dark:text-gray-400 hover:text-evident dark:hover:text-blue-400 transition-colors"
       aria-label={resolvedTheme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
     >
       {resolvedTheme === 'dark' ? (

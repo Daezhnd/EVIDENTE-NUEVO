@@ -44,7 +44,7 @@ export function HeroCombo({ mainArticle, secondaryArticles }: HeroComboProps) {
 
             {/* Badge - Top Left */}
             <div className="absolute top-8 left-8 z-10">
-              <span className="px-4 py-1.5 bg-blue-900 text-white text-xs font-bold uppercase tracking-widest shadow-lg">
+              <span className="px-4 py-1.5 bg-evident text-white text-xs font-bold uppercase tracking-widest shadow-lg">
                 Destacado
               </span>
             </div>
@@ -74,15 +74,15 @@ export function HeroCombo({ mainArticle, secondaryArticles }: HeroComboProps) {
           <div className="max-w-xl">
             {/* Categoría con línea */}
             <div className="flex items-center gap-4 mb-6">
-              <div className="w-8 h-1 bg-blue-900" />
-              <span className="text-blue-900 text-sm font-bold uppercase tracking-wider">
+              <div className="w-8 h-1 bg-evident" />
+              <span className="text-evident text-sm font-bold uppercase tracking-wider">
                 {typeof mainArticle.category === 'object' ? mainArticle.category.name : 'Noticias'}
               </span>
             </div>
 
             {/* Título Grande */}
             <Link href={`/noticia/${mainArticle.slug}`} className="group block mb-6">
-              <h1 className="text-4xl xl:text-5xl font-black text-gray-900 leading-[1.1] group-hover:text-blue-900 transition-colors">
+              <h1 className="text-4xl xl:text-5xl font-black text-gray-900 leading-[1.1] group-hover:text-evident transition-colors">
                 {mainArticle.title}
               </h1>
             </Link>
@@ -105,7 +105,7 @@ export function HeroCombo({ mainArticle, secondaryArticles }: HeroComboProps) {
             {/* CTA */}
             <Link
               href={`/noticia/${mainArticle.slug}`}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-900 text-white font-semibold hover:bg-blue-800 transition-colors w-fit group"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-evident text-white font-semibold hover:bg-evident-dark transition-colors w-fit group"
             >
               Leer nota completa
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

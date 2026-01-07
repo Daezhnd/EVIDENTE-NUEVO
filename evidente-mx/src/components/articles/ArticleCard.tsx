@@ -37,7 +37,7 @@ export function ArticleCard({
 }: ArticleCardProps) {
   const categoryColors: Record<string, { bg: string; text: string; glow: string }> = {
     'destacadas': { bg: 'bg-gradient-to-r from-red-500 to-orange-500', text: 'text-white', glow: 'shadow-red-500/30' },
-    'noticias': { bg: 'bg-gradient-to-r from-blue-500 to-cyan-500', text: 'text-white', glow: 'shadow-blue-500/30' },
+    'noticias': { bg: 'bg-gradient-to-r from-evident to-evident-dark', text: 'text-white', glow: 'shadow-evident/30' },
     'deportes': { bg: 'bg-gradient-to-r from-green-500 to-emerald-500', text: 'text-white', glow: 'shadow-green-500/30' },
     'turismo': { bg: 'bg-gradient-to-r from-amber-500 to-yellow-500', text: 'text-white', glow: 'shadow-amber-500/30' },
   };
