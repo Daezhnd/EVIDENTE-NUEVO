@@ -8,6 +8,7 @@ import { sanitizeHtml } from '@/lib/sanitize';
 import { ArticleCard } from '@/components/articles/ArticleCard';
 import { Article } from '@/types/database';
 import { Clock, Eye, Share2, Facebook, Twitter, Linkedin, ArrowLeft, MessageCircle, BookOpen } from 'lucide-react';
+import { ViewCounter } from '@/components/articles/ViewCounter';
 
 /**
  * Formatea contenido de texto plano a HTML si es necesario
@@ -300,6 +301,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </section>
       )}
+      {/* Contador de vistas (invisible) */}
+      <ViewCounter articleId={article.id} />
     </article>
   );
 }
