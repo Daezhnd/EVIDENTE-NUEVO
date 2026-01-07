@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Upload, Loader2, Check, X, Image as ImageIcon } from 'lucide-react';
+import { Upload, Loader2, Check, X } from 'lucide-react';
 import { generateVideoThumbnail } from '@/lib/video-utils';
 
 interface VideoUploaderProps {
