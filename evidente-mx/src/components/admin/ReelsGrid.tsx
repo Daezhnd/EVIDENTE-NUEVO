@@ -181,7 +181,7 @@ export function ReelsGrid() {
               <p className="text-sm text-gray-500 line-clamp-2 mb-2">
                 {reel.caption || 'Sin descripción'}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray-400" suppressHydrationWarning>
                 {reel.published_at ? formatDistanceToNow(reel.published_at) : 'Sin publicar'}
               </p>
 

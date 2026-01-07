@@ -13,11 +13,21 @@ interface ReelPlayerProps {
 }
 
 // Detectar tipo de video
-function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'direct' {
+function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'jwplayer' | 'direct' {
   if (!url) return 'direct';
   if (url.includes('instagram.com') || url.includes('instagr.am')) return 'instagram';
   if (url.includes('tiktok.com') || url.includes('vm.tiktok.com')) return 'tiktok';
+  if (url.includes('jwplayer.com')) return 'jwplayer';
   return 'direct';
+}
+
+function getJwPlayerDirectUrl(url: string): string | null {
+  // Extract ID from https://cdn.jwplayer.com/previews/MEDIAID...
+  const match = url.match(/previews\/([a-zA-Z0-9]+)/);
+  if (match && match[1]) {
+    return `https://cdn.jwplayer.com/videos/${match[1]}-720.mp4`;
+  }
+  return null;
 }
 
 export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerProps) {
@@ -32,11 +42,14 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
 
   // Auto-play cuando está activo
   useEffect(() => {
-    if (videoRef.current && videoSource === 'direct') {
+    if (videoRef.current && (videoSource === 'direct' || videoSource === 'jwplayer')) {
       if (isActive) {
-        videoRef.current.play().catch(() => {
-          // Autoplay bloqueado, necesita interacción del usuario
-        });
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Autoplay bloqueado, necesita interacción del usuario
+          });
+        }
         setIsPlaying(true);
       } else {
         videoRef.current.pause();
@@ -44,7 +57,7 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
         setIsPlaying(false);
       }
     }
-  }, [isActive, videoSource]);
+  }, [isActive, videoSource, reel.video_url]);
 
   const togglePlay = () => {
     if (videoRef.current) {
@@ -131,8 +144,8 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
         </div>
       )}
 
-      {/* Direct Video */}
-      {videoSource === 'direct' && (
+      {/* JWPlayer converted to Direct OR Standard Direct Video */}
+      {(videoSource === 'direct' || videoSource === 'jwplayer') && (
         <>
           {/* Error state */}
           {videoError && (
@@ -166,7 +179,7 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
 
           <video
             ref={videoRef}
-            src={reel.video_url}
+            src={videoSource === 'jwplayer' ? getJwPlayerDirectUrl(reel.video_url) || reel.video_url : reel.video_url}
             poster={reel.thumbnail_url || undefined}
             className="absolute inset-0 w-full h-full object-cover"
             loop
@@ -191,6 +204,7 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
               }
               setVideoError(errorMsg);
               setIsLoading(false);
+              // Fallback for JWPlayer if 720p fails? could try 1080 or base
             }}
           />
 

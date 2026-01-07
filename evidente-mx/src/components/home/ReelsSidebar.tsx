@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { Reel } from '@/types/database';
 import { Play, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, X, Maximize2, Minimize2, Volume2, VolumeX } from 'lucide-react';
 import { AdBanner } from '@/components/ads/AdBanner';
+import { PhoneFrame } from '@/components/ui/PhoneFrame';
+import { ReelPlayer } from '@/components/reels/ReelPlayer';
 import { TikTokEmbed } from '@/components/reels/TikTokEmbed';
 
 interface ReelsSidebarProps {
@@ -20,7 +22,7 @@ function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'direct' {
 }
 
 export function ReelsSidebar({ reels }: ReelsSidebarProps) {
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentReelIndex, setCurrentReelIndex] = useState(0);
@@ -64,98 +66,92 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
         </button>
       )}
 
-      {/* Sidebar normal */}
+      {/* Sidebar normal - PHONE REDESIGN */}
       {!isHidden && !isFullscreen && (
-        <div className="hidden lg:block fixed right-0 top-1/2 -translate-y-1/2 z-30">
-          <div className="bg-gray-950 rounded-l-xl shadow-2xl shadow-black/50 overflow-hidden">
-            {/* Header con botones */}
-            <div className="px-2 py-2 bg-evident flex items-center justify-between gap-1">
-              <div className="flex items-center justify-center w-6">
-                <Play className="w-4 h-4 text-white" fill="white" />
-              </div>
-              <div className="flex items-center gap-0.5">
-                {/* Botón expandir */}
-                <button
-                  onClick={() => setIsFullscreen(true)}
-                  className="w-6 h-6 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 rounded transition-colors"
-                  title="Ver reels"
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </button>
-                {/* Botón ocultar */}
-                <button
-                  onClick={() => setIsHidden(true)}
-                  className="w-6 h-6 flex items-center justify-center text-white/70 hover:text-white hover:bg-white/10 rounded transition-colors"
-                  title="Ocultar"
-                >
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Navegación arriba */}
+        <div className="hidden xl:block fixed right-8 top-[60%] -translate-y-1/2 z-30">
+          <div className="relative group">
+            {/* Botón cerrar */}
             <button
-              onClick={scrollUp}
-              disabled={!canScrollUp}
-              className={`w-full py-1 flex justify-center ${canScrollUp ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-700 cursor-not-allowed'} transition-colors`}
+              onClick={() => setIsHidden(true)}
+              className="absolute -top-4 -right-4 z-40 w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center text-white/70 hover:text-white shadow-lg border border-gray-700 hover:scale-110 transition-all"
+              title="Ocultar"
             >
-              <ChevronUp className="w-4 h-4" />
+              <ChevronRight className="w-5 h-5" />
             </button>
 
-            {/* Reels visibles */}
-            <div className="px-2 space-y-2">
-              {visibleReels.map((reel) => (
-                <button
-                  key={reel.id}
-                  onClick={() => {
-                    setCurrentReelIndex(reels.findIndex(r => r.id === reel.id));
-                    setIsFullscreen(true);
-                  }}
-                  className="block group relative w-full"
-                >
-                  <div className="relative w-16 aspect-[9/16] rounded-md overflow-hidden">
-                    <Image
-                      src={reel.thumbnail_url || '/placeholder.svg'}
-                      alt={reel.caption || 'Reel'}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+            <PhoneFrame>
+              <div className="relative w-full h-full bg-black">
+                {currentReel && (
+                  <>
+                    {/* Video Preview (Autoplay muted) */}
+                    <ReelPlayer
+                      reel={currentReel}
+                      isActive={true}
+                      onVideoEnd={() => {
+                        // Auto next?
+                        // setCurrentReelIndex((prev) => (prev + 1) % reels.length);
+                      }}
                     />
-                    <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
 
-                    {/* Play icon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-8 h-8 bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-blue-900 group-hover:scale-110 transition-all">
-                        <Play className="w-3 h-3 text-white ml-0.5" fill="white" />
+                    {/* Overlay Controls for Mini-Phone */}
+                    <div className="absolute inset-0 pointer-events-none">
+                      {/* Top Shadow */}
+                      <div className="absolute top-0 left-0 right-0 h-20 bg-gradient-to-b from-black/60 to-transparent pointer-events-auto">
+                        <div className="flex justify-between items-start p-4 pt-8">
+                          <span className="text-white/80 text-xs font-medium">Reels Destacados</span>
+                          <button
+                            onClick={() => setIsFullscreen(true)}
+                            className="p-1.5 bg-white/20 backdrop-blur rounded-full hover:bg-white/30 transition-colors"
+                            title="Pantalla completa"
+                          >
+                            <Maximize2 className="w-3.5 h-3.5 text-white" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Navigation Buttons (Visible explicitly) */}
+                      <div className="absolute top-1/2 -translate-y-1/2 w-full flex justify-between px-2 pointer-events-auto">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentReelIndex((prev) => (prev - 1 + reels.length) % reels.length);
+                          }}
+                          className="w-8 h-8 bg-black/50 backdrop-blur rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                        >
+                          <ChevronLeft className="w-5 h-5" />
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCurrentReelIndex((prev) => (prev + 1) % reels.length);
+                          }}
+                          className="w-8 h-8 bg-black/50 backdrop-blur rounded-full flex items-center justify-center text-white hover:bg-black/70 transition-colors"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      {/* Bottom Info */}
+                      <div className="absolute bottom-0 left-0 right-0 p-4 pt-12 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-auto">
+                        <p className="text-white text-sm font-semibold line-clamp-2 mb-1">
+                          {currentReel.caption || 'Sin descripción'}
+                        </p>
+                        <div className="flex items-center justify-between text-white/60 text-xs">
+                          <span>{currentReelIndex + 1} / {reels.length}</span>
+                          <button
+                            onClick={() => setIsFullscreen(true)}
+                            className="text-blue-400 hover:text-blue-300 font-medium"
+                          >
+                            Ver completo
+                          </button>
+                        </div>
                       </div>
                     </div>
-
-                    {/* Duración - removido porque no existe en el schema */}
-                    <div className="absolute bottom-1 right-1">
-                      <span className="text-[10px] text-white bg-black/60 px-1 rounded">
-                        Reel
-                      </span>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Navegación abajo */}
-            <button
-              onClick={scrollDown}
-              disabled={!canScrollDown}
-              className={`w-full py-2 flex justify-center ${canScrollDown ? 'text-gray-400 hover:text-white hover:bg-gray-800' : 'text-gray-700 cursor-not-allowed'} transition-colors`}
-            >
-              <ChevronDown className="w-5 h-5" />
-            </button>
-
-            {/* Ver todos */}
-            <button
-              onClick={() => setIsFullscreen(true)}
-              className="block w-full px-4 py-3 text-center text-xs text-gray-400 hover:text-white hover:bg-gray-800 border-t border-gray-800 transition-colors"
-            >
-              Ver todos ({reels.length})
-            </button>
+                  </>
+                )}
+              </div>
+            </PhoneFrame>
           </div>
         </div>
       )}

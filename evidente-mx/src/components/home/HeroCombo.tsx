@@ -70,7 +70,7 @@ export function HeroCombo({ mainArticle }: HeroComboProps) {
         </div>
 
         {/* Lado derecho - TEXTO (Sólido blanco) */}
-        <div className="hidden lg:flex absolute inset-0 left-[58%] bg-white items-center p-12 xl:p-16 z-10">
+        <div className="hidden lg:flex absolute inset-0 left-[58%] bg-white items-center p-12 xl:p-16 xl:pr-72 2xl:pr-80 z-10">
           <div className="max-w-xl">
             {/* Categoría con línea */}
             <div className="flex items-center gap-4 mb-6">
