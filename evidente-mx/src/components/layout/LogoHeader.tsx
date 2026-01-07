@@ -6,7 +6,7 @@ import Image from 'next/image';
 export function LogoHeader() {
     return (
         <div className="bg-white dark:bg-gray-950 border-b border-gray-100 dark:border-gray-800 transition-colors">
-            <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-center py-2 lg:py-4">
                     {/* Logo placeholder - Reemplazar con imagen cuando esté disponible */}
                     <Link href="/" className="group" aria-label="Ir a inicio - Evidente.mx">
@@ -17,7 +17,14 @@ export function LogoHeader() {
                                     src="/logo.png"
                                     alt="Evidente.mx Logo"
                                     fill
-                                    className="object-contain"
+                                    className="object-contain transition-opacity duration-300 group-hover:opacity-0"
+                                    priority
+                                />
+                                <Image
+                                    src="/logo-hover.png"
+                                    alt="Evidente.mx Logo Hover"
+                                    fill
+                                    className="object-contain absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                                     priority
                                 />
                             </div>

@@ -1,58 +1,107 @@
 import Link from 'next/link';
-import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
-import { NewsletterForm } from '@/components/home/NewsletterForm';
+import Image from 'next/image';
+import { Facebook, Instagram, Youtube, Phone, Mail, MapPin } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-400">
-      {/* Newsletter Section */}
-      <div className="border-b border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Mantente informado
-              </h3>
-              <p className="text-gray-400">
-                Recibe las noticias más importantes directamente en tu correo. Sin spam, solo contenido de valor.
-              </p>
-            </div>
-            <NewsletterForm variant="inline" />
-          </div>
-        </div>
+    <footer className="bg-[#1a1b1f] text-gray-400 font-sans">
+      {/* Top Colorful Border */}
+      <div className="flex h-1">
+        <div className="flex-1 bg-purple-500"></div>
+        <div className="flex-1 bg-blue-500"></div>
+        <div className="flex-1 bg-cyan-500"></div>
+        <div className="flex-1 bg-green-500"></div>
+        <div className="flex-1 bg-yellow-500"></div>
+        <div className="flex-1 bg-orange-500"></div>
+        <div className="flex-1 bg-red-500"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
-          {/* Logo */}
-          <Link href="/" className="text-xl font-bold text-white">
-            Evidente<span className="text-cyan-500">.mx</span>
-          </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 
-          {/* Nav */}
-          <nav className="flex flex-wrap gap-6 text-sm">
-            <Link href="/categoria/destacadas" className="hover:text-white">Destacadas</Link>
-            <Link href="/categoria/noticias" className="hover:text-white">Noticias</Link>
-            <Link href="/categoria/deportes" className="hover:text-white">Deportes</Link>
-            <Link href="/categoria/turismo" className="hover:text-white">Turismo</Link>
-            <Link href="/reels" className="hover:text-white">Reels</Link>
-            <Link href="/contacto" className="hover:text-white">Contacto</Link>
-          </nav>
-
-          {/* Social */}
-          <div className="flex gap-3">
-            {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
-              <a key={i} href="#" className="w-8 h-8 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-cyan-800 transition-colors">
-                <Icon className="w-4 h-4" />
-              </a>
-            ))}
+          {/* Column 1: Logo */}
+          <div className="flex flex-col items-start">
+            <Link href="/" className="mb-6">
+              <Image
+                src="/logo.png"
+                alt="Evidente Logo"
+                width={200}
+                height={60}
+                className="object-contain"
+              />
+            </Link>
           </div>
+
+          {/* Column 2: Nosotros */}
+          <div>
+            <h3 className="text-white font-bold text-lg mb-4 uppercase tracking-wider">Nosotros</h3>
+            <p className="text-sm leading-relaxed mb-6 text-gray-400">
+              Medio de comunicación que ofrece noticias relevantes e inmediatas principalmente del estado de Chihuahua y sus alrededores.
+            </p>
+            <div className="flex space-x-4">
+              <a
+                href="https://www.facebook.com/EVIDENTE.MX"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-blue-600 transition-colors"
+              >
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a
+                href="https://www.instagram.com/evidentemx/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-pink-600 transition-colors"
+              >
+                <Instagram className="w-6 h-6" />
+              </a>
+              <a
+                href="https://www.youtube.com/@EVIDENTEMX"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 hover:text-red-600 transition-colors"
+              >
+                <Youtube className="w-6 h-6" />
+              </a>
+            </div>
+          </div>
+
+          {/* Column 3: Información Adicional */}
+          <div>
+            <h3 className="text-white font-bold text-lg mb-4 uppercase tracking-wider">Información Adicional</h3>
+            <div className="space-y-3 text-sm">
+              <p>
+                <strong className="text-gray-300">Director General:</strong> Wilhelmy Guzman Paniagua
+              </p>
+              <p>
+                <strong className="text-gray-300">Director Editorial:</strong> David Hernández Navarro
+              </p>
+              <p>
+                <strong className="text-gray-300">Gerente:</strong> José Montañez Mata
+              </p>
+              <p>
+                <strong className="text-gray-300">Tel:</strong> 614-123-4567
+              </p>
+              <p className="flex items-center gap-2">
+                <strong className="text-gray-300">Ciudad:</strong> Chihuahua
+              </p>
+              <p className="flex items-center gap-2">
+                <strong className="text-gray-300">Email:</strong>
+                <a href="mailto:Contacto@evidente.mx" className="hover:text-white transition-colors">
+                  Contacto@evidente.mx
+                </a>
+              </p>
+            </div>
+          </div>
+
         </div>
 
-        <div className="border-t border-gray-800 pt-6 text-sm text-gray-500 text-center">
-          © {new Date().getFullYear()} Evidente.mx — Todos los derechos reservados
+        {/* Copyright */}
+        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-xs text-gray-600">
+          <p>© {new Date().getFullYear()} Evidente.mx. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>
   );
 }
+

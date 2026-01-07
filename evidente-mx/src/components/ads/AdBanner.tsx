@@ -24,7 +24,8 @@ export function AdBanner({ position = 'feed', className, imageUrl }: AdBannerPro
         <div className={cn("flex flex-col items-center justify-center my-8", className)}>
             <div
                 className={cn(
-                    "bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg flex flex-col items-center justify-center overflow-hidden relative group cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors",
+                    "rounded-lg flex flex-col items-center justify-center overflow-hidden relative group cursor-pointer transition-colors",
+                    !imageUrl && "bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 hover:bg-gray-200 dark:hover:bg-gray-800",
                     sizeClasses[position]
                 )}
             >
@@ -34,7 +35,7 @@ export function AdBanner({ position = 'feed', className, imageUrl }: AdBannerPro
                         <img
                             src={imageUrl}
                             alt="Publicidad"
-                            className="w-full h-full object-fill"
+                            className="w-full h-full object-contain"
                         />
                     </div>
                 ) : (

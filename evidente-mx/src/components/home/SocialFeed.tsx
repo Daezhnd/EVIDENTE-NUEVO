@@ -49,6 +49,12 @@ function getCategoryColor(displayCategory: string): string {
 export function SocialFeed({ articles }: SocialFeedProps) {
     if (!articles || articles.length === 0) return null;
 
+    // Defines groups of ads to show in pairs
+    const adGroups = [
+        ['/ads/top-banner-1.jpg', '/ads/top-banner-2.jpg'],
+        ['/ads/top-banner-3.jpg', '/ads/top-banner-4.jpg']
+    ];
+
     return (
         <section className="py-12 bg-gray-50 dark:bg-gray-950">
             <div className="max-w-7xl mx-auto px-4 lg:px-6">
@@ -64,7 +70,12 @@ export function SocialFeed({ articles }: SocialFeedProps) {
                         // Calcular la categoría visual
                         const displayCategory = getDisplayCategory(article.category);
                         const tagColorClass = getCategoryColor(displayCategory);
-                        const showAd = (index + 1) % 5 === 0; // Publicidad cada 5 artículos
+
+                        // Show ads after every 5th article (index 4, 9, 14...)
+                        // Alternates between the two ad groups
+                        const showAdBlock = (index + 1) % 5 === 0;
+                        const adGroupIndex = Math.floor((index + 1) / 5) % 2 === 1 ? 0 : 1;
+                        const currentAds = adGroups[adGroupIndex];
 
                         return (
                             <div key={article.id} className="space-y-8">
@@ -119,8 +130,11 @@ export function SocialFeed({ articles }: SocialFeedProps) {
                                     </Link>
                                 </motion.article>
 
-                                {showAd && (
-                                    <AdBanner position="feed" />
+                                {showAdBlock && (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <AdBanner position="feed" imageUrl={currentAds[0]} />
+                                        <AdBanner position="feed" imageUrl={currentAds[1]} />
+                                    </div>
                                 )}
                             </div>
                         );
@@ -136,3 +150,4 @@ export function SocialFeed({ articles }: SocialFeedProps) {
         </section >
     );
 }
+
