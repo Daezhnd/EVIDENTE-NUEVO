@@ -20,7 +20,7 @@ export function ReelsGrid() {
       .from('reels')
       .select('*')
       .order('created_at', { ascending: false });
-    
+
     if (error) {
       console.error('Error fetching reels:', error);
     } else {
@@ -35,10 +35,10 @@ export function ReelsGrid() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('¿Estás seguro de eliminar este reel?')) return;
-    
+
     const supabase = createClient();
     const { error } = await supabase.from('reels').delete().eq('id', id);
-    
+
     if (error) {
       console.error('Error deleting reel:', error);
       alert('Error al eliminar el reel');
@@ -47,9 +47,25 @@ export function ReelsGrid() {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`¿Estás seguro de eliminar ${selectedIds.length} reels seleccionados?`)) return;
+
+    const supabase = createClient();
+    const { error } = await supabase.from('reels').delete().in('id', selectedIds);
+
+    if (error) {
+      console.error('Error deleting reels:', error);
+      alert('Error al eliminar los reels seleccionados');
+    } else {
+      setReels(prev => prev.filter(r => !selectedIds.includes(r.id)));
+      setSelectedIds([]);
+    }
+  };
+
   const toggleSelect = (id: string) => {
-    setSelectedIds(prev => 
-      prev.includes(id) 
+    setSelectedIds(prev =>
+      prev.includes(id)
         ? prev.filter(i => i !== id)
         : [...prev, id]
     );
@@ -82,7 +98,10 @@ export function ReelsGrid() {
           <span className="text-sm text-gray-600">
             {selectedIds.length} reel(s) seleccionado(s)
           </span>
-          <button className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+          <button
+            onClick={handleBulkDelete}
+            className="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
             Eliminar seleccionados
           </button>
         </div>
@@ -91,7 +110,7 @@ export function ReelsGrid() {
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {reels.map((reel) => (
-          <div 
+          <div
             key={reel.id}
             className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden group"
           >
@@ -110,7 +129,7 @@ export function ReelsGrid() {
                   <Play className="w-12 h-12 text-gray-400" />
                 </div>
               )}
-              
+
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <button className="p-4 bg-white/20 backdrop-blur-sm rounded-full">
