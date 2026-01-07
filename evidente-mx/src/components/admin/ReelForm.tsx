@@ -171,7 +171,13 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
             {inputMode === 'upload' && (
               <VideoUploader
                 currentUrl={videoSource === 'direct' ? formData.video_url : undefined}
-                onUploadComplete={(url) => setFormData(prev => ({ ...prev, video_url: url }))}
+                onUploadComplete={(url, thumbnailUrl) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    video_url: url,
+                    thumbnail_url: thumbnailUrl || prev.thumbnail_url
+                  }));
+                }}
               />
             )}
 

@@ -2,10 +2,11 @@
 
 import { useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Upload, Loader2, Check, X } from 'lucide-react';
+import { Upload, Loader2, Check, X, Image as ImageIcon } from 'lucide-react';
+import { generateVideoThumbnail } from '@/lib/video-utils';
 
 interface VideoUploaderProps {
-  onUploadComplete: (url: string) => void;
+  onUploadComplete: (url: string, thumbnailUrl?: string) => void;
   currentUrl?: string;
 }
 
@@ -49,7 +50,7 @@ export function VideoUploader({ onUploadComplete, currentUrl }: VideoUploaderPro
         setProgress(prev => Math.min(prev + 10, 90));
       }, 200);
 
-      // Subir archivo
+      // 1. Subir video
       const { error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
@@ -57,21 +58,46 @@ export function VideoUploader({ onUploadComplete, currentUrl }: VideoUploaderPro
           upsert: false
         });
 
-      clearInterval(progressInterval);
+      if (uploadError) throw uploadError;
 
-      if (uploadError) {
-        throw uploadError;
+      // 2. Generar y subir thumbnail (en paralelo o secuencial)
+      // Intentamos generar el thumbnail, si falla no detenemos el proceso del video
+      let publicThumbnailUrl = '';
+
+      try {
+        const thumbnailBlob = await generateVideoThumbnail(file);
+        const thumbnailName = `thumbnails/${timestamp}.jpg`;
+
+        const { error: thumbError } = await supabase.storage
+          .from('videos')
+          .upload(thumbnailName, thumbnailBlob, {
+            contentType: 'image/jpeg',
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (!thumbError) {
+          const { data: thumbData } = supabase.storage
+            .from('videos')
+            .getPublicUrl(thumbnailName);
+          publicThumbnailUrl = thumbData.publicUrl;
+        }
+      } catch (thumbErr) {
+        console.warn('No se pudo generar el thumbnail:', thumbErr);
+        // No lanzamos error para permitir que el video se guarde aunque falle el thumbnail
       }
 
-      // Obtener URL pública
+      clearInterval(progressInterval);
+
+      // Obtener URL pública del video
       const { data: urlData } = supabase.storage
         .from('videos')
         .getPublicUrl(fileName);
 
       setProgress(100);
 
-      // Llamar callback con la URL
-      onUploadComplete(urlData.publicUrl);
+      // Llamar callback con ambas URLs
+      onUploadComplete(urlData.publicUrl, publicThumbnailUrl || undefined);
 
       // Reset después de un momento
       setTimeout(() => {
