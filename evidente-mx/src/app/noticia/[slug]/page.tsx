@@ -15,9 +15,9 @@ import { Clock, Eye, Share2, Facebook, Twitter, Linkedin, ArrowLeft, MessageCirc
  */
 function formatContent(content: string): string {
   if (!content) return '';
-  
+
   let htmlContent: string;
-  
+
   // Si ya tiene tags HTML, usarlo directamente
   if (/<[a-z][\s\S]*>/i.test(content)) {
     htmlContent = content;
@@ -27,7 +27,7 @@ function formatContent(content: string): string {
       .split(/\n\s*\n/)
       .map(p => p.trim())
       .filter(p => p.length > 0);
-    
+
     if (paragraphs.length === 1 && content.includes('\n')) {
       const lines = content
         .split('\n')
@@ -41,7 +41,7 @@ function formatContent(content: string): string {
       }).join('\n');
     }
   }
-  
+
   // SEGURIDAD: Sanitizar HTML para prevenir XSS
   return sanitizeHtml(htmlContent);
 }
@@ -80,7 +80,7 @@ async function getRelatedArticles(category: string, excludeId: string): Promise<
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
-  
+
   if (!article) {
     return { title: 'Artículo no encontrado | Evidente.mx' };
   }
@@ -105,7 +105,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = await params;
-  
+
   // Buscar en Supabase
   const article = await getArticleBySlug(slug);
 
@@ -114,8 +114,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   // Obtener categoría como string
-  const categoryName = typeof article.category === 'string' 
-    ? article.category 
+  const categoryName = typeof article.category === 'string'
+    ? article.category
     : (article.category as { name?: string })?.name || 'Noticias';
 
   // Obtener artículos relacionados (misma categoría)
@@ -147,7 +147,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               Inicio
             </Link>
             <span className="text-gray-300">/</span>
-            <Link 
+            <Link
               href={`/categoria/${catSlug}`}
               className="text-gray-500 hover:text-blue-900 transition-colors"
             >
@@ -264,7 +264,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </div>
 
         {/* Contenido del artículo */}
-        <div 
+        <div
           className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4 prose-a:text-blue-900 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl"
           dangerouslySetInnerHTML={{ __html: formatContent(article.content || '') }}
         />
