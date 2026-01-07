@@ -56,7 +56,7 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
 
       {/* Sidebar normal - PHONE REDESIGN */}
       {!isHidden && !isFullscreen && (
-        <div className="hidden xl:block fixed right-8 top-[60%] -translate-y-1/2 z-30">
+        <div className="hidden lg:block fixed right-8 top-[60%] -translate-y-1/2 z-30">
           <div className="relative group">
             {/* Botón cerrar */}
             <button
