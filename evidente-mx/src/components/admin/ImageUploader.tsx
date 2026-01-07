@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
-import { Upload, X, Loader2, Image as ImageIcon, Link as LinkIcon, AlertTriangle } from 'lucide-react';
+import { Upload, X, Loader2, Image as ImageIcon, Link as LinkIcon } from 'lucide-react';
 
 interface ImageUploaderProps {
   currentImageUrl?: string | null;
@@ -40,7 +40,7 @@ export function ImageUploader({ currentImageUrl, onImageChange, folder = 'articl
 
     try {
       const supabase = createClient();
-      
+
       // Generar nombre único
       const fileExt = file.name.split('.').pop();
       const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
@@ -87,43 +87,43 @@ export function ImageUploader({ currentImageUrl, onImageChange, folder = 'articl
    */
   const handleUrlSubmit = async () => {
     if (!urlInput.trim()) return;
-    
+
     setError(null);
-    
+
     try {
       const parsed = new URL(urlInput);
-      
+
       // Solo permitir HTTPS (y HTTP en desarrollo local)
       const allowedProtocols = ['https:'];
       if (process.env.NODE_ENV === 'development') {
         allowedProtocols.push('http:');
       }
-      
+
       if (!allowedProtocols.includes(parsed.protocol)) {
         setError('Solo se permiten URLs HTTPS');
         return;
       }
-      
+
       // Bloquear acortadores de URL y dominios sospechosos
       const blockedDomains = ['bit.ly', 'tinyurl.com', 'goo.gl', 't.co', 'ow.ly'];
       if (blockedDomains.some(domain => parsed.hostname.includes(domain))) {
         setError('No se permiten URLs acortadas. Usa la URL directa de la imagen.');
         return;
       }
-      
+
       // Verificar que la URL termina en extensión de imagen común (opcional pero recomendado)
       const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.avif'];
-      const hasImageExtension = imageExtensions.some(ext => 
+      const hasImageExtension = imageExtensions.some(ext =>
         parsed.pathname.toLowerCase().endsWith(ext)
       );
-      
+
       // Si no tiene extensión de imagen, mostrar advertencia pero permitir
       // (algunas CDNs no usan extensiones)
-      if (!hasImageExtension && !parsed.hostname.includes('unsplash') && 
-          !parsed.hostname.includes('cloudinary') && !parsed.hostname.includes('imgur')) {
+      if (!hasImageExtension && !parsed.hostname.includes('unsplash') &&
+        !parsed.hostname.includes('cloudinary') && !parsed.hostname.includes('imgur')) {
         console.warn('URL sin extensión de imagen reconocida:', urlInput);
       }
-      
+
       setPreview(urlInput);
       onImageChange(urlInput);
       setShowUrlInput(false);
@@ -164,9 +164,8 @@ export function ImageUploader({ currentImageUrl, onImageChange, folder = 'articl
       ) : (
         <div
           onClick={() => !showUrlInput && fileInputRef.current?.click()}
-          className={`aspect-video rounded-lg border-2 border-dashed transition-colors flex flex-col items-center justify-center cursor-pointer ${
-            isUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-          }`}
+          className={`aspect-video rounded-lg border-2 border-dashed transition-colors flex flex-col items-center justify-center cursor-pointer ${isUploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+            }`}
         >
           {isUploading ? (
             <>

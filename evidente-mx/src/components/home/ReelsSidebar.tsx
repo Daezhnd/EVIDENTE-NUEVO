@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { Reel } from '@/types/database';
-import { Play, Pause, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, X, Maximize2, Minimize2, Volume2, VolumeX } from 'lucide-react';
+import { Play, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, X, Maximize2, Minimize2, Volume2, VolumeX } from 'lucide-react';
 import { AdBanner } from '@/components/ads/AdBanner';
 
 interface ReelsSidebarProps {

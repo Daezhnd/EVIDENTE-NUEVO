@@ -21,7 +21,7 @@ function timeAgo(date: string): string {
 
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
-export function HeroCombo({ mainArticle, secondaryArticles }: HeroComboProps) {
+export function HeroCombo({ mainArticle }: HeroComboProps) {
   return (
     <section className="relative">
       <ScrollIndicator />

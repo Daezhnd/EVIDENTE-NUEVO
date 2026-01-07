@@ -103,7 +103,7 @@ export function calculateReadingTime(content: string): string {
   const textOnly = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
   const wordCount = textOnly.split(/\s+/).filter(word => word.length > 0).length;
   const minutes = Math.ceil(wordCount / 200);
-  
+
   if (minutes < 1) return '1 min de lectura';
   if (minutes === 1) return '1 min de lectura';
   return `${minutes} min de lectura`;
@@ -194,14 +194,12 @@ export function validateArticle(data: ArticleValidation): ValidationError[] {
  */
 export function sanitizeHtml(html: string): string {
   // Permitir solo tags básicos de formato
-  const allowedTags = ['p', 'br', 'b', 'i', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'ul', 'ol', 'li', 'a', 'blockquote'];
-  
   // Remover scripts y eventos
-  let clean = html
+  const clean = html
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
     .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
     .replace(/javascript:/gi, '');
-  
+
   // Esto es una sanitización básica - en producción usar DOMPurify
   return clean;
 }

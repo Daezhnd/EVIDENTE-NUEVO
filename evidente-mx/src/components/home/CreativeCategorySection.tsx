@@ -158,7 +158,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
             </Link>
 
             {/* Notas secundarias - Apiladas */}
-            {rest.slice(0, 2).map((article, idx) => (
+            {rest.slice(0, 2).map((article) => (
               <Link
                 key={article.id}
                 href={`/noticia/${article.slug}`}
@@ -272,7 +272,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
 
           {/* Grid de secundarias - Estilo tarjetas horizontales */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {rest.map((article, idx) => (
+            {rest.map((article) => (
               <Link
                 key={article.id}
                 href={`/noticia/${article.slug}`}

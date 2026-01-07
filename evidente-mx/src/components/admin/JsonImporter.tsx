@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { generateSlug } from '@/lib/utils';
 import { ArticleCategory } from '@/types/database';
-import { 
-  Upload, 
-  FileJson, 
-  Check, 
-  X, 
+import {
+  Upload,
+  FileJson,
+  Check,
+  X,
   AlertCircle,
   Loader2,
   ArrowLeft,
@@ -44,23 +44,23 @@ interface ProcessedArticle {
   error?: string;
 }
 
-const validCategories: ArticleCategory[] = ['Destacadas', 'Noticias', 'Deportes', 'Turismo'];
+// const validCategories: ArticleCategory[] = ['Destacadas', 'Noticias', 'Deportes', 'Turismo'];
 
 // Función para convertir texto plano a HTML con párrafos
 const formatContentToHtml = (content: string): string => {
   if (!content) return '';
-  
+
   // Si ya tiene tags HTML, devolverlo como está
   if (/<[a-z][\s\S]*>/i.test(content)) {
     return content;
   }
-  
+
   // Dividir por dobles saltos de línea (párrafos)
   const paragraphs = content
     .split(/\n\s*\n/)
     .map(p => p.trim())
     .filter(p => p.length > 0);
-  
+
   // Si solo hay un párrafo sin saltos, intentar dividir por saltos simples
   if (paragraphs.length === 1 && content.includes('\n')) {
     const lines = content
@@ -69,7 +69,7 @@ const formatContentToHtml = (content: string): string => {
       .filter(l => l.length > 0);
     return lines.map(line => `<p>${line}</p>`).join('\n');
   }
-  
+
   // Envolver cada párrafo en <p>
   return paragraphs.map(p => {
     // Si el párrafo tiene saltos de línea simples, convertirlos a <br>
@@ -96,10 +96,10 @@ const exampleJson = `[
 ]`;
 
 export function JsonImporter() {
-  const router = useRouter();
+  // const router = useRouter();
   const [jsonInput, setJsonInput] = useState('');
   const [processedArticles, setProcessedArticles] = useState<ProcessedArticle[]>([]);
-  const [isProcessing, setIsProcessing] = useState(false);
+  // const [isProcessing, setIsProcessing] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [importResults, setImportResults] = useState<{ success: number; failed: number } | null>(null);
   const [parseError, setParseError] = useState<string | null>(null);
@@ -107,22 +107,22 @@ export function JsonImporter() {
   const normalizeCategory = (cat?: string): ArticleCategory => {
     if (!cat) return 'Noticias';
     const normalized = cat.toLowerCase().trim();
-    
+
     // Destacadas
     if (normalized.includes('destacad') || normalized.includes('principal') || normalized.includes('portada')) {
       return 'Destacadas';
     }
-    
+
     // Deportes
     if (normalized.includes('deport') || normalized.includes('futbol') || normalized.includes('fútbol')) {
       return 'Deportes';
     }
-    
+
     // Turismo
     if (normalized.includes('turis') || normalized.includes('viaj') || normalized.includes('destino')) {
       return 'Turismo';
     }
-    
+
     // Todo lo demás va a Noticias (incluyendo internacional, política, economía, etc.)
     // Noticias es la categoría general
     return 'Noticias';
@@ -131,7 +131,7 @@ export function JsonImporter() {
   const processJson = () => {
     setParseError(null);
     setProcessedArticles([]);
-    
+
     if (!jsonInput.trim()) {
       setParseError('Por favor, pega el JSON a importar');
       return;
@@ -139,7 +139,7 @@ export function JsonImporter() {
 
     try {
       let parsed = JSON.parse(jsonInput);
-      
+
       // Si no es un array, intenta envolverlo
       if (!Array.isArray(parsed)) {
         parsed = [parsed];
@@ -193,7 +193,7 @@ export function JsonImporter() {
 
     for (let i = 0; i < updatedArticles.length; i++) {
       const article = updatedArticles[i];
-      
+
       if (article.status === 'error') {
         failed++;
         continue;
@@ -210,12 +210,12 @@ export function JsonImporter() {
           is_published: article.is_published,
           published_at: article.is_published ? article.published_at : null,
         };
-        
-        console.log('Insertando artículo:', insertData);
-        
-        const { data, error } = await supabase.from('articles').insert([insertData]).select();
-        
-        console.log('Resultado:', { data, error });
+
+        // console.log('Insertando artículo:', insertData);
+
+        const { error } = await supabase.from('articles').insert([insertData]).select();
+
+        // console.log('Resultado:', { data, error });
 
         if (error) throw error;
 
@@ -227,10 +227,10 @@ export function JsonImporter() {
         const errorMsg = errorObj.message || 'Error desconocido';
         const hint = errorObj.hint ? ` - ${errorObj.hint}` : '';
         const code = errorObj.code ? ` [${errorObj.code}]` : '';
-        
-        updatedArticles[i] = { 
-          ...article, 
-          status: 'error', 
+
+        updatedArticles[i] = {
+          ...article,
+          status: 'error',
           error: `${errorMsg}${hint}${code}`
         };
         failed++;
@@ -300,14 +300,10 @@ export function JsonImporter() {
           <div className="mt-4 flex gap-3">
             <button
               onClick={processJson}
-              disabled={isProcessing || !jsonInput.trim()}
+              disabled={!jsonInput.trim()}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
             >
-              {isProcessing ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Upload className="w-5 h-5" />
-              )}
+              <Upload className="w-5 h-5" />
               Procesar JSON
             </button>
             <button
@@ -347,15 +343,14 @@ export function JsonImporter() {
             <>
               <div className="h-80 overflow-y-auto space-y-3 pr-2">
                 {processedArticles.map((article, index) => (
-                  <div 
+                  <div
                     key={index}
-                    className={`p-3 rounded-lg border ${
-                      article.status === 'success' 
-                        ? 'bg-green-50 border-green-200' 
-                        : article.status === 'error'
+                    className={`p-3 rounded-lg border ${article.status === 'success'
+                      ? 'bg-green-50 border-green-200'
+                      : article.status === 'error'
                         ? 'bg-red-50 border-red-200'
                         : 'bg-gray-50 border-gray-200'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex-1 min-w-0">

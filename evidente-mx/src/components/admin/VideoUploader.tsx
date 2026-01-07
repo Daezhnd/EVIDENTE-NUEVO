@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import { Upload, Loader2, Check, X, Video } from 'lucide-react';
+import { Upload, Loader2, Check, X } from 'lucide-react';
 
 interface VideoUploaderProps {
   onUploadComplete: (url: string) => void;
@@ -38,7 +38,7 @@ export function VideoUploader({ onUploadComplete, currentUrl }: VideoUploaderPro
 
     try {
       const supabase = createClient();
-      
+
       // Generar nombre único
       const timestamp = Date.now();
       const extension = file.name.split('.').pop() || 'mp4';
@@ -50,7 +50,7 @@ export function VideoUploader({ onUploadComplete, currentUrl }: VideoUploaderPro
       }, 200);
 
       // Subir archivo
-      const { data, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('videos')
         .upload(fileName, file, {
           cacheControl: '3600',
@@ -69,10 +69,10 @@ export function VideoUploader({ onUploadComplete, currentUrl }: VideoUploaderPro
         .getPublicUrl(fileName);
 
       setProgress(100);
-      
+
       // Llamar callback con la URL
       onUploadComplete(urlData.publicUrl);
-      
+
       // Reset después de un momento
       setTimeout(() => {
         setProgress(0);
@@ -95,8 +95,8 @@ export function VideoUploader({ onUploadComplete, currentUrl }: VideoUploaderPro
         className={`
           relative border-2 border-dashed rounded-xl p-6 text-center cursor-pointer
           transition-colors
-          ${isUploading 
-            ? 'border-blue-300 bg-blue-50' 
+          ${isUploading
+            ? 'border-blue-300 bg-blue-50'
             : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50/50'
           }
         `}
@@ -115,7 +115,7 @@ export function VideoUploader({ onUploadComplete, currentUrl }: VideoUploaderPro
             <Loader2 className="w-10 h-10 text-blue-500 animate-spin mx-auto" />
             <p className="text-sm text-blue-600 font-medium">Subiendo video...</p>
             <div className="w-full bg-blue-100 rounded-full h-2">
-              <div 
+              <div
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />

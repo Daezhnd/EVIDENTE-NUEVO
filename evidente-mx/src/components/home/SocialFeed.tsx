@@ -22,8 +22,8 @@ function timeAgo(date: string): string {
 }
 
 // Función para mapear categorías antiguas a 'Internacionales' visualmente
-function getDisplayCategory(category: string | any): string {
-    const catName = typeof category === 'object' ? category.name : category;
+function getDisplayCategory(category: string | unknown): string {
+    const catName = typeof category === 'object' && category && 'name' in category ? (category as { name: string }).name : String(category || '');
 
     if (!catName) return 'General';
 

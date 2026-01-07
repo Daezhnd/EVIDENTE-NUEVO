@@ -1,12 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Eye, EyeOff, Loader2, Mail, Lock } from 'lucide-react';
 
 export function AdminLoginForm() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -20,7 +18,7 @@ export function AdminLoginForm() {
 
     try {
       const supabase = createClient();
-      
+
       const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -40,10 +38,10 @@ export function AdminLoginForm() {
           .eq('id', data.user.id)
           .single();
 
-        console.log('Profile check:', { profile, profileError, userId: data.user.id });
+        // console.log('Profile check:', { profile, profileError, userId: data.user.id });
 
         if (profileError) {
-          console.error('Profile error:', profileError);
+          // console.error('Profile error:', profileError);
           // Si no hay perfil, permitir acceso temporal para crear el perfil
           // o mostrar error específico
           if (profileError.code === 'PGRST116') {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle } from 'lucide-react';
 
 export default function ContactoPage() {
@@ -10,10 +11,10 @@ export default function ContactoPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simular envío (aquí conectarías con tu backend/API)
     await new Promise(resolve => setTimeout(resolve, 1500));
-    
+
     setIsSubmitting(false);
     setIsSubmitted(true);
   };
@@ -29,12 +30,12 @@ export default function ContactoPage() {
           <p className="text-gray-600 mb-6">
             Gracias por contactarnos. Te responderemos lo antes posible.
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors"
           >
             Volver al inicio
-          </a>
+          </Link>
         </div>
       </div>
     );

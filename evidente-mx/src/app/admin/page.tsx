@@ -1,19 +1,16 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
-import { SimpleBarChart, SimpleLineChart } from '@/components/admin/Charts';
+import { SimpleBarChart } from '@/components/admin/Charts';
 import { createClient } from '@/lib/supabase/server';
 import { formatDistanceToNow } from '@/lib/utils';
-import { Article, Reel } from '@/types/database';
+import { Article } from '@/types/database';
 import { requireAuth } from '@/lib/auth';
-import { 
-  FileText, 
-  Video, 
-  Eye, 
-  TrendingUp,
-  ArrowUpRight,
+import {
+  FileText,
+  Video,
+  Eye,
   Clock,
-  Users,
   Mail
 } from 'lucide-react';
 
@@ -24,22 +21,22 @@ export const metadata: Metadata = {
 
 async function getDashboardStats() {
   const supabase = await createClient();
-  
+
   // Contar artículos
   const { count: articlesCount } = await supabase
     .from('articles')
     .select('*', { count: 'exact', head: true });
-  
+
   // Contar reels
   const { count: reelsCount } = await supabase
     .from('reels')
     .select('*', { count: 'exact', head: true });
-  
+
   // Sumar vistas de artículos
   const { data: articlesViews } = await supabase
     .from('articles')
     .select('views_count');
-  
+
   const totalViews = articlesViews?.reduce((sum, a) => sum + (a.views_count || 0), 0) || 0;
 
   // Contar suscriptores del newsletter (puede que la tabla no exista aún)
@@ -53,7 +50,7 @@ async function getDashboardStats() {
   } catch {
     // Tabla no existe aún
   }
-  
+
   return {
     articles: articlesCount || 0,
     reels: reelsCount || 0,
@@ -67,13 +64,13 @@ async function getViewsByCategory() {
   const { data } = await supabase
     .from('articles')
     .select('category, views_count');
-  
+
   const byCategory: Record<string, number> = {};
   data?.forEach(article => {
     const cat = typeof article.category === 'string' ? article.category : 'Otro';
     byCategory[cat] = (byCategory[cat] || 0) + (article.views_count || 0);
   });
-  
+
   return Object.entries(byCategory).map(([label, value]) => ({ label, value }));
 }
 
@@ -84,42 +81,42 @@ async function getRecentArticles(limit: number = 5): Promise<Article[]> {
     .select('*')
     .order('created_at', { ascending: false })
     .limit(limit);
-  
+
   return data || [];
 }
 
 export default async function AdminDashboardPage() {
   // Verificar autenticación
   await requireAuth();
-  
+
   const dashboardStats = await getDashboardStats();
   const recentArticles = await getRecentArticles(5);
   const viewsByCategory = await getViewsByCategory();
 
   const stats = [
-    { 
-      label: 'Total Artículos', 
-      value: dashboardStats.articles.toString(), 
+    {
+      label: 'Total Artículos',
+      value: dashboardStats.articles.toString(),
       icon: FileText,
       color: 'bg-blue-900'
     },
-    { 
-      label: 'Total Reels', 
-      value: dashboardStats.reels.toString(), 
+    {
+      label: 'Total Reels',
+      value: dashboardStats.reels.toString(),
       icon: Video,
       color: 'bg-blue-700'
     },
-    { 
-      label: 'Total Vistas', 
-      value: dashboardStats.views >= 1000 
-        ? `${(dashboardStats.views / 1000).toFixed(1)}K` 
-        : dashboardStats.views.toString(), 
+    {
+      label: 'Total Vistas',
+      value: dashboardStats.views >= 1000
+        ? `${(dashboardStats.views / 1000).toFixed(1)}K`
+        : dashboardStats.views.toString(),
       icon: Eye,
       color: 'bg-green-600'
     },
-    { 
-      label: 'Suscriptores', 
-      value: dashboardStats.subscribers.toString(), 
+    {
+      label: 'Suscriptores',
+      value: dashboardStats.subscribers.toString(),
       icon: Mail,
       color: 'bg-purple-600'
     },
@@ -128,7 +125,7 @@ export default async function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <AdminSidebar />
-      
+
       <main className="flex-1 p-8 ml-64">
         {/* Header */}
         <div className="mb-8">
@@ -139,7 +136,7 @@ export default async function AdminDashboardPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat) => (
-            <div 
+            <div
               key={stat.label}
               className="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
             >
@@ -175,7 +172,7 @@ export default async function AdminDashboardPage() {
                         <span className="text-gray-500">{cat.value.toLocaleString()} vistas ({percent}%)</span>
                       </div>
                       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                        <div 
+                        <div
                           className={`h-full ${colors[idx % colors.length]} rounded-full transition-all duration-500`}
                           style={{ width: `${percent}%` }}
                         />
@@ -194,7 +191,7 @@ export default async function AdminDashboardPage() {
           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900">Artículos Recientes</h2>
-              <Link 
+              <Link
                 href="/admin/articulos"
                 className="text-sm text-blue-900 hover:text-blue-700 font-medium"
               >

@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { Reel } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
 import { VideoUploader } from './VideoUploader';
-import { 
-  Save, 
-  ArrowLeft, 
+import {
+  Save,
+  ArrowLeft,
   Video,
   Image as ImageIcon,
   Loader2,
@@ -37,7 +37,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [videoSource, setVideoSource] = useState<'instagram' | 'tiktok' | 'direct' | null>(null);
   const [inputMode, setInputMode] = useState<'upload' | 'url'>('upload');
-  
+
   const [formData, setFormData] = useState({
     title: reel?.title || '',
     video_url: reel?.video_url || '',
@@ -58,7 +58,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
 
     try {
       const supabase = createClient();
-      
+
       // Solo incluir campos que existen en la tabla
       const reelData: Record<string, unknown> = {
         video_url: formData.video_url,
@@ -68,7 +68,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
         published_at: publish ? new Date().toISOString() : null,
       };
 
-      console.log('Intentando guardar reel:', reelData);
+      // console.log('Intentando guardar reel:', reelData);
 
       if (isEditing && reel?.id) {
         // Actualizar reel existente
@@ -83,7 +83,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
         }
       } else {
         // Crear nuevo reel
-        const { data, error: insertError } = await supabase
+        const { error: insertError } = await supabase
           .from('reels')
           .insert([reelData])
           .select();
@@ -92,9 +92,9 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
           console.error('Error de Supabase (insert):', insertError);
           throw new Error(insertError.message || insertError.details || JSON.stringify(insertError));
         }
-        console.log('Reel creado:', data);
+        // console.log('Reel creado:', data);
       }
-      
+
       router.push('/admin/reels');
       router.refresh();
     } catch (err: unknown) {
@@ -140,17 +140,16 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
             <label className="block text-sm font-medium text-gray-700 mb-3">
               Video *
             </label>
-            
+
             {/* Tabs para elegir método */}
             <div className="flex gap-2 mb-4">
               <button
                 type="button"
                 onClick={() => setInputMode('upload')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                  inputMode === 'upload'
-                    ? 'bg-blue-900 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${inputMode === 'upload'
+                  ? 'bg-blue-900 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
               >
                 <Upload className="w-4 h-4" />
                 Subir video
@@ -158,11 +157,10 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
               <button
                 type="button"
                 onClick={() => setInputMode('url')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
-                  inputMode === 'url'
-                    ? 'bg-blue-900 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${inputMode === 'url'
+                  ? 'bg-blue-900 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
               >
                 <LinkIcon className="w-4 h-4" />
                 Pegar URL
@@ -190,7 +188,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
                     className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
                   />
                 </div>
-                
+
                 <p className="text-sm text-gray-400 mt-3">
                   Pega una URL directa a un archivo MP4 o WebM
                 </p>
@@ -276,9 +274,10 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
           {/* Thumbnail */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
             <h3 className="font-semibold text-gray-900 mb-4">Miniatura</h3>
-            
+
             {formData.thumbnail_url ? (
               <div className="relative aspect-[9/16] rounded-lg overflow-hidden mb-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={formData.thumbnail_url}
                   alt="Thumbnail preview"
@@ -325,7 +324,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
             <h3 className="font-semibold text-blue-900 mb-3">💡 Cómo agregar Reels</h3>
             <ul className="text-sm text-blue-800 space-y-2">
               <li><strong>Instagram:</strong> Copia el enlace del reel desde la app o web</li>
-              <li><strong>TikTok:</strong> Usa "Copiar enlace" del video</li>
+              <li><strong>TikTok:</strong> Usa &quot;Copiar enlace&quot; del video</li>
               <li><strong>Video propio:</strong> Sube a un hosting y pega la URL directa</li>
               <li className="pt-2 border-t border-blue-200">• Videos de 15-60 segundos funcionan mejor</li>
               <li>• Agrega hashtags en la descripción</li>

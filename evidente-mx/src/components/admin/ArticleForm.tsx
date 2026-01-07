@@ -10,8 +10,7 @@ import {
   Save,
   Eye,
   ArrowLeft,
-  Loader2,
-  X
+  Loader2
 } from 'lucide-react';
 import { ImageUploader } from './ImageUploader';
 
@@ -114,9 +113,9 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
   };
 
   // Helper para obtener error de un campo específico
-  const getFieldError = (field: string) => {
-    return validationErrors.find(e => e.field === field)?.message;
-  };
+  // const getFieldError = (field: string) => {
+  //   return validationErrors.find(e => e.field === field)?.message;
+  // };
 
   return (
     <form onSubmit={(e) => handleSubmit(e, false)}>
@@ -270,8 +269,8 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
                 <label
                   key={category}
                   className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${formData.category === category
-                      ? 'border-blue-900 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-blue-900 bg-blue-50'
+                    : 'border-gray-200 hover:border-gray-300'
                     }`}
                 >
                   <input
