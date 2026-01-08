@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Article } from '@/types/database';
@@ -58,6 +59,70 @@ function getJwPlayerDirectUrl(url: string): string {
     return url;
 }
 
+function FeedVideoPlayer({ url, poster }: { url: string; poster: string }) {
+    const videoRef = React.useRef<HTMLVideoElement>(null);
+    const [isMuted, setIsMuted] = React.useState(true);
+
+    React.useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        video.play().catch(() => {
+                            // Autoplay might be blocked if not muted or user interaction required
+                            console.log('Autoplay prevented');
+                        });
+                    } else {
+                        video.pause();
+                    }
+                });
+            },
+            { threshold: 0.6 } // Play when 60% visible
+        );
+
+        observer.observe(video);
+
+        return () => {
+            observer.unobserve(video);
+        };
+    }, []);
+
+    return (
+        <div className="relative w-full h-full group">
+            <video
+                ref={videoRef}
+                src={url}
+                className="w-full h-full object-cover"
+                poster={poster}
+                muted={isMuted}
+                loop
+                playsInline
+            />
+
+            {/* Controls Overlay */}
+            <div className="absolute bottom-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <button
+                    onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setIsMuted(!isMuted);
+                    }}
+                    className="p-1.5 bg-black/50 text-white rounded-full hover:bg-black/70 backdrop-blur-sm"
+                >
+                    {isMuted ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><line x1="23" x2="17" y1="9" y2="15" /><line x1="17" x2="23" y1="9" y2="15" /></svg>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" /><path d="M15.54 8.46a5 5 0 0 1 0 7.07" /><path d="M19.07 4.93a10 10 0 0 1 0 14.14" /></svg>
+                    )}
+                </button>
+            </div>
+        </div>
+    );
+}
+
 export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLoading = true }: SocialFeedProps) {
     if (!articles || articles.length === 0) return null;
 
@@ -110,14 +175,10 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                         <div className="md:w-5/12 lg:w-4/12 relative aspect-video md:aspect-auto">
                                             <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800">
                                                 {article.video_url ? (
-                                                    <video
-                                                        src={getJwPlayerDirectUrl(article.video_url)}
-                                                        controls
-                                                        className="w-full h-full object-cover"
+                                                    <FeedVideoPlayer
+                                                        url={getJwPlayerDirectUrl(article.video_url)}
                                                         poster={article.image_url || '/placeholder.svg'}
-                                                    >
-                                                        Tu navegador no soporta el tag de video.
-                                                    </video>
+                                                    />
                                                 ) : (
                                                     <>
                                                         <Image
