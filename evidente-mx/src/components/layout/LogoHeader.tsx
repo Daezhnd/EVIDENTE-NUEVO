@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook, Instagram, Youtube } from 'lucide-react';
+import { FacebookIcon, InstagramIcon, YouTubeIcon } from '@/components/ui/SocialIcons';
 
 export function LogoHeader() {
     return (
@@ -41,7 +41,7 @@ export function LogoHeader() {
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-blue-600 transition-colors"
                             >
-                                <Facebook className="w-6 h-6" />
+                                <FacebookIcon className="w-6 h-6" />
                             </a>
                             <a
                                 href="https://www.instagram.com/evidentemx/"
@@ -49,7 +49,7 @@ export function LogoHeader() {
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-pink-600 transition-colors"
                             >
-                                <Instagram className="w-6 h-6" />
+                                <InstagramIcon className="w-6 h-6" />
                             </a>
                             <a
                                 href="https://www.youtube.com/@EVIDENTEMX"
@@ -57,7 +57,7 @@ export function LogoHeader() {
                                 rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-red-600 transition-colors"
                             >
-                                <Youtube className="w-6 h-6" />
+                                <YouTubeIcon className="w-6 h-6" />
                             </a>
                         </div>
                     </div>
