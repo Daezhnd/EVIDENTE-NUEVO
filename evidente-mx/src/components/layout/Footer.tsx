@@ -36,7 +36,7 @@ export function Footer() {
           <div>
             <h3 className="text-white font-bold text-lg mb-4 uppercase tracking-wider">Nosotros</h3>
             <p className="text-sm leading-relaxed mb-6 text-gray-400">
-              Medio de comunicación que ofrece noticias relevantes e inmediatas principalmente del estado de Chihuahua y sus alrededores.
+              Conexión directa con la actualidad mundial. Una plataforma informativa dedicada a reportar los hechos más trascendentes con inmediatez, precisión y una perspectiva sin fronteras.
             </p>
             <div className="flex space-x-4">
               <a
