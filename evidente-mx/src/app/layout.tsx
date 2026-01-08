@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { BreakingNewsTicker } from "@/components/layout/BreakingNewsTicker";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { BackToTop } from "@/components/ui/BackToTop";
 import { getRecentArticlesForTicker } from "@/lib/api";
 
 const inter = Inter({
@@ -86,6 +87,13 @@ export default async function RootLayout({
 
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        {/* Preconnect hints for faster resource loading */}
+        <link rel="preconnect" href="https://fnlvkexkimhgptasngbw.supabase.co" />
+        <link rel="preconnect" href="https://cdn.jwplayer.com" />
+        <link rel="dns-prefetch" href="https://fnlvkexkimhgptasngbw.supabase.co" />
+        <link rel="dns-prefetch" href="https://cdn.jwplayer.com" />
+      </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors`}>
         <ThemeProvider>
           <ScrollProgress />
@@ -98,6 +106,7 @@ export default async function RootLayout({
           <main className="min-h-screen">
             {children}
           </main>
+          <BackToTop />
           <Footer />
         </ThemeProvider>
       </body>

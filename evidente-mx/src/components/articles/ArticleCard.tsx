@@ -56,6 +56,7 @@ export function ArticleCard({
                 src={article.image_url}
                 alt={article.title}
                 fill
+                loading="lazy"
                 className="object-cover group-hover:scale-110 transition-transform duration-500"
               />
             ) : (
@@ -93,6 +94,7 @@ export function ArticleCard({
                 src={article.image_url}
                 alt={article.title}
                 fill
+                loading="lazy"
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
               />
             ) : (
@@ -149,6 +151,7 @@ export function ArticleCard({
               src={article.image_url}
               alt={article.title}
               fill
+              loading="lazy"
               className="object-cover group-hover:scale-105 transition-transform duration-700"
             />
           ) : (

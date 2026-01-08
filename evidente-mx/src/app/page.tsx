@@ -94,5 +94,5 @@ export default async function HomePage() {
   );
 }
 
-// Revalidar cada 60 segundos para mantener contenido fresco
-export const revalidate = 60;
+// Revalidar cada 5 minutos para reducir llamadas a la base de datos
+export const revalidate = 300;

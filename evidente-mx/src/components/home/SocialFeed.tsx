@@ -185,6 +185,7 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                                             src={article.image_url || '/placeholder.svg'}
                                                             alt={article.title}
                                                             fill
+                                                            loading="lazy"
                                                             className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                                         />
                                                         {/* Overlay sutil solo para imágenes */}

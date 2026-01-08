@@ -38,6 +38,8 @@ export function HeroCombo({ mainArticle }: HeroComboProps) {
               fill
               className="object-cover transition-transform duration-1000 group-hover:scale-105"
               priority
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsLCgwMDQwNDAwMDQ0MDAwMDAwMDAwMDAwMDAwMDAwMDAz/2wBDAQMEBAUEBQkFBQkMCwgLDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDBAMBAAAAAAAAAAAAAQIDBAURAAYSIRMxQVH/xAAVAQEBAAAAAAAAAAAAAAAAAAADBP/EABkRAAIDAQAAAAAAAAAAAAAAAAECAAMRIf/aAAwDAQACEQMRAD8A1+0bGsFg3VbrjbLJSU1bRPK0E0cYDxl42QlT9BBUgjr2P50tNNgA/9k="
             />
             {/* Overlay sutil */}
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
