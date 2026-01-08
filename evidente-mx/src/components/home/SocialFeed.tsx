@@ -149,11 +149,13 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0 }: Soci
                         );
                     })}
 
-                    <div className="flex justify-center pt-12 pb-8 opacity-30">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce" />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce delay-75" />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce delay-150" />
-                    </div>
+                    {showLoading && (
+                        <div className="flex justify-center pt-12 pb-8 opacity-30">
+                            <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce" />
+                            <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce delay-75" />
+                            <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce delay-150" />
+                        </div>
+                    )}
                 </div>
             </div>
         </section >

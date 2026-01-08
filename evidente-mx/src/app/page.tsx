@@ -59,12 +59,12 @@ export default async function HomePage() {
           {/* Layout Split: Top part has Sidebar, Bottom part is full width */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-            {/* Top Feed Column (3 cols) - Wraps first 6 articles */}
+            {/* Top Feed Column (3 cols) - Wraps first 3 articles */}
             <div className="lg:col-span-3">
               <div className="bg-red-100 p-4 text-red-900 border border-red-300 mb-4 hidden">
                 DEBUG: Featured: {featuredArticles.length}, Latest: {latestArticles.length}, Reels: {reels.length}
               </div>
-              <SocialFeed articles={latestArticles.slice(0, 6)} showLoading={false} />
+              <SocialFeed articles={latestArticles.slice(0, 3)} showLoading={false} />
             </div>
 
             {/* Sidebar Column (1 col) - Static */}
@@ -78,9 +78,9 @@ export default async function HomePage() {
           {/* Remaining Feed (Full Width) */}
           <div className="mt-8">
             <SocialFeed
-              articles={latestArticles.slice(6)}
+              articles={latestArticles.slice(3)}
               showHeader={false}
-              startIndex={6}
+              startIndex={3}
             />
           </div>
 
