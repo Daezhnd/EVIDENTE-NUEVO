@@ -47,6 +47,15 @@ function formatContent(content: string): string {
   return sanitizeHtml(htmlContent);
 }
 
+function getJwPlayerDirectUrl(url: string): string {
+  // Extract ID from https://cdn.jwplayer.com/previews/MEDIAID...
+  const match = url.match(/previews\/([a-zA-Z0-9]+)/);
+  if (match && match[1]) {
+    return `https://cdn.jwplayer.com/videos/${match[1]}-720.mp4`;
+  }
+  return url;
+}
+
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
@@ -206,8 +215,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </header>
 
-        {/* Imagen principal */}
-        {article.image_url && (
+        {/* Imagen o Video principal */}
+        {article.video_url ? (
+          <div className="relative aspect-video rounded-2xl overflow-hidden mb-8 bg-black">
+            <video
+              src={getJwPlayerDirectUrl(article.video_url)}
+              poster={article.image_url || undefined}
+              controls
+              className="w-full h-full object-contain"
+            >
+              Tu navegador no soporta el elemento de video.
+            </video>
+          </div>
+        ) : article.image_url ? (
           <div className="relative aspect-video rounded-2xl overflow-hidden mb-8">
             <Image
               src={article.image_url}
@@ -218,7 +238,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               unoptimized
             />
           </div>
-        )}
+        ) : null}
 
         {/* Botones de compartir */}
         <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-100">
