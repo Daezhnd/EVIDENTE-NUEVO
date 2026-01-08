@@ -97,17 +97,30 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                 >
                                     <Link href={`/noticia/${article.slug}`} className="flex flex-col md:flex-row h-full">
 
-                                        {/* Imagen a la izquierda (Desktop) - 40% ancho fijo */}
+                                        {/* Imagen o Video a la izquierda (Desktop) - 40% ancho fijo */}
                                         <div className="md:w-5/12 lg:w-4/12 relative aspect-video md:aspect-auto">
                                             <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800">
-                                                <Image
-                                                    src={article.image_url || '/placeholder.svg'}
-                                                    alt={article.title}
-                                                    fill
-                                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                                                />
-                                                {/* Overlay sutil */}
-                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                                                {article.video_url ? (
+                                                    <video
+                                                        src={article.video_url}
+                                                        controls
+                                                        className="w-full h-full object-cover"
+                                                        poster={article.image_url || '/placeholder.svg'}
+                                                    >
+                                                        Tu navegador no soporta el tag de video.
+                                                    </video>
+                                                ) : (
+                                                    <>
+                                                        <Image
+                                                            src={article.image_url || '/placeholder.svg'}
+                                                            alt={article.title}
+                                                            fill
+                                                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                                        />
+                                                        {/* Overlay sutil solo para imágenes */}
+                                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                                                    </>
+                                                )}
                                             </div>
                                         </div>
 

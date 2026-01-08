@@ -36,6 +36,7 @@ export interface Article {
   summary?: string;
   content?: string;
   image_url: string | null;
+  video_url?: string;
   category?: Category | ArticleCategory;
   author?: Author;
   author_id?: string | null;
