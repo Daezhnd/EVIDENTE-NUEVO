@@ -49,7 +49,7 @@ function getCategoryColor(displayCategory: string): string {
     return colors[displayCategory] || colors['default'];
 }
 
-export function SocialFeed({ articles, showHeader = true, startIndex = 0 }: SocialFeedProps) {
+export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLoading = true }: SocialFeedProps) {
     if (!articles || articles.length === 0) return null;
 
     // Defines groups of ads to show in pairs
