@@ -83,7 +83,7 @@ export function ArticlesTable() {
   if (isLoading) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 flex flex-col items-center justify-center">
-        <Loader2 className="w-8 h-8 text-blue-900 animate-spin mb-3" />
+        <Loader2 className="w-8 h-8 text-[#0067b2] animate-spin mb-3" />
         <p className="text-gray-500">Cargando artículos...</p>
       </div>
     );
@@ -95,7 +95,7 @@ export function ArticlesTable() {
         <p className="text-red-600 mb-4">{error}</p>
         <button
           onClick={fetchArticles}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800"
+          className="flex items-center gap-2 px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e]"
         >
           <RefreshCw className="w-4 h-4" />
           Reintentar
@@ -110,7 +110,7 @@ export function ArticlesTable() {
         <p className="text-gray-500 mb-4">No hay artículos todavía</p>
         <Link
           href="/admin/articulos/nuevo"
-          className="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800"
+          className="px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e]"
         >
           Crear primer artículo
         </Link>
@@ -158,7 +158,7 @@ export function ArticlesTable() {
                   type="checkbox"
                   checked={selectedIds.length === articles.length && articles.length > 0}
                   onChange={toggleSelectAll}
-                  className="rounded border-gray-300 text-blue-900 focus:ring-blue-900"
+                  className="rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2]"
                 />
               </th>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
@@ -189,7 +189,7 @@ export function ArticlesTable() {
                     type="checkbox"
                     checked={selectedIds.includes(article.id)}
                     onChange={() => toggleSelect(article.id)}
-                    className="rounded border-gray-300 text-blue-900 focus:ring-blue-900"
+                    className="rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2]"
                   />
                 </td>
                 <td className="px-6 py-4">

@@ -50,7 +50,7 @@ export function AdminSidebar() {
             href={item.href}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
               isActive(item.href)
-                ? 'bg-blue-900 text-white'
+                ? 'bg-[#0067b2] text-white'
                 : 'text-gray-400 hover:text-white hover:bg-gray-800'
             }`}
           >

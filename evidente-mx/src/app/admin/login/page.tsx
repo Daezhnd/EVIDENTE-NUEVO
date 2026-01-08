@@ -13,7 +13,7 @@ export default function AdminLoginPage() {
         {/* Logo y título */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Evidente<span className="text-blue-900">.mx</span>
+            Evidente<span className="text-[#0067b2]">.mx</span>
           </h1>
           <p className="mt-2 text-gray-600">Panel de Administración</p>
         </div>
@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-500">
           ¿Olvidaste tu contraseña?{' '}
-          <a href="#" className="text-blue-900 hover:text-blue-700 font-medium">
+          <a href="#" className="text-[#0067b2] hover:text-blue-700 font-medium">
             Recuperar acceso
           </a>
         </p>

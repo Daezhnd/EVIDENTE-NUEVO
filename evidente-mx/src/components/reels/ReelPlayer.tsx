@@ -275,7 +275,7 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
             {/* Caption y info */}
             <div className="absolute bottom-4 left-3 right-16">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-800 to-blue-900 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-br from-[#00528e] to-[#0067b2] rounded-full flex items-center justify-center">
                   <span className="text-white text-xs font-bold">E</span>
                 </div>
                 <span className="text-white font-semibold text-sm">Evidente.mx</span>

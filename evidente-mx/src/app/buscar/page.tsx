@@ -57,12 +57,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
               name="q"
               defaultValue={query}
               placeholder="¿Qué estás buscando?"
-              className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
               autoFocus
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] transition-colors"
             >
               Buscar
             </button>
@@ -108,10 +108,10 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
                 {/* Contenido */}
                 <div className="flex-1 min-w-0">
-                  <span className="text-xs font-medium text-blue-900 uppercase">
+                  <span className="text-xs font-medium text-[#0067b2] uppercase">
                     {typeof article.category === 'object' ? article.category.name : article.category}
                   </span>
-                  <h2 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-900 transition-colors mt-1">
+                  <h2 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-[#0067b2] transition-colors mt-1">
                     {article.title}
                   </h2>
                   <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
@@ -120,7 +120,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                   </div>
                 </div>
 
-                <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-blue-900 self-center flex-shrink-0" />
+                <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-[#0067b2] self-center flex-shrink-0" />
               </Link>
             ))}
           </div>
@@ -134,7 +134,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <Link
                   key={cat}
                   href={`/categoria/${cat.toLowerCase()}`}
-                  className="px-4 py-2 bg-white rounded-lg border hover:border-blue-900 hover:text-blue-900 transition-colors"
+                  className="px-4 py-2 bg-white rounded-lg border hover:border-[#0067b2] hover:text-[#0067b2] transition-colors"
                 >
                   {cat}
                 </Link>

@@ -270,12 +270,12 @@ export function JsonImporter() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <FileJson className="w-5 h-5 text-blue-900" />
+              <FileJson className="w-5 h-5 text-[#0067b2]" />
               JSON de Entrada
             </h2>
             <button
               onClick={copyExample}
-              className="text-sm text-blue-900 hover:text-blue-800 flex items-center gap-1"
+              className="text-sm text-[#0067b2] hover:text-[#00528e] flex items-center gap-1"
               title="Copiar ejemplo"
             >
               <Copy className="w-4 h-4" />
@@ -287,7 +287,7 @@ export function JsonImporter() {
             value={jsonInput}
             onChange={(e) => setJsonInput(e.target.value)}
             placeholder={`Pega tu JSON aquí...\n\nEjemplo:\n${exampleJson}`}
-            className="w-full h-80 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent font-mono text-sm resize-none"
+            className="w-full h-80 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent font-mono text-sm resize-none"
           />
 
           {parseError && (
@@ -301,7 +301,7 @@ export function JsonImporter() {
             <button
               onClick={processJson}
               disabled={!jsonInput.trim()}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#0067b2] hover:bg-[#00528e] text-white font-medium rounded-lg transition-colors disabled:opacity-50"
             >
               <Upload className="w-5 h-5" />
               Procesar JSON
@@ -397,7 +397,7 @@ export function JsonImporter() {
                     </p>
                     <Link
                       href="/admin/articulos"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] transition-colors"
                     >
                       Ver artículos
                     </Link>

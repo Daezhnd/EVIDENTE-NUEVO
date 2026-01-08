@@ -69,7 +69,7 @@ export function PollWidget() {
                         disabled={!selectedOption}
                         className={`w-full py-2.5 rounded font-medium mt-4 transition-all
               ${selectedOption
-                                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-900/50'
+                                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-[#0067b2]/50'
                                 : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                             }
             `}

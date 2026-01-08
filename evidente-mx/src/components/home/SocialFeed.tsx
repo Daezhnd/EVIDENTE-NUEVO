@@ -41,7 +41,7 @@ function getDisplayCategory(category: string | unknown): string {
 
 function getCategoryColor(displayCategory: string): string {
     const colors: Record<string, string> = {
-        'Noticias': 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/30',
+        'Noticias': 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-[#0067b2]/30',
         'Internacionales': 'text-cyan-700 bg-cyan-50 dark:text-cyan-300 dark:bg-cyan-900/30',
         'Entretenimiento': 'text-purple-700 bg-purple-50 dark:text-purple-300 dark:bg-purple-900/30',
         'Destacadas': 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/30',

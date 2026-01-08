@@ -53,7 +53,7 @@ export function SiteSettings() {
       {/* Información General */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <Globe className="w-5 h-5 text-blue-900" />
+          <Globe className="w-5 h-5 text-[#0067b2]" />
           Información General
         </h2>
         
@@ -66,7 +66,7 @@ export function SiteSettings() {
               type="text"
               value={config.siteName}
               onChange={(e) => setConfig(prev => ({ ...prev, siteName: e.target.value }))}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
             />
           </div>
           
@@ -78,7 +78,7 @@ export function SiteSettings() {
               type="url"
               value={config.siteUrl}
               onChange={(e) => setConfig(prev => ({ ...prev, siteUrl: e.target.value }))}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
             />
           </div>
           
@@ -90,7 +90,7 @@ export function SiteSettings() {
               value={config.siteDescription}
               onChange={(e) => setConfig(prev => ({ ...prev, siteDescription: e.target.value }))}
               rows={3}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent resize-none"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent resize-none"
             />
             <p className="text-xs text-gray-400 mt-1">Esta descripción aparecerá en los motores de búsqueda</p>
           </div>
@@ -100,7 +100,7 @@ export function SiteSettings() {
       {/* Información de Contacto */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <Mail className="w-5 h-5 text-blue-900" />
+          <Mail className="w-5 h-5 text-[#0067b2]" />
           Información de Contacto
         </h2>
         
@@ -115,7 +115,7 @@ export function SiteSettings() {
                 type="email"
                 value={config.contactEmail}
                 onChange={(e) => setConfig(prev => ({ ...prev, contactEmail: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
               />
             </div>
           </div>
@@ -130,7 +130,7 @@ export function SiteSettings() {
                 type="tel"
                 value={config.contactPhone}
                 onChange={(e) => setConfig(prev => ({ ...prev, contactPhone: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
               />
             </div>
           </div>
@@ -145,7 +145,7 @@ export function SiteSettings() {
                 type="text"
                 value={config.address}
                 onChange={(e) => setConfig(prev => ({ ...prev, address: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
               />
             </div>
           </div>
@@ -155,7 +155,7 @@ export function SiteSettings() {
       {/* Redes Sociales */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <Instagram className="w-5 h-5 text-blue-900" />
+          <Instagram className="w-5 h-5 text-[#0067b2]" />
           Redes Sociales
         </h2>
         
@@ -170,7 +170,7 @@ export function SiteSettings() {
                 type="url"
                 value={config.socialFacebook}
                 onChange={(e) => setConfig(prev => ({ ...prev, socialFacebook: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                 placeholder="https://facebook.com/..."
               />
             </div>
@@ -186,7 +186,7 @@ export function SiteSettings() {
                 type="url"
                 value={config.socialTwitter}
                 onChange={(e) => setConfig(prev => ({ ...prev, socialTwitter: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                 placeholder="https://twitter.com/..."
               />
             </div>
@@ -202,7 +202,7 @@ export function SiteSettings() {
                 type="url"
                 value={config.socialInstagram}
                 onChange={(e) => setConfig(prev => ({ ...prev, socialInstagram: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                 placeholder="https://instagram.com/..."
               />
             </div>
@@ -218,7 +218,7 @@ export function SiteSettings() {
                 type="url"
                 value={config.socialYoutube}
                 onChange={(e) => setConfig(prev => ({ ...prev, socialYoutube: e.target.value }))}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                 placeholder="https://youtube.com/..."
               />
             </div>
@@ -234,7 +234,7 @@ export function SiteSettings() {
         <button
           onClick={handleSave}
           disabled={isLoading}
-          className="flex items-center gap-2 px-6 py-3 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-3 bg-[#0067b2] hover:bg-[#00528e] text-white font-medium rounded-lg transition-colors disabled:opacity-50"
         >
           {isLoading ? (
             <Loader2 className="w-5 h-5 animate-spin" />

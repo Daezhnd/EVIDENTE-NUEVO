@@ -3,8 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #111827;
-  --primary: #dc2626;
-  --primary-hover: #b91c1c;
+  --primary: #0099ba;
+  --primary-hover: #007a96;
+  --secondary: #0067b2;
+  --secondary-hover: #00528e;
 }
 
 .dark {
@@ -18,8 +20,8 @@
   --color-primary: var(--primary);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
-  --color-evident: #0066b2;
-  --color-evident-dark: #005291;
+  --color-evident: #0099ba;
+  --color-evident-dark: #0067b2;
 }
 
 html {
@@ -27,9 +29,9 @@ html {
 }
 
 ::selection {
-  background-color: rgba(0, 102, 178, 0.2);
-  /* Brand Blue/20 */
-  color: #0066b2;
+  background-color: rgba(0, 153, 186, 0.2);
+  /* Primary #0099ba/20 */
+  color: #0099ba;
 }
 
 

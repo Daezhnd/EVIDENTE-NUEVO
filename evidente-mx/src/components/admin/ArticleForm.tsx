@@ -150,7 +150,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
               value={formData.title}
               onChange={(e) => handleTitleChange(e.target.value)}
               placeholder="Escribe un título atractivo..."
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent text-lg"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent text-lg"
               required
             />
           </div>
@@ -167,7 +167,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
                 value={formData.slug}
                 onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
                 placeholder="url-del-articulo"
-                className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
               />
             </div>
           </div>
@@ -182,7 +182,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
               onChange={(e) => setFormData(prev => ({ ...prev, summary: e.target.value }))}
               placeholder="Un breve resumen de la noticia (aparece en las tarjetas)..."
               rows={3}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent resize-none"
               required
             />
             <p className="text-sm text-gray-400 mt-2">
@@ -199,7 +199,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
               <button
                 type="button"
                 onClick={() => setIsPreview(!isPreview)}
-                className="text-sm text-blue-900 hover:text-blue-800 font-medium flex items-center gap-1"
+                className="text-sm text-[#0067b2] hover:text-[#00528e] font-medium flex items-center gap-1"
               >
                 <Eye className="w-4 h-4" />
                 {isPreview ? 'Editar' : 'Vista previa'}
@@ -217,7 +217,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
                 onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
                 placeholder="Escribe el contenido del artículo... (Puedes usar HTML básico)"
                 rows={15}
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent resize-none font-mono text-sm"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent resize-none font-mono text-sm"
                 required
               />
             )}
@@ -237,7 +237,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
                 type="button"
                 onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
                 disabled={isLoading}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#0067b2] hover:bg-[#00528e] text-white font-medium rounded-lg transition-colors disabled:opacity-50"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -271,7 +271,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
                 <label
                   key={category}
                   className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${formData.category === category
-                    ? 'border-blue-900 bg-blue-50'
+                    ? 'border-[#0067b2] bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300'
                     }`}
                 >
@@ -281,7 +281,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
                     value={category}
                     checked={formData.category === category}
                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value as ArticleCategory }))}
-                    className="text-blue-900 focus:ring-blue-900"
+                    className="text-[#0067b2] focus:ring-[#0067b2]"
                   />
                   <span className="font-medium text-gray-700">{category}</span>
                 </label>
@@ -310,7 +310,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
               value={formData.video_url}
               onChange={(e) => setFormData(prev => ({ ...prev, video_url: e.target.value }))}
               placeholder="https://ejemplo.com/video.mp4"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent text-sm"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent text-sm"
             />
             <p className="text-xs text-gray-400 mt-2">
               Si agregas un video, este reemplazará a la imagen destacada en el feed.

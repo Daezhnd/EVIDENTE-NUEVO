@@ -74,7 +74,7 @@ export function ReelsGrid() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-16">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-900" />
+        <Loader2 className="w-8 h-8 animate-spin text-[#0067b2]" />
       </div>
     );
   }
@@ -143,7 +143,7 @@ export function ReelsGrid() {
                   type="checkbox"
                   checked={selectedIds.includes(reel.id)}
                   onChange={() => toggleSelect(reel.id)}
-                  className="w-5 h-5 rounded border-gray-300 text-blue-900 focus:ring-blue-900 bg-white/80"
+                  className="w-5 h-5 rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2] bg-white/80"
                 />
               </div>
 
@@ -217,7 +217,7 @@ export function ReelsGrid() {
           </p>
           <Link
             href="/admin/reels/nuevo"
-            className="inline-block px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800"
+            className="inline-block px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e]"
           >
             Crear reel
           </Link>

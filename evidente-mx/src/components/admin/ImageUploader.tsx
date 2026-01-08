@@ -227,7 +227,7 @@ export function ImageUploader({ currentImageUrl, onImageChange, folder = 'articl
           <button
             type="button"
             onClick={handleUrlSubmit}
-            className="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 text-sm"
+            className="px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] text-sm"
           >
             Usar
           </button>

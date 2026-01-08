@@ -32,7 +32,7 @@ export default function ContactoPage() {
           </p>
           <Link
             href="/"
-            className="inline-block px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors"
+            className="inline-block px-6 py-3 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] transition-colors"
           >
             Volver al inicio
           </Link>
@@ -44,7 +44,7 @@ export default function ContactoPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-blue-900 text-white py-16">
+      <div className="bg-[#0067b2] text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Contáctanos</h1>
           <p className="text-blue-100 text-lg max-w-2xl mx-auto">
@@ -60,11 +60,11 @@ export default function ContactoPage() {
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-5 h-5 text-blue-900" />
+                  <Mail className="w-5 h-5 text-[#0067b2]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Email</h3>
-                  <a href="mailto:contacto@evidente.mx" className="text-blue-900 hover:underline">
+                  <a href="mailto:contacto@evidente.mx" className="text-[#0067b2] hover:underline">
                     contacto@evidente.mx
                   </a>
                 </div>
@@ -74,11 +74,11 @@ export default function ContactoPage() {
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-5 h-5 text-blue-900" />
+                  <Phone className="w-5 h-5 text-[#0067b2]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Teléfono</h3>
-                  <a href="tel:+525512345678" className="text-gray-600 hover:text-blue-900">
+                  <a href="tel:+525512345678" className="text-gray-600 hover:text-[#0067b2]">
                     +52 55 1234 5678
                   </a>
                 </div>
@@ -88,7 +88,7 @@ export default function ContactoPage() {
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <div className="flex items-start gap-4">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-5 h-5 text-blue-900" />
+                  <MapPin className="w-5 h-5 text-[#0067b2]" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Ubicación</h3>
@@ -118,7 +118,7 @@ export default function ContactoPage() {
                     id="nombre"
                     name="nombre"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                     placeholder="Tu nombre"
                   />
                 </div>
@@ -131,7 +131,7 @@ export default function ContactoPage() {
                     id="email"
                     name="email"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                     placeholder="tu@email.com"
                   />
                 </div>
@@ -145,7 +145,7 @@ export default function ContactoPage() {
                   id="asunto"
                   name="asunto"
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                 >
                   <option value="">Selecciona un asunto</option>
                   <option value="noticia">Enviar una noticia</option>
@@ -165,7 +165,7 @@ export default function ContactoPage() {
                   name="mensaje"
                   rows={6}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent resize-none"
                   placeholder="Escribe tu mensaje aquí..."
                 />
               </div>
@@ -173,7 +173,7 @@ export default function ContactoPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-blue-900 text-white font-medium rounded-lg hover:bg-blue-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-[#0067b2] text-white font-medium rounded-lg hover:bg-[#00528e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>

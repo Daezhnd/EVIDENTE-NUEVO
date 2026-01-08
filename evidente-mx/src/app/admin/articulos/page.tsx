@@ -32,7 +32,7 @@ export default async function AdminArticlesPage() {
             </Link>
             <Link
               href="/admin/articulos/nuevo"
-              className="flex items-center gap-2 px-4 py-2 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-[#0067b2] hover:bg-[#00528e] text-white font-medium rounded-lg transition-colors"
             >
               <Plus className="w-5 h-5" />
               Nuevo Artículo
@@ -49,14 +49,14 @@ export default async function AdminArticlesPage() {
               <input
                 type="search"
                 placeholder="Buscar artículos..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
               />
             </div>
 
             {/* Category Filter */}
             <div className="relative">
               <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <select className="pl-10 pr-8 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent appearance-none bg-white">
+              <select className="pl-10 pr-8 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent appearance-none bg-white">
                 <option value="">Todas las categorías</option>
                 <option value="Destacadas">Destacadas</option>
                 <option value="Noticias">Noticias</option>
@@ -66,7 +66,7 @@ export default async function AdminArticlesPage() {
             </div>
 
             {/* Status Filter */}
-            <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent appearance-none bg-white">
+            <select className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent appearance-none bg-white">
               <option value="">Todos los estados</option>
               <option value="published">Publicado</option>
               <option value="draft">Borrador</option>

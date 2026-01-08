@@ -98,7 +98,7 @@ export default async function AdminDashboardPage() {
       label: 'Total Artículos',
       value: dashboardStats.articles.toString(),
       icon: FileText,
-      color: 'bg-blue-900'
+      color: 'bg-[#0067b2]'
     },
     {
       label: 'Total Reels',
@@ -164,7 +164,7 @@ export default async function AdminDashboardPage() {
                 {viewsByCategory.map((cat, idx) => {
                   const total = viewsByCategory.reduce((sum, c) => sum + c.value, 0);
                   const percent = total > 0 ? Math.round((cat.value / total) * 100) : 0;
-                  const colors = ['bg-blue-900', 'bg-green-600', 'bg-amber-500', 'bg-purple-600'];
+                  const colors = ['bg-[#0067b2]', 'bg-green-600', 'bg-amber-500', 'bg-purple-600'];
                   return (
                     <div key={cat.label}>
                       <div className="flex justify-between text-sm mb-1">
@@ -193,7 +193,7 @@ export default async function AdminDashboardPage() {
               <h2 className="text-lg font-semibold text-gray-900">Artículos Recientes</h2>
               <Link
                 href="/admin/articulos"
-                className="text-sm text-blue-900 hover:text-blue-700 font-medium"
+                className="text-sm text-[#0067b2] hover:text-blue-700 font-medium"
               >
                 Ver todos
               </Link>
@@ -244,11 +244,11 @@ export default async function AdminDashboardPage() {
                 href="/admin/articulos/nuevo"
                 className="flex items-center gap-3 p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors group"
               >
-                <div className="p-2 bg-blue-900 rounded-lg">
+                <div className="p-2 bg-[#0067b2] rounded-lg">
                   <FileText className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <p className="font-medium text-gray-900 group-hover:text-blue-900 transition-colors">
+                  <p className="font-medium text-gray-900 group-hover:text-[#0067b2] transition-colors">
                     Nuevo Artículo
                   </p>
                   <p className="text-sm text-gray-500">Crear una nueva noticia</p>

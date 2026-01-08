@@ -90,7 +90,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
   const getRoleBadgeColor = (role?: string) => {
     switch (role) {
       case 'admin': return 'bg-purple-100 text-purple-800';
-      case 'editor': return 'bg-blue-100 text-blue-800';
+      case 'editor': return 'bg-blue-100 text-[#00528e]';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -115,7 +115,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
         </p>
         <button
           onClick={() => setShowInviteModal(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] transition-colors"
         >
           <Plus className="w-4 h-4" />
           Invitar usuario
@@ -132,8 +132,8 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-blue-900 dark:text-blue-300" />
+                  <div className="w-12 h-12 bg-blue-100 dark:bg-[#0067b2] rounded-full flex items-center justify-center">
+                    <User className="w-6 h-6 text-[#0067b2] dark:text-blue-300" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
@@ -177,7 +177,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
           </p>
           <button
             onClick={() => setShowInviteModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] transition-colors"
           >
             <Plus className="w-4 h-4" />
             Invitar al primer usuario
@@ -211,7 +211,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
                     type="email"
                     value={inviteEmail}
                     onChange={(e) => setInviteEmail(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-900"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0067b2]"
                     placeholder="usuario@ejemplo.com"
                     required
                   />
@@ -224,7 +224,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
                   <select
                     value={inviteRole}
                     onChange={(e) => setInviteRole(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-900"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0067b2]"
                   >
                     <option value="editor">Editor</option>
                     <option value="admin">Administrador</option>
@@ -243,7 +243,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 disabled:opacity-50"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] disabled:opacity-50"
                 >
                   {loading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

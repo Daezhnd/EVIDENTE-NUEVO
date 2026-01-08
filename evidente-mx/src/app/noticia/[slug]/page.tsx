@@ -132,8 +132,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const relatedArticles = await getRelatedArticles(categoryName, article.id);
 
   const categoryColors: Record<string, string> = {
-    'Destacadas': 'bg-blue-900',
-    'Noticias': 'bg-blue-900',
+    'Destacadas': 'bg-[#0067b2]',
+    'Noticias': 'bg-[#0067b2]',
     'Deportes': 'bg-green-600',
     'Turismo': 'bg-amber-600',
   };
@@ -153,13 +153,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <div className="bg-gray-50 border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-gray-500 hover:text-blue-900 transition-colors">
+            <Link href="/" className="text-gray-500 hover:text-[#0067b2] transition-colors">
               Inicio
             </Link>
             <span className="text-gray-300">/</span>
             <Link
               href={`/categoria/${catSlug}`}
-              className="text-gray-500 hover:text-blue-900 transition-colors"
+              className="text-gray-500 hover:text-[#0067b2] transition-colors"
             >
               {categoryName}
             </Link>
@@ -175,7 +175,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <header className="mb-8">
           <Link
             href={`/categoria/${catSlug}`}
-            className={`inline-block px-3 py-1 text-xs font-semibold text-white rounded-full ${categoryColors[categoryName] || 'bg-blue-900'} mb-4`}
+            className={`inline-block px-3 py-1 text-xs font-semibold text-white rounded-full ${categoryColors[categoryName] || 'bg-[#0067b2]'} mb-4`}
           >
             {categoryName}
           </Link>
@@ -277,7 +277,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://evidente.mx/noticia/${article.slug}`)}&title=${encodeURIComponent(article.title)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 bg-blue-700 text-white rounded-full hover:bg-blue-800 transition-colors"
+            className="p-2 bg-blue-700 text-white rounded-full hover:bg-[#00528e] transition-colors"
             aria-label="Compartir en LinkedIn"
           >
             <Linkedin className="w-4 h-4" />
@@ -286,7 +286,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         {/* Contenido del artículo */}
         <div
-          className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4 prose-a:text-blue-900 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl"
+          className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4 prose-a:text-[#0067b2] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl"
           dangerouslySetInnerHTML={{ __html: formatContent(article.content || '') }}
         />
 
@@ -294,7 +294,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         <div className="mt-12 pt-8 border-t border-gray-100">
           <Link
             href={`/categoria/${catSlug}`}
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-900 transition-colors"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-[#0067b2] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Volver a {categoryName}

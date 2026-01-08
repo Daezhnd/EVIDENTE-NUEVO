@@ -11,7 +11,7 @@ export default function NotFound() {
             404
           </span>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl font-black text-blue-900">404</span>
+            <span className="text-6xl font-black text-[#0067b2]">404</span>
           </div>
         </div>
 
@@ -27,7 +27,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition-colors font-medium"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] transition-colors font-medium"
           >
             <Home className="w-4 h-4" />
             Ir al inicio
@@ -56,7 +56,7 @@ export default function NotFound() {
               <Link
                 key={cat.name}
                 href={cat.href}
-                className="px-3 py-1.5 text-sm bg-white rounded-full border border-gray-200 hover:border-blue-900 hover:text-blue-900 transition-colors"
+                className="px-3 py-1.5 text-sm bg-white rounded-full border border-gray-200 hover:border-[#0067b2] hover:text-[#0067b2] transition-colors"
               >
                 {cat.name}
               </Link>

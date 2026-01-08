@@ -166,7 +166,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
               value={formData.title}
               onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
               placeholder="Título breve para el reel..."
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
             />
           </div>
 
@@ -182,7 +182,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
                 type="button"
                 onClick={() => setInputMode('upload')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${inputMode === 'upload'
-                  ? 'bg-blue-900 text-white'
+                  ? 'bg-[#0067b2] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
@@ -193,7 +193,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
                 type="button"
                 onClick={() => setInputMode('url')}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors ${inputMode === 'url'
-                  ? 'bg-blue-900 text-white'
+                  ? 'bg-[#0067b2] text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
               >
@@ -237,7 +237,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
                       setFormData(prev => ({ ...prev, video_url: val }));
                     }}
                     placeholder="https://ejemplo.com/video.mp4 o Código Embed de TikTok"
-                    className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent"
+                    className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
                   />
                 </div>
 
@@ -293,7 +293,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
               onChange={(e) => setFormData(prev => ({ ...prev, caption: e.target.value }))}
               placeholder="Escribe una descripción atractiva con emojis y hashtags..."
               rows={4}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent resize-none"
             />
             <p className="text-sm text-gray-400 mt-2">
               {formData.caption.length}/300 caracteres · Usa #hashtags para mejor alcance
@@ -311,7 +311,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
                 type="button"
                 onClick={(e) => handleSubmit(e as unknown as React.FormEvent, true)}
                 disabled={isLoading || !formData.video_url}
-                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-[#0067b2] hover:bg-[#00528e] text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -378,7 +378,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
               value={formData.thumbnail_url}
               onChange={(e) => setFormData(prev => ({ ...prev, thumbnail_url: e.target.value }))}
               placeholder="URL de la miniatura..."
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent text-sm"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent text-sm"
             />
             <p className="text-xs text-gray-400 mt-2">
               Si no se proporciona, se usará el primer frame del video
@@ -387,8 +387,8 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
 
           {/* Tips */}
           <div className="bg-blue-50 rounded-xl p-6">
-            <h3 className="font-semibold text-blue-900 mb-3">💡 Cómo agregar Reels</h3>
-            <ul className="text-sm text-blue-800 space-y-2">
+            <h3 className="font-semibold text-[#0067b2] mb-3">💡 Cómo agregar Reels</h3>
+            <ul className="text-sm text-[#00528e] space-y-2">
               <li><strong>Instagram:</strong> Copia el enlace del reel desde la app o web</li>
               <li><strong>TikTok:</strong> Usa &quot;Copiar enlace&quot; del video</li>
               <li><strong>Video propio:</strong> Sube a un hosting y pega la URL directa</li>

@@ -87,7 +87,7 @@ export function AdminLoginForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-colors"
+            className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent transition-colors"
             placeholder="admin@evidente.mx"
           />
         </div>
@@ -110,7 +110,7 @@ export function AdminLoginForm() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent transition-colors"
+            className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent transition-colors"
             placeholder="••••••••"
           />
           <button
@@ -138,7 +138,7 @@ export function AdminLoginForm() {
       <button
         type="submit"
         disabled={isLoading}
-        className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-blue-900 hover:bg-blue-800 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-[#0067b2] hover:bg-[#00528e] text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isLoading ? (
           <>
