@@ -34,6 +34,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
     summary: article?.summary || '',
     content: article?.content || '',
     image_url: article?.image_url || '',
+    video_url: article?.video_url || '',
     category: article?.category || 'Noticias' as ArticleCategory,
     is_published: article?.is_published || false,
   });
@@ -75,6 +76,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
         summary: formData.summary.trim(),
         content: formData.content.trim(),
         image_url: formData.image_url || null,
+        video_url: formData.video_url || null,
         category: formData.category as ArticleCategory,
         is_published: publish,
         published_at: publish ? new Date().toISOString() : null,
@@ -295,6 +297,24 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
               onImageChange={(url) => setFormData(prev => ({ ...prev, image_url: url || '' }))}
               folder="articles"
             />
+          </div>
+
+          {/* Video URL (Optional) */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <h3 className="font-semibold text-gray-900 mb-4">Video (Opcional)</h3>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              URL del video
+            </label>
+            <input
+              type="text"
+              value={formData.video_url}
+              onChange={(e) => setFormData(prev => ({ ...prev, video_url: e.target.value }))}
+              placeholder="https://ejemplo.com/video.mp4"
+              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-900 focus:border-transparent text-sm"
+            />
+            <p className="text-xs text-gray-400 mt-2">
+              Si agregas un video, este reemplazará a la imagen destacada en el feed.
+            </p>
           </div>
         </div>
       </div>
