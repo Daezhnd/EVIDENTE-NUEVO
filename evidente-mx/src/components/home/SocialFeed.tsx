@@ -233,11 +233,15 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                     })}
 
                     {showLoading && (
-                        <div className="flex justify-center pt-12 pb-8 opacity-30">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce" />
-                            <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce delay-75" />
-                            <div className="w-2 h-2 bg-gray-400 rounded-full mx-1.5 animate-bounce delay-150" />
-                        </div>
+                        <Link
+                            href="/categoria/destacadas"
+                            className="flex justify-center items-center gap-2 pt-12 pb-8 group cursor-pointer"
+                        >
+                            <span className="text-gray-400 group-hover:text-[#0067b2] transition-colors text-sm mr-2">Ver más noticias</span>
+                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-[#0067b2] rounded-full animate-bounce transition-colors" />
+                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-[#0067b2] rounded-full animate-bounce transition-colors" style={{ animationDelay: '75ms' }} />
+                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-[#0067b2] rounded-full animate-bounce transition-colors" style={{ animationDelay: '150ms' }} />
+                        </Link>
                     )}
                 </div>
             </div>

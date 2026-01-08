@@ -76,8 +76,8 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
                       reel={currentReel}
                       isActive={true}
                       onVideoEnd={() => {
-                        // Auto next?
-                        // setCurrentReelIndex((prev) => (prev + 1) % reels.length);
+                        // Auto-advance to next reel
+                        setCurrentReelIndex((prev) => (prev + 1) % reels.length);
                       }}
                     />
 

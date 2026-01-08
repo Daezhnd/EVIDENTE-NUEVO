@@ -6,10 +6,10 @@ import { Menu, X, Search, User, Play } from 'lucide-react';
 import { ThemeToggleCompact } from '@/components/ui/ThemeToggle';
 
 const categories = [
-  { name: 'Inicio', href: '/', color: 'hover:border-gray-900 dark:hover:border-white hover:bg-gray-100 dark:hover:bg-gray-800/50' },
-  { name: 'Destacadas', href: '/categoria/destacadas', color: 'hover:border-red-600 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20' },
-  { name: 'Internacionales', href: '/categoria/internacionales', color: 'hover:border-cyan-500 hover:text-cyan-700 dark:hover:text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-900/20' },
-  { name: 'Entretenimiento', href: '/categoria/entretenimiento', color: 'hover:border-purple-500 hover:text-purple-700 dark:hover:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20' },
+  { name: 'Inicio', href: '/', borderColor: 'border-gray-400 dark:border-gray-500', hoverBg: 'hover:bg-gray-100 dark:hover:bg-gray-800/50' },
+  { name: 'Destacadas', href: '/categoria/destacadas', borderColor: 'border-red-500', hoverBg: 'hover:bg-red-50 dark:hover:bg-red-900/30' },
+  { name: 'Internacionales', href: '/categoria/internacionales', borderColor: 'border-cyan-500', hoverBg: 'hover:bg-cyan-50 dark:hover:bg-cyan-900/30' },
+  { name: 'Entretenimiento', href: '/categoria/entretenimiento', borderColor: 'border-purple-500', hoverBg: 'hover:bg-purple-50 dark:hover:bg-purple-900/30' },
 ];
 
 export function Navbar() {
@@ -33,15 +33,30 @@ export function Navbar() {
 
           {/* Navegación desktop - Centrada */}
           <nav className="hidden md:flex flex-1 justify-center items-center gap-1 absolute left-1/2 -translate-x-1/2" aria-label="Navegación principal">
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                href={category.href}
-                className={`px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-4 border-transparent rounded-lg ${category.color}`}
-              >
-                {category.name}
-              </Link>
-            ))}
+            <Link
+              href="/"
+              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600"
+            >
+              Inicio
+            </Link>
+            <Link
+              href="/categoria/destacadas"
+              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800/60"
+            >
+              Destacadas
+            </Link>
+            <Link
+              href="/categoria/internacionales"
+              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-cyan-300 rounded-lg hover:bg-cyan-200 dark:hover:bg-cyan-800/60"
+            >
+              Internacionales
+            </Link>
+            <Link
+              href="/categoria/entretenimiento"
+              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/60"
+            >
+              Entretenimiento
+            </Link>
             <Link
               href="/reels"
               className="flex items-center gap-1.5 px-3 py-1.5 ml-2 text-sm font-bold bg-gradient-to-r from-evident to-evident-dark text-white rounded-full hover:shadow-lg transition-all hover:scale-105"

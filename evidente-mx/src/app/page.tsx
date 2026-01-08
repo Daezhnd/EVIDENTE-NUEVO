@@ -13,7 +13,7 @@ export default async function HomePage() {
   // Cargar datos usando funciones centralizadas
   const [featuredArticles, latestArticles, reels] = await Promise.all([
     getFeaturedArticles(5),
-    getLatestArticles(20), // Cargar más artículos para scroll infinito
+    getLatestArticles(16), // Límite de 16 artículos en el feed
     getReels(10),
   ]);
 

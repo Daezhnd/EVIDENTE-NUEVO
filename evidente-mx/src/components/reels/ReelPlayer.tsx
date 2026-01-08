@@ -187,7 +187,7 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
             src={videoSource === 'jwplayer' ? getJwPlayerDirectUrl(reel.video_url) || reel.video_url : reel.video_url}
             poster={reel.thumbnail_url || undefined}
             className="absolute inset-0 w-full h-full object-cover"
-            loop
+            loop={!onVideoEnd}
             muted={isMuted}
             playsInline
             onTimeUpdate={handleTimeUpdate}
