@@ -10,6 +10,9 @@ import { AdBanner } from '@/components/ads/AdBanner';
 
 interface SocialFeedProps {
     articles: Article[];
+    showHeader?: boolean;
+    startIndex?: number;
+    showLoading?: boolean;
 }
 
 function timeAgo(date: string): string {
@@ -46,7 +49,7 @@ function getCategoryColor(displayCategory: string): string {
     return colors[displayCategory] || colors['default'];
 }
 
-export function SocialFeed({ articles }: SocialFeedProps) {
+export function SocialFeed({ articles, showHeader = true, startIndex = 0 }: SocialFeedProps) {
     if (!articles || articles.length === 0) return null;
 
     // Defines groups of ads to show in pairs
@@ -56,14 +59,16 @@ export function SocialFeed({ articles }: SocialFeedProps) {
     ];
 
     return (
-        <section className="py-12 bg-gray-50 dark:bg-gray-950">
+        <section className="py-2 bg-gray-50 dark:bg-gray-950">
             <div className="max-w-7xl mx-auto px-4 lg:px-6">
-                <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-200 dark:border-gray-800">
-                    <TextReveal text="Para ti" className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter" />
-                    <span className="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-700 pl-4 py-1 flex items-center">
-                        Últimas actualizaciones
-                    </span>
-                </div>
+                {showHeader && (
+                    <div className="flex items-center gap-4 mb-10 pb-6 border-b border-gray-200 dark:border-gray-800">
+                        <TextReveal text="Para ti" className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter" />
+                        <span className="text-sm md:text-base font-medium text-gray-500 dark:text-gray-400 border-l-2 border-gray-300 dark:border-gray-700 pl-4 py-1 flex items-center">
+                            Últimas actualizaciones
+                        </span>
+                    </div>
+                )}
 
                 <div className="space-y-6">
                     {articles.map((article, index) => {
@@ -73,11 +78,12 @@ export function SocialFeed({ articles }: SocialFeedProps) {
 
                         // Show ads after every 5th article (index 4, 9, 14...)
                         // Ensure we don't repeat ads - only show if we have a unique group available
-                        const blockNumber = Math.floor((index + 1) / 5); // 1, 2, 3...
+                        const globalIndex = index + startIndex;
+                        const blockNumber = Math.floor((globalIndex + 1) / 5); // 1, 2, 3...
                         const adGroupIndex = blockNumber - 1; // 0, 1, 2...
 
                         // Show ad only if it's a multiple of 5 AND we have a unique group for this position
-                        const showAdBlock = (index + 1) % 5 === 0 && adGroupIndex >= 0 && adGroupIndex < adGroups.length;
+                        const showAdBlock = (globalIndex + 1) % 5 === 0 && adGroupIndex >= 0 && adGroupIndex < adGroups.length;
                         const currentAds = showAdBlock ? adGroups[adGroupIndex] : [];
 
                         return (
@@ -153,4 +159,3 @@ export function SocialFeed({ articles }: SocialFeedProps) {
         </section >
     );
 }
-

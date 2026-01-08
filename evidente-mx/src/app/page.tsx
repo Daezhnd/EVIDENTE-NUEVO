@@ -55,23 +55,35 @@ export default async function HomePage() {
       {/* Feed Red Social + Sidebar Widgets */}
       <section className="bg-gray-50 dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 lg:px-6">
+
+          {/* Layout Split: Top part has Sidebar, Bottom part is full width */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-            {/* Main Feed Column (3 cols) */}
+            {/* Top Feed Column (3 cols) - Wraps first 6 articles */}
             <div className="lg:col-span-3">
               <div className="bg-red-100 p-4 text-red-900 border border-red-300 mb-4 hidden">
                 DEBUG: Featured: {featuredArticles.length}, Latest: {latestArticles.length}, Reels: {reels.length}
               </div>
-              <SocialFeed articles={latestArticles} />
+              <SocialFeed articles={latestArticles.slice(0, 6)} showLoading={false} />
             </div>
 
-            {/* Sidebar Column (1 col) - Sticky */}
-            <div className="hidden lg:block lg:col-span-1 space-y-8 pt-12">
+            {/* Sidebar Column (1 col) - Static */}
+            <div className="hidden lg:block lg:col-span-1 space-y-8 pt-12 self-start h-fit">
               <PollWidget />
               <AdBanner position="sidebar" />
             </div>
 
           </div>
+
+          {/* Remaining Feed (Full Width) */}
+          <div className="mt-8">
+            <SocialFeed
+              articles={latestArticles.slice(6)}
+              showHeader={false}
+              startIndex={6}
+            />
+          </div>
+
         </div>
       </section>
 
