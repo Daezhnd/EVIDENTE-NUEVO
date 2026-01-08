@@ -2,6 +2,7 @@ import { HeroCombo } from '@/components/home/HeroCombo';
 import { SocialFeed } from '@/components/home/SocialFeed';
 import { ReelsSidebar } from '@/components/home/ReelsSidebar';
 import { AdBanner } from '@/components/ads/AdBanner';
+import { PollWidget } from '@/components/widgets/PollWidget';
 import {
   getFeaturedArticles,
   getLatestArticles,
@@ -51,11 +52,28 @@ export default async function HomePage() {
         secondaryArticles={secondaryArticles}
       />
 
-      {/* Feed Red Social - Noticias estilo feed infinito */}
-      <div className="bg-red-100 p-4 text-red-900 border border-red-300 m-4">
-        DEBUG: Featured: {featuredArticles.length}, Latest: {latestArticles.length}, Reels: {reels.length}
-      </div>
-      <SocialFeed articles={latestArticles} />
+      {/* Feed Red Social + Sidebar Widgets */}
+      <section className="bg-gray-50 dark:bg-gray-950">
+        <div className="max-w-7xl mx-auto px-4 lg:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+
+            {/* Main Feed Column (3 cols) */}
+            <div className="lg:col-span-3">
+              <div className="bg-red-100 p-4 text-red-900 border border-red-300 mb-4 hidden">
+                DEBUG: Featured: {featuredArticles.length}, Latest: {latestArticles.length}, Reels: {reels.length}
+              </div>
+              <SocialFeed articles={latestArticles} />
+            </div>
+
+            {/* Sidebar Column (1 col) - Sticky */}
+            <div className="hidden lg:block lg:col-span-1 space-y-8 pt-12">
+              <PollWidget />
+              <AdBanner position="sidebar" />
+            </div>
+
+          </div>
+        </div>
+      </section>
 
       <div className="max-w-7xl mx-auto px-4 mb-12">
         <AdBanner position="footer" />
