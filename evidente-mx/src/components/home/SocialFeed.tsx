@@ -49,6 +49,15 @@ function getCategoryColor(displayCategory: string): string {
     return colors[displayCategory] || colors['default'];
 }
 
+function getJwPlayerDirectUrl(url: string): string {
+    // Extract ID from https://cdn.jwplayer.com/previews/MEDIAID...
+    const match = url.match(/previews\/([a-zA-Z0-9]+)/);
+    if (match && match[1]) {
+        return `https://cdn.jwplayer.com/videos/${match[1]}-720.mp4`;
+    }
+    return url;
+}
+
 export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLoading = true }: SocialFeedProps) {
     if (!articles || articles.length === 0) return null;
 
@@ -102,7 +111,7 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                             <div className="absolute inset-0 bg-gray-200 dark:bg-gray-800">
                                                 {article.video_url ? (
                                                     <video
-                                                        src={article.video_url}
+                                                        src={getJwPlayerDirectUrl(article.video_url)}
                                                         controls
                                                         className="w-full h-full object-cover"
                                                         poster={article.image_url || '/placeholder.svg'}
