@@ -72,10 +72,13 @@ export function SocialFeed({ articles }: SocialFeedProps) {
                         const tagColorClass = getCategoryColor(displayCategory);
 
                         // Show ads after every 5th article (index 4, 9, 14...)
-                        // Alternates between the two ad groups
-                        const showAdBlock = (index + 1) % 5 === 0;
-                        const adGroupIndex = Math.floor((index + 1) / 5) % 2 === 1 ? 0 : 1;
-                        const currentAds = adGroups[adGroupIndex];
+                        // Ensure we don't repeat ads - only show if we have a unique group available
+                        const blockNumber = Math.floor((index + 1) / 5); // 1, 2, 3...
+                        const adGroupIndex = blockNumber - 1; // 0, 1, 2...
+
+                        // Show ad only if it's a multiple of 5 AND we have a unique group for this position
+                        const showAdBlock = (index + 1) % 5 === 0 && adGroupIndex >= 0 && adGroupIndex < adGroups.length;
+                        const currentAds = showAdBlock ? adGroups[adGroupIndex] : [];
 
                         return (
                             <div key={article.id} className="space-y-8">
