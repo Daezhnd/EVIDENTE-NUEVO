@@ -126,10 +126,16 @@ function FeedVideoPlayer({ url, poster }: { url: string; poster: string }) {
 export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLoading = true }: SocialFeedProps) {
     if (!articles || articles.length === 0) return null;
 
-    // Defines groups of ads to show in pairs
+    // Defines groups of ads to show in pairs - first pair uses animated GIFs with links
     const adGroups = [
-        ['/ads/top-banner-1.jpg', '/ads/top-banner-2.jpg'],
-        ['/ads/top-banner-3.jpg', '/ads/top-banner-4.jpg']
+        [
+            { image: '/ads/DELICIAS.gif', link: 'https://municipiodelicias.com/' },
+            { image: '/ads/JMAS.gif', link: 'http://jmasdelicias.gob.mx/' }
+        ],
+        [
+            { image: '/ads/top-banner-3.jpg', link: undefined },
+            { image: '/ads/top-banner-4.jpg', link: undefined }
+        ]
     ];
 
     return (
@@ -225,8 +231,18 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
 
                                 {showAdBlock && (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <AdBanner position="feed" imageUrl={currentAds[0]} />
-                                        <AdBanner position="feed" imageUrl={currentAds[1]} />
+                                        <AdBanner
+                                            position="feed"
+                                            imageUrl={currentAds[0].image}
+                                            linkUrl={currentAds[0].link}
+                                            sizeOverride={adGroupIndex > 0 ? "w-full h-[180px] md:h-[220px]" : undefined}
+                                        />
+                                        <AdBanner
+                                            position="feed"
+                                            imageUrl={currentAds[1].image}
+                                            linkUrl={currentAds[1].link}
+                                            sizeOverride={adGroupIndex > 0 ? "w-full h-[180px] md:h-[220px]" : undefined}
+                                        />
                                     </div>
                                 )}
                             </div>
