@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate, formatDistanceToNow, calculateReadingTime } from '@/lib/utils';
@@ -9,6 +8,8 @@ import { ArticleCard } from '@/components/articles/ArticleCard';
 import { Article } from '@/types/database';
 import { Clock, Eye, Share2, Facebook, Twitter, Linkedin, ArrowLeft, MessageCircle, BookOpen } from 'lucide-react';
 import { ViewCounter } from '@/components/articles/ViewCounter';
+import { ArticleHeroImage } from '@/components/articles/ArticleHeroImage';
+import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
 /**
  * Formatea contenido de texto plano a HTML si es necesario
@@ -19,41 +20,40 @@ function formatContent(content: string): string {
 
   let htmlContent: string;
 
-  // Si ya tiene tags HTML, usarlo directamente
+  // Si ya tiene tags HTML, mejorar el espaciado
   if (/<[a-z][\s\S]*>/i.test(content)) {
-    htmlContent = content;
+    // Asegurar que los párrafos tengan clases de espaciado
+    htmlContent = content
+      .replace(/<p>/g, '<p class="mb-6">')
+      .replace(/<p\s+/g, '<p class="mb-6" ');
   } else {
     // Convertir texto plano a párrafos HTML
-    const paragraphs = content
-      .split(/\n\s*\n/)
+    // Primero, normalizar los saltos de línea
+    const normalizedContent = content.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    // Dividir por doble salto de línea (párrafos) o por punto seguido de salto
+    const paragraphs = normalizedContent
+      .split(/\n\s*\n|(?<=\.)\s*\n/)
       .map(p => p.trim())
       .filter(p => p.length > 0);
 
-    if (paragraphs.length === 1 && content.includes('\n')) {
-      const lines = content
+    if (paragraphs.length === 1 && normalizedContent.includes('\n')) {
+      // Si solo hay un párrafo pero tiene saltos de línea, dividir por líneas
+      const lines = normalizedContent
         .split('\n')
         .map(l => l.trim())
         .filter(l => l.length > 0);
-      htmlContent = lines.map(line => `<p>${line}</p>`).join('\n');
+      htmlContent = lines.map(line => `<p class="mb-6">${line}</p>`).join('\n');
     } else {
       htmlContent = paragraphs.map(p => {
-        const withBreaks = p.replace(/\n/g, '<br>');
-        return `<p>${withBreaks}</p>`;
+        // No usar <br> dentro de párrafos, crear párrafos separados
+        return `<p class="mb-6">${p}</p>`;
       }).join('\n');
     }
   }
 
   // SEGURIDAD: Sanitizar HTML para prevenir XSS
   return sanitizeHtml(htmlContent);
-}
-
-function getJwPlayerDirectUrl(url: string): string {
-  // Extract ID from https://cdn.jwplayer.com/previews/MEDIAID...
-  const match = url.match(/previews\/([a-zA-Z0-9]+)/);
-  if (match && match[1]) {
-    return `https://cdn.jwplayer.com/videos/${match[1]}-720.mp4`;
-  }
-  return url;
 }
 
 interface ArticlePageProps {
@@ -215,30 +215,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </header>
 
-        {/* Imagen o Video principal */}
-        {article.video_url ? (
-          <div className="relative aspect-video rounded-2xl overflow-hidden mb-8 bg-black">
-            <video
-              src={getJwPlayerDirectUrl(article.video_url)}
-              poster={article.image_url || undefined}
-              controls
-              className="w-full h-full object-contain"
-            >
-              Tu navegador no soporta el elemento de video.
-            </video>
-          </div>
-        ) : article.image_url ? (
-          <div className="relative aspect-video rounded-2xl overflow-hidden mb-8">
-            <Image
-              src={article.image_url}
-              alt={article.title}
-              fill
-              className="object-cover"
-              priority
-              unoptimized
-            />
-          </div>
-        ) : null}
+        {/* Imagen o Video principal con efecto hover */}
+        <ArticleHeroImage
+          imageUrl={article.image_url || ''}
+          title={article.title}
+          videoUrl={article.video_url || undefined}
+        />
 
         {/* Botones de compartir */}
         <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-100">
@@ -286,7 +268,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         {/* Contenido del artículo */}
         <div
-          className="prose prose-lg max-w-none prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4 prose-a:text-[#0067b2] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl"
+          className="article-content prose prose-lg max-w-none prose-headings:text-gray-900 prose-headings:mt-8 prose-headings:mb-4 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-lg prose-a:text-[#0067b2] prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-li:mb-2"
           dangerouslySetInnerHTML={{ __html: formatContent(article.content || '') }}
         />
 
@@ -321,6 +303,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           </div>
         </section>
       )}
+      {/* Indicador de scroll para pantallas pequeñas */}
+      <ScrollIndicator />
       {/* Contador de vistas (invisible) */}
       <ViewCounter articleId={article.id} />
     </article>
