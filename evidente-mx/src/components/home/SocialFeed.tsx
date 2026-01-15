@@ -133,8 +133,8 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
             { image: '/ads/JMAS.gif', link: 'http://jmasdelicias.gob.mx/' }
         ],
         [
-            { image: '/ads/top-banner-3.jpg', link: undefined },
-            { image: '/ads/top-banner-4.jpg', link: undefined }
+            { image: '/ads/top-banner-2.jpg', link: 'https://fcjuarez.com/' },
+            { image: '/ads/top-banner-3.jpg', link: 'https://www.saetapro.com/' }
         ]
     ];
 
