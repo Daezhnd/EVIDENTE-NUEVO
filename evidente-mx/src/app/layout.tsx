@@ -39,9 +39,9 @@ export const metadata: Metadata = {
   creator: "Evidente.mx",
   publisher: "Evidente.mx",
   icons: {
-    icon: '/logo.png',
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
   },
   robots: {
     index: true,
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     description: 'Tu fuente confiable de noticias en México.',
     images: [
       {
-        url: 'https://evidente.mx/logo.png',
+        url: 'https://evidente.mx/favicon.png',
         width: 512,
         height: 512,
         alt: 'Evidente.mx - Portal de Noticias',
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Evidente.mx | Portal de Noticias',
     description: 'Tu fuente confiable de noticias en México.',
-    images: ['https://evidente.mx/logo.png'],
+    images: ['https://evidente.mx/favicon.png'],
     creator: '@evidentemx',
   },
   alternates: {
