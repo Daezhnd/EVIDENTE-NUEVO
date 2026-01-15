@@ -61,13 +61,21 @@ export const metadata: Metadata = {
     siteName: 'Evidente.mx',
     title: 'Evidente.mx | Portal de Noticias',
     description: 'Tu fuente confiable de noticias en México.',
-    images: [{ url: '/logo.png', alt: 'Evidente.mx' }],
+    images: [
+      {
+        url: 'https://evidente.mx/logo.png',
+        width: 512,
+        height: 512,
+        alt: 'Evidente.mx - Portal de Noticias',
+      },
+    ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: 'Evidente.mx | Portal de Noticias',
     description: 'Tu fuente confiable de noticias en México.',
-    images: ['/logo.png'],
+    images: ['https://evidente.mx/logo.png'],
+    creator: '@evidentemx',
   },
   alternates: {
     canonical: 'https://evidente.mx',

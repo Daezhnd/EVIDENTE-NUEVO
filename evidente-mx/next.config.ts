@@ -34,6 +34,12 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
+        // Permitir dominios .es para fuentes españolas
+        protocol: 'https',
+        hostname: '**.es',
+        pathname: '/**',
+      },
+      {
         // JWPlayer CDN
         protocol: 'https',
         hostname: 'cdn.jwplayer.com',
