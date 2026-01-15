@@ -40,6 +40,12 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
+        // Permitir dominios .mx para fuentes mexicanas
+        protocol: 'https',
+        hostname: '**.mx',
+        pathname: '/**',
+      },
+      {
         // JWPlayer CDN
         protocol: 'https',
         hostname: 'cdn.jwplayer.com',
