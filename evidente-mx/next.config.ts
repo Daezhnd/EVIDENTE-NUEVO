@@ -18,13 +18,19 @@ const nextConfig: NextConfig = {
       {
         // Supabase Storage
         protocol: 'https',
-        hostname: '*.supabase.co',
+        hostname: '**.supabase.co',
         pathname: '/**',
       },
       {
-        // Permitir cualquier dominio .com para flexibilidad con imágenes externas
+        // Permitir dominios .com (con o sin subdominios) para imágenes externas
         protocol: 'https',
-        hostname: '*.com',
+        hostname: '**.com',
+        pathname: '/**',
+      },
+      {
+        // Permitir dominios .com.mx para fuentes mexicanas
+        protocol: 'https',
+        hostname: '**.com.mx',
         pathname: '/**',
       },
       {
