@@ -113,6 +113,16 @@ export function JsonImporter() {
       return 'Destacadas';
     }
 
+    // Internacionales
+    if (normalized.includes('internacional') || normalized.includes('mundo') || normalized.includes('global')) {
+      return 'Internacionales';
+    }
+
+    // Entretenimiento
+    if (normalized.includes('entretenimiento') || normalized.includes('espectaculo') || normalized.includes('espectáculo') || normalized.includes('cultura') || normalized.includes('celebridad')) {
+      return 'Entretenimiento';
+    }
+
     // Deportes
     if (normalized.includes('deport') || normalized.includes('futbol') || normalized.includes('fútbol')) {
       return 'Deportes';
@@ -123,7 +133,7 @@ export function JsonImporter() {
       return 'Turismo';
     }
 
-    // Todo lo demás va a Noticias (incluyendo internacional, política, economía, etc.)
+    // Todo lo demás va a Noticias (política, economía, local, etc.)
     // Noticias es la categoría general
     return 'Noticias';
   };
