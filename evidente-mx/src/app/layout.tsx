@@ -28,6 +28,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://evidente.mx'),
   title: {
     default: "Evidente.mx | Portal de Noticias",
     template: "%s | Evidente.mx",
@@ -37,6 +38,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Evidente.mx" }],
   creator: "Evidente.mx",
   publisher: "Evidente.mx",
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
   robots: {
     index: true,
     follow: true,
@@ -55,11 +61,13 @@ export const metadata: Metadata = {
     siteName: 'Evidente.mx',
     title: 'Evidente.mx | Portal de Noticias',
     description: 'Tu fuente confiable de noticias en México.',
+    images: [{ url: '/logo.png', alt: 'Evidente.mx' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Evidente.mx | Portal de Noticias',
     description: 'Tu fuente confiable de noticias en México.',
+    images: ['/logo.png'],
   },
   alternates: {
     canonical: 'https://evidente.mx',
