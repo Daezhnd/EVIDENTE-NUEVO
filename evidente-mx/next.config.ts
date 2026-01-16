@@ -5,9 +5,17 @@ const nextConfig: NextConfig = {
     reactCompiler: true,
   },
   images: {
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // === OPTIMIZACIONES PARA REDUCIR COSTOS DE VERCEL ===
+    // Solo webp (reduce transformaciones a la mitad vs avif+webp)
+    formats: ['image/webp'],
+    // Cache de 31 días para imágenes que no cambian frecuentemente
+    minimumCacheTTL: 2678400,
+    // Reducir tamaños de dispositivos (menos transformaciones)
+    deviceSizes: [640, 828, 1200, 1920],
+    // Reducir tamaños de imagen (menos variantes)
+    imageSizes: [32, 64, 128, 256],
+    // Calidades permitidas (menos variantes = menos transformaciones)
+    qualities: [75],
     remotePatterns: [
       {
         // Imágenes de Unsplash
