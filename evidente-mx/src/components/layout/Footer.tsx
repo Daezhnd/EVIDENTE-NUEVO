@@ -41,8 +41,8 @@ export function Footer() {
             <div className="flex space-x-4">
               <a
                 href="https://www.facebook.com/EVIDENTE.MX"
-                
-                
+
+
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-500 hover:text-blue-600 transition-colors"
@@ -82,7 +82,7 @@ export function Footer() {
                 <strong className="text-gray-300">Gerente:</strong> José Montañez Mata
               </p>
               <p>
-                <strong className="text-gray-300">Tel:</strong> 614-123-4567
+                <strong className="text-gray-300">Tel:</strong> 614-131-8497
               </p>
               <p className="flex items-center gap-2">
                 <strong className="text-gray-300">Ciudad:</strong> Chihuahua
