@@ -124,6 +124,7 @@ export function CategorySection({
             src={mainArticle.image_url || '/placeholder-news.jpg'}
             alt={mainArticle.title}
             fill
+            unoptimized
             className="object-cover transition-transform duration-700 group-hover:scale-110"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
@@ -171,6 +172,7 @@ export function CategorySection({
                   src={article.image_url || '/placeholder-news.jpg'}
                   alt={article.title}
                   fill
+                  unoptimized
                   className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className={`absolute bottom-1 right-1 w-6 h-6 bg-gradient-to-br ${config.gradient} rounded-md flex items-center justify-center text-white text-xs font-bold`}>

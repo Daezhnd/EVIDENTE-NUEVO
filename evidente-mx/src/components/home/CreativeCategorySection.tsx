@@ -58,6 +58,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
                     src={main.image_url || '/placeholder.svg'}
                     alt={main.title}
                     fill
+                    unoptimized
                     className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
                   />
                 </div>
@@ -139,6 +140,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
                   src={main.image_url || '/placeholder.svg'}
                   alt={main.title}
                   fill
+                  unoptimized
                   className="object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
@@ -169,6 +171,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
                     src={article.image_url || '/placeholder.svg'}
                     alt={article.title}
                     fill
+                    unoptimized
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
@@ -196,6 +199,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
                       src={article.image_url || '/placeholder.svg'}
                       alt={article.title}
                       fill
+                      unoptimized
                       className="object-cover"
                     />
                   </div>
@@ -245,6 +249,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
                 src={main.image_url || '/placeholder.svg'}
                 alt={main.title}
                 fill
+                unoptimized
                 className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
               />
               {/* Overlay con gradiente lateral */}
@@ -283,6 +288,7 @@ export function CreativeCategorySection({ title, slug, articles, variant = 'defa
                     src={article.image_url || '/placeholder.svg'}
                     alt={article.title}
                     fill
+                    unoptimized
                     className="object-cover"
                   />
                 </div>

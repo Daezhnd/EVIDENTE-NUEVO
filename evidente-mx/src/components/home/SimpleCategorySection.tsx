@@ -48,6 +48,7 @@ export function SimpleCategorySection({ title, slug, articles }: SimpleCategoryS
               src={main.image_url || '/placeholder.svg'}
               alt={main.title}
               fill
+              unoptimized
               className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
@@ -76,6 +77,7 @@ export function SimpleCategorySection({ title, slug, articles }: SimpleCategoryS
                   src={article.image_url || '/placeholder.svg'}
                   alt={article.title}
                   fill
+                  unoptimized
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>

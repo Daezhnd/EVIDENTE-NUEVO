@@ -11,7 +11,7 @@ function formatTimeAgo(date: string | Date): string {
   const now = new Date();
   const articleDate = new Date(date);
   const diffInMinutes = Math.floor((now.getTime() - articleDate.getTime()) / (1000 * 60));
-  
+
   if (diffInMinutes < 60) return `Hace ${diffInMinutes} min`;
   if (diffInMinutes < 1440) return `Hace ${Math.floor(diffInMinutes / 60)}h`;
   return `Hace ${Math.floor(diffInMinutes / 1440)}d`;
@@ -47,8 +47,8 @@ export function HeroGrid({ articles }: HeroGridProps) {
             <p className="text-sm text-gray-500">Actualizado en tiempo real</p>
           </div>
         </div>
-        <Link 
-          href="/categoria/destacadas" 
+        <Link
+          href="/categoria/destacadas"
           className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 hover:text-white hover:bg-red-600 rounded-full border-2 border-red-600 transition-all duration-300"
         >
           Ver todas
@@ -59,7 +59,7 @@ export function HeroGrid({ articles }: HeroGridProps) {
       {/* Bento Grid Mejorado */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 auto-rows-[minmax(200px,auto)]">
         {/* Artículo principal - Hero gigante */}
-        <Link 
+        <Link
           href={`/noticia/${mainArticle.slug}`}
           className="lg:col-span-2 lg:row-span-2 group relative overflow-hidden rounded-3xl min-h-[400px] lg:min-h-[500px] card-hover"
         >
@@ -67,12 +67,13 @@ export function HeroGrid({ articles }: HeroGridProps) {
             src={mainArticle.image_url || '/placeholder-news.jpg'}
             alt={mainArticle.title}
             fill
+            unoptimized
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             priority
           />
           {/* Overlay con gradiente intenso */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80" />
-          
+
           {/* Badge DESTACADO */}
           <div className="absolute top-4 left-4 flex items-center gap-2">
             <span className="px-3 py-1.5 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold rounded-full shadow-lg animate-pulse-glow">
@@ -116,27 +117,26 @@ export function HeroGrid({ articles }: HeroGridProps) {
 
         {/* Artículos secundarios - Cards más pequeñas */}
         {secondaryArticles.map((article, index) => (
-          <Link 
+          <Link
             key={article.id}
             href={`/noticia/${article.slug}`}
-            className={`group relative overflow-hidden rounded-2xl card-hover ${
-              index < 2 ? 'min-h-[240px]' : 'lg:col-span-2 min-h-[200px]'
-            }`}
+            className={`group relative overflow-hidden rounded-2xl card-hover ${index < 2 ? 'min-h-[240px]' : 'lg:col-span-2 min-h-[200px]'
+              }`}
             style={{ animationDelay: `${index * 100}ms` }}
           >
             <Image
               src={article.image_url || '/placeholder-news.jpg'}
               alt={article.title}
               fill
+              unoptimized
               className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90" />
-            
+
             {/* Badge de categoría */}
             <div className="absolute top-3 left-3">
-              <span className={`px-2.5 py-1 text-white text-xs font-semibold rounded-full shadow-lg ${
-                getCategoryColor(typeof article.category === 'string' ? article.category.toLowerCase() : article.category?.slug)
-              }`}>
+              <span className={`px-2.5 py-1 text-white text-xs font-semibold rounded-full shadow-lg ${getCategoryColor(typeof article.category === 'string' ? article.category.toLowerCase() : article.category?.slug)
+                }`}>
                 {typeof article.category === 'string' ? article.category : article.category?.name || 'Noticias'}
               </span>
             </div>
@@ -161,7 +161,7 @@ export function HeroGrid({ articles }: HeroGridProps) {
 
         {/* Placeholders si faltan artículos */}
         {secondaryArticles.length < 4 && Array.from({ length: 4 - secondaryArticles.length }).map((_, i) => (
-          <div 
+          <div
             key={`placeholder-${i}`}
             className="min-h-[200px] bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center"
           >
