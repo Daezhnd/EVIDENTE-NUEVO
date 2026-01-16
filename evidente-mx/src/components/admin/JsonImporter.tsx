@@ -210,9 +210,23 @@ export function JsonImporter() {
       }
 
       try {
+        // Verificar si el slug ya existe y generar uno único si es necesario
+        let finalSlug = article.slug;
+        const { data: existingArticle } = await supabase
+          .from('articles')
+          .select('id')
+          .eq('slug', finalSlug)
+          .single();
+
+        if (existingArticle) {
+          // El slug ya existe, agregar un sufijo con timestamp
+          const timestamp = Date.now().toString(36); // Base36 para un sufijo más corto
+          finalSlug = `${article.slug}-${timestamp}`;
+        }
+
         const insertData = {
           title: article.title,
-          slug: article.slug,
+          slug: finalSlug,
           summary: article.summary,
           content: article.content,
           image_url: article.image_url,
@@ -221,15 +235,11 @@ export function JsonImporter() {
           published_at: article.is_published ? article.published_at : null,
         };
 
-        // console.log('Insertando artículo:', insertData);
-
         const { error } = await supabase.from('articles').insert([insertData]).select();
-
-        // console.log('Resultado:', { data, error });
 
         if (error) throw error;
 
-        updatedArticles[i] = { ...article, status: 'success' };
+        updatedArticles[i] = { ...article, slug: finalSlug, status: 'success' };
         success++;
       } catch (e) {
         console.error('Error detallado:', e);
