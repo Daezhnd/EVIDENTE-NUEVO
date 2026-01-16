@@ -46,6 +46,12 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
       {
+        // Permitir dominios .net
+        protocol: 'https',
+        hostname: '**.net',
+        pathname: '/**',
+      },
+      {
         // JWPlayer CDN
         protocol: 'https',
         hostname: 'cdn.jwplayer.com',
