@@ -51,7 +51,7 @@ export function AdminLoginForm() {
           }
         }
 
-        if (!profile || (profile.role !== 'admin' && profile.role !== 'editor')) {
+        if (!profile || !['admin', 'editor', 'publisher'].includes(profile.role)) {
           await supabase.auth.signOut();
           setError('No tienes permisos para acceder al panel de administración.');
           return;

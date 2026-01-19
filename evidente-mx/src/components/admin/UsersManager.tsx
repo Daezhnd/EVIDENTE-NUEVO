@@ -91,6 +91,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
     switch (role) {
       case 'admin': return 'bg-purple-100 text-purple-800';
       case 'editor': return 'bg-blue-100 text-[#00528e]';
+      case 'publisher': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -99,11 +100,10 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
     <div>
       {/* Message */}
       {message && (
-        <div className={`mb-4 p-4 rounded-lg ${
-          message.type === 'success' 
-            ? 'bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300' 
+        <div className={`mb-4 p-4 rounded-lg ${message.type === 'success'
+            ? 'bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-300'
             : 'bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-300'
-        }`}>
+          }`}>
           {message.text}
         </div>
       )}
@@ -126,7 +126,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
       {users.length > 0 ? (
         <div className="space-y-4">
           {users.map((user) => (
-            <div 
+            <div
               key={user.id}
               className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4"
             >
@@ -227,6 +227,7 @@ export function UsersManager({ initialUsers }: UsersManagerProps) {
                     className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0067b2]"
                   >
                     <option value="editor">Editor</option>
+                    <option value="publisher">Publicador</option>
                     <option value="admin">Administrador</option>
                   </select>
                 </div>

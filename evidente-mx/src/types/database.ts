@@ -3,7 +3,7 @@
 
 export type ArticleCategory = 'Destacadas' | 'Internacionales' | 'Entretenimiento' | 'Noticias' | 'Deportes' | 'Turismo';
 
-export type UserRole = 'admin' | 'editor' | 'viewer';
+export type UserRole = 'admin' | 'editor' | 'publisher' | 'viewer';
 
 export interface Profile {
   id: string;

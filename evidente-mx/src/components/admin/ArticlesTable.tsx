@@ -15,16 +15,23 @@ const categoryColors: Record<string, string> = {
   'Turismo': 'bg-amber-100 text-amber-700',
 };
 
-export function ArticlesTable() {
+interface ArticlesTableProps {
+  userRole?: string;
+}
+
+export function ArticlesTable({ userRole: propUserRole }: ArticlesTableProps) {
   const [articles, setArticles] = useState<Article[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [userRole, setUserRole] = useState<string | null>(propUserRole || null);
+
+  const canEditDelete = userRole !== 'publisher';
 
   const fetchArticles = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const supabase = createClient();
       const { data, error: fetchError } = await supabase
@@ -44,9 +51,29 @@ export function ArticlesTable() {
 
   useEffect(() => {
     fetchArticles();
-  }, []);
+
+    // Fetch user role if not provided
+    if (!propUserRole) {
+      const fetchUserRole = async () => {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+          if (profile) {
+            setUserRole(profile.role);
+          }
+        }
+      };
+      fetchUserRole();
+    }
+  }, [propUserRole]);
 
   const handleDelete = async (id: string) => {
+    if (!canEditDelete) return;
     if (!confirm('¿Estás seguro de eliminar este artículo?')) return;
 
     try {
@@ -65,14 +92,16 @@ export function ArticlesTable() {
   };
 
   const toggleSelect = (id: string) => {
-    setSelectedIds(prev => 
-      prev.includes(id) 
+    if (!canEditDelete) return;
+    setSelectedIds(prev =>
+      prev.includes(id)
         ? prev.filter(i => i !== id)
         : [...prev, id]
     );
   };
 
   const toggleSelectAll = () => {
+    if (!canEditDelete) return;
     if (selectedIds.length === articles.length) {
       setSelectedIds([]);
     } else {
@@ -134,8 +163,8 @@ export function ArticlesTable() {
         </button>
       </div>
 
-      {/* Bulk Actions */}
-      {selectedIds.length > 0 && (
+      {/* Bulk Actions - only for users who can edit/delete */}
+      {canEditDelete && selectedIds.length > 0 && (
         <div className="bg-blue-50 px-6 py-3 border-b border-gray-100 flex items-center justify-between">
           <span className="text-sm text-gray-600">
             {selectedIds.length} artículo(s) seleccionado(s)
@@ -153,14 +182,16 @@ export function ArticlesTable() {
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-gray-100">
             <tr>
-              <th className="px-6 py-4 text-left">
-                <input
-                  type="checkbox"
-                  checked={selectedIds.length === articles.length && articles.length > 0}
-                  onChange={toggleSelectAll}
-                  className="rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2]"
-                />
-              </th>
+              {canEditDelete && (
+                <th className="px-6 py-4 text-left">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.length === articles.length && articles.length > 0}
+                    onChange={toggleSelectAll}
+                    className="rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2]"
+                  />
+                </th>
+              )}
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                 Artículo
               </th>
@@ -184,14 +215,16 @@ export function ArticlesTable() {
           <tbody className="divide-y divide-gray-100">
             {articles.map((article) => (
               <tr key={article.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4">
-                  <input
-                    type="checkbox"
-                    checked={selectedIds.includes(article.id)}
-                    onChange={() => toggleSelect(article.id)}
-                    className="rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2]"
-                  />
-                </td>
+                {canEditDelete && (
+                  <td className="px-6 py-4">
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.includes(article.id)}
+                      onChange={() => toggleSelect(article.id)}
+                      className="rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2]"
+                    />
+                  </td>
+                )}
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-4">
                     {article.image_url && (
@@ -217,8 +250,8 @@ export function ArticlesTable() {
                 </td>
                 <td className="px-6 py-4">
                   {(() => {
-                    const categoryName = typeof article.category === 'string' 
-                      ? article.category 
+                    const categoryName = typeof article.category === 'string'
+                      ? article.category
                       : (article.category as { name?: string })?.name || 'Sin categoría';
                     return (
                       <span className={`inline-flex px-2.5 py-1 text-xs font-medium rounded-full ${categoryColors[categoryName] || 'bg-gray-100 text-gray-700'}`}>
@@ -256,20 +289,24 @@ export function ArticlesTable() {
                     >
                       <ExternalLink className="w-4 h-4" />
                     </Link>
-                    <Link
-                      href={`/admin/articulos/${article.id}/editar`}
-                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      title="Editar"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(article.id)}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                      title="Eliminar"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {canEditDelete && (
+                      <>
+                        <Link
+                          href={`/admin/articulos/${article.id}/editar`}
+                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                          title="Editar"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(article.id)}
+                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Eliminar"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -287,3 +324,4 @@ export function ArticlesTable() {
     </div>
   );
 }
+

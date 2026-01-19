@@ -2,26 +2,60 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  FileText, 
-  Video, 
-  Users, 
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import {
+  LayoutDashboard,
+  FileText,
+  Video,
+  Users,
   Settings,
   ChevronLeft
 } from 'lucide-react';
 import { LogoutButton } from './LogoutButton';
 
-const menuItems = [
+interface MenuItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  requiredRoles?: string[]; // Si está vacío, todos pueden ver
+}
+
+const menuItems: MenuItem[] = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Artículos', href: '/admin/articulos', icon: FileText },
   { name: 'Reels', href: '/admin/reels', icon: Video },
-  { name: 'Usuarios', href: '/admin/usuarios', icon: Users },
-  { name: 'Configuración', href: '/admin/configuracion', icon: Settings },
+  { name: 'Usuarios', href: '/admin/usuarios', icon: Users, requiredRoles: ['admin', 'editor'] },
+  { name: 'Configuración', href: '/admin/configuracion', icon: Settings, requiredRoles: ['admin'] },
 ];
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  userRole?: string;
+}
+
+export function AdminSidebar({ userRole: propUserRole }: AdminSidebarProps) {
   const pathname = usePathname();
+  const [userRole, setUserRole] = useState<string | null>(propUserRole || null);
+
+  useEffect(() => {
+    if (propUserRole) return;
+
+    const fetchUserRole = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        if (profile) {
+          setUserRole(profile.role);
+        }
+      }
+    };
+    fetchUserRole();
+  }, [propUserRole]);
 
   const isActive = (href: string) => {
     if (href === '/admin') {
@@ -29,6 +63,13 @@ export function AdminSidebar() {
     }
     return pathname.startsWith(href);
   };
+
+  const filteredMenuItems = menuItems.filter(item => {
+    if (!item.requiredRoles || item.requiredRoles.length === 0) {
+      return true;
+    }
+    return userRole && item.requiredRoles.includes(userRole);
+  });
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-gray-900 text-white flex flex-col z-50">
@@ -44,15 +85,14 @@ export function AdminSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {menuItems.map((item) => (
+        {filteredMenuItems.map((item) => (
           <Link
             key={item.name}
             href={item.href}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-              isActive(item.href)
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.href)
                 ? 'bg-[#0067b2] text-white'
                 : 'text-gray-400 hover:text-white hover:bg-gray-800'
-            }`}
+              }`}
           >
             <item.icon className="w-5 h-5" />
             <span className="font-medium">{item.name}</span>
@@ -69,9 +109,10 @@ export function AdminSidebar() {
           <ChevronLeft className="w-5 h-5" />
           <span className="font-medium">Volver al sitio</span>
         </Link>
-        
+
         <LogoutButton />
       </div>
     </aside>
   );
 }
+

@@ -8,10 +8,17 @@ import { Reel } from '@/types/database';
 import { formatDistanceToNow, formatNumber } from '@/lib/utils';
 import { Edit, Trash2, Play, Eye, Heart, RefreshCw, Loader2 } from 'lucide-react';
 
-export function ReelsGrid() {
+interface ReelsGridProps {
+  userRole?: string;
+}
+
+export function ReelsGrid({ userRole: propUserRole }: ReelsGridProps) {
   const [reels, setReels] = useState<Reel[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [userRole, setUserRole] = useState<string | null>(propUserRole || null);
+
+  const canEditDelete = userRole !== 'publisher';
 
   const fetchReels = async () => {
     setIsLoading(true);
@@ -31,9 +38,29 @@ export function ReelsGrid() {
 
   useEffect(() => {
     fetchReels();
-  }, []);
+
+    // Fetch user role if not provided
+    if (!propUserRole) {
+      const fetchUserRole = async () => {
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+          if (profile) {
+            setUserRole(profile.role);
+          }
+        }
+      };
+      fetchUserRole();
+    }
+  }, [propUserRole]);
 
   const handleDelete = async (id: string) => {
+    if (!canEditDelete) return;
     if (!confirm('¿Estás seguro de eliminar este reel?')) return;
 
     const supabase = createClient();
@@ -48,6 +75,7 @@ export function ReelsGrid() {
   };
 
   const handleBulkDelete = async () => {
+    if (!canEditDelete) return;
     if (selectedIds.length === 0) return;
     if (!confirm(`¿Estás seguro de eliminar ${selectedIds.length} reels seleccionados?`)) return;
 
@@ -64,6 +92,7 @@ export function ReelsGrid() {
   };
 
   const toggleSelect = (id: string) => {
+    if (!canEditDelete) return;
     setSelectedIds(prev =>
       prev.includes(id)
         ? prev.filter(i => i !== id)
@@ -92,8 +121,8 @@ export function ReelsGrid() {
         </button>
       </div>
 
-      {/* Bulk Actions */}
-      {selectedIds.length > 0 && (
+      {/* Bulk Actions - only for users who can edit/delete */}
+      {canEditDelete && selectedIds.length > 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 mb-6 flex items-center justify-between">
           <span className="text-sm text-gray-600">
             {selectedIds.length} reel(s) seleccionado(s)
@@ -137,15 +166,17 @@ export function ReelsGrid() {
                 </button>
               </div>
 
-              {/* Checkbox */}
-              <div className="absolute top-3 left-3">
-                <input
-                  type="checkbox"
-                  checked={selectedIds.includes(reel.id)}
-                  onChange={() => toggleSelect(reel.id)}
-                  className="w-5 h-5 rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2] bg-white/80"
-                />
-              </div>
+              {/* Checkbox - only for users who can edit/delete */}
+              {canEditDelete && (
+                <div className="absolute top-3 left-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(reel.id)}
+                    onChange={() => toggleSelect(reel.id)}
+                    className="w-5 h-5 rounded border-gray-300 text-[#0067b2] focus:ring-[#0067b2] bg-white/80"
+                  />
+                </div>
+              )}
 
               {/* Status Badge */}
               <div className="absolute top-3 right-3">
@@ -185,23 +216,25 @@ export function ReelsGrid() {
                 {reel.published_at ? formatDistanceToNow(reel.published_at) : 'Sin publicar'}
               </p>
 
-              {/* Actions */}
-              <div className="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-gray-100">
-                <Link
-                  href={`/admin/reels/${reel.id}/editar`}
-                  className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  title="Editar"
-                >
-                  <Edit className="w-4 h-4" />
-                </Link>
-                <button
-                  onClick={() => handleDelete(reel.id)}
-                  className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                  title="Eliminar"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
+              {/* Actions - only show edit/delete for users who can */}
+              {canEditDelete && (
+                <div className="flex items-center justify-end gap-2 mt-3 pt-3 border-t border-gray-100">
+                  <Link
+                    href={`/admin/reels/${reel.id}/editar`}
+                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Editar"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(reel.id)}
+                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Eliminar"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -226,3 +259,4 @@ export function ReelsGrid() {
     </div>
   );
 }
+
