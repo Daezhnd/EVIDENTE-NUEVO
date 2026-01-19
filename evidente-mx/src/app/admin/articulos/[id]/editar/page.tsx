@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ArticleForm } from '@/components/admin/ArticleForm';
 import { createClient } from '@/lib/supabase/server';
-import { requireAuth } from '@/lib/auth';
+import { requireRole } from '@/lib/auth';
 
 interface EditArticlePageProps {
   params: Promise<{ id: string }>;
@@ -27,7 +27,8 @@ async function getArticle(id: string) {
 }
 
 export default async function EditArticlePage({ params }: EditArticlePageProps) {
-  await requireAuth();
+  // Solo admin y editor pueden editar artículos
+  await requireRole(['admin', 'editor']);
   const { id } = await params;
   const article = await getArticle(id);
 
@@ -38,7 +39,7 @@ export default async function EditArticlePage({ params }: EditArticlePageProps) 
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <AdminSidebar />
-      
+
       <main className="flex-1 ml-64">
         <ArticleForm article={article} isEditing={true} />
       </main>

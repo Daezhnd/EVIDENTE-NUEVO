@@ -1,15 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
+// Helper para verificar rol del usuario
+async function verifyUserRole(supabase: Awaited<ReturnType<typeof createClient>>, userId: string, allowedRoles: string[]): Promise<boolean> {
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', userId)
+    .single();
+
+  return profile ? allowedRoles.includes(profile.role) : false;
+}
+
 // POST: Invitar un nuevo usuario
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
+
     // Verificar autenticación
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    }
+
+    // Verificar que el usuario sea admin o editor
+    const hasPermission = await verifyUserRole(supabase, user.id, ['admin', 'editor']);
+    if (!hasPermission) {
+      return NextResponse.json({ error: 'No tienes permisos para esta acción' }, { status: 403 });
     }
 
     const { email, role } = await request.json();
@@ -45,7 +62,7 @@ export async function POST(request: NextRequest) {
     // En una implementación completa, aquí enviarías un email de invitación
     // usando Supabase Auth invite o un servicio de email
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Usuario creado. En producción, se enviaría un email de invitación.'
     });
@@ -59,11 +76,17 @@ export async function POST(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     const supabase = await createClient();
-    
+
     // Verificar autenticación
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    }
+
+    // Verificar que el usuario sea admin o editor
+    const hasPermission = await verifyUserRole(supabase, user.id, ['admin', 'editor']);
+    if (!hasPermission) {
+      return NextResponse.json({ error: 'No tienes permisos para esta acción' }, { status: 403 });
     }
 
     const { userId } = await request.json();
@@ -93,3 +116,4 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: 'Error del servidor' }, { status: 500 });
   }
 }
+

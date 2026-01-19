@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ReelForm } from '@/components/admin/ReelForm';
 import { createClient } from '@/lib/supabase/server';
-import { requireAuth } from '@/lib/auth';
+import { requireRole } from '@/lib/auth';
 
 interface EditReelPageProps {
   params: Promise<{ id: string }>;
@@ -27,7 +27,8 @@ async function getReel(id: string) {
 }
 
 export default async function EditReelPage({ params }: EditReelPageProps) {
-  await requireAuth();
+  // Solo admin y editor pueden editar reels
+  await requireRole(['admin', 'editor']);
   const { id } = await params;
   const reel = await getReel(id);
 
@@ -38,7 +39,7 @@ export default async function EditReelPage({ params }: EditReelPageProps) {
   return (
     <div className="min-h-screen bg-gray-50 flex">
       <AdminSidebar />
-      
+
       <main className="flex-1 ml-64">
         <ReelForm reel={reel} isEditing={true} />
       </main>

@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { UsersManager } from '@/components/admin/UsersManager';
-import { redirect } from 'next/navigation';
+import { requireRole } from '@/lib/auth';
 
 interface User {
   id: string;
@@ -12,12 +12,6 @@ interface User {
 
 async function getUsers(): Promise<User[]> {
   const supabase = await createClient();
-  
-  // Verificar autenticación
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    redirect('/admin/login');
-  }
 
   // Obtener usuarios de la tabla users (si existe)
   const { data, error } = await supabase
@@ -35,8 +29,11 @@ async function getUsers(): Promise<User[]> {
 }
 
 export default async function AdminUsersPage() {
+  // Solo admin y editor pueden gestionar usuarios
+  await requireRole(['admin', 'editor']);
+
   const users = await getUsers();
-  
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -49,3 +46,4 @@ export default async function AdminUsersPage() {
     </div>
   );
 }
+
