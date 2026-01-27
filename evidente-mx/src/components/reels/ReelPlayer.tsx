@@ -6,6 +6,7 @@ import { Reel } from '@/types/database';
 import { Play, Pause, Volume2, VolumeX, Heart, MessageCircle, Share2, AlertCircle, RefreshCw } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
 import { TikTokEmbed } from './TikTokEmbed';
+import { FacebookEmbed } from './FacebookEmbed';
 
 interface ReelPlayerProps {
   reel: Reel;
@@ -14,10 +15,11 @@ interface ReelPlayerProps {
 }
 
 // Detectar tipo de video
-function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'jwplayer' | 'direct' {
+function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'facebook' | 'jwplayer' | 'direct' {
   if (!url) return 'direct';
   if (url.includes('instagram.com') || url.includes('instagr.am')) return 'instagram';
   if (url.includes('tiktok.com') || url.includes('vm.tiktok.com')) return 'tiktok';
+  if (url.includes('facebook.com') || url.includes('fb.watch') || url.includes('fb.com')) return 'facebook';
   if (url.includes('jwplayer.com')) return 'jwplayer';
   return 'direct';
 }
@@ -146,6 +148,13 @@ export function ReelPlayer({ reel, isActive = false, onVideoEnd }: ReelPlayerPro
       {videoSource === 'tiktok' && (
         <div className="absolute inset-0 bg-black flex items-center justify-center overflow-y-auto">
           <TikTokEmbed url={reel.video_url} caption={reel.caption || undefined} />
+        </div>
+      )}
+
+      {/* Facebook - Native Embed */}
+      {videoSource === 'facebook' && (
+        <div className="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
+          <FacebookEmbed url={reel.video_url} caption={reel.caption || undefined} />
         </div>
       )}
 

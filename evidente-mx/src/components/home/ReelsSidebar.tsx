@@ -8,16 +8,18 @@ import { AdBanner } from '@/components/ads/AdBanner';
 import { PhoneFrame } from '@/components/ui/PhoneFrame';
 import { ReelPlayer } from '@/components/reels/ReelPlayer';
 import { TikTokEmbed } from '@/components/reels/TikTokEmbed';
+import { FacebookEmbed } from '@/components/reels/FacebookEmbed';
 
 interface ReelsSidebarProps {
   reels: Reel[];
 }
 
 // Detectar tipo de video
-function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'jwplayer' | 'direct' {
+function detectVideoSource(url: string): 'instagram' | 'tiktok' | 'facebook' | 'jwplayer' | 'direct' {
   if (!url) return 'direct';
   if (url.includes('instagram.com') || url.includes('instagr.am')) return 'instagram';
   if (url.includes('tiktok.com') || url.includes('vm.tiktok.com')) return 'tiktok';
+  if (url.includes('facebook.com') || url.includes('fb.watch') || url.includes('fb.com')) return 'facebook';
   if (url.includes('jwplayer.com')) return 'jwplayer';
   return 'direct';
 }
@@ -246,11 +248,20 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
                   );
                 }
 
-                // Instagram o TikTok - mostrar card con link
+                // TikTok - mostrar embed nativo
                 if (videoSource === 'tiktok') {
                   return (
                     <div className="absolute inset-0 bg-black flex items-center justify-center overflow-y-auto">
                       <TikTokEmbed url={currentReel?.video_url || ''} caption={currentReel?.caption || undefined} />
+                    </div>
+                  );
+                }
+
+                // Facebook - mostrar embed nativo
+                if (videoSource === 'facebook') {
+                  return (
+                    <div className="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
+                      <FacebookEmbed url={currentReel?.video_url || ''} caption={currentReel?.caption || undefined} />
                     </div>
                   );
                 }
