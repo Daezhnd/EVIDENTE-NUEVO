@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { Play, ExternalLink, Loader2 } from 'lucide-react';
 
@@ -39,68 +39,44 @@ function extractVideoId(url: string): string | null {
     return null;
 }
 
-// Check if URL is a short/share URL that needs expansion
-function isShortUrl(url: string): boolean {
-    return url.includes('/share/v/') ||
-        url.includes('fb.watch') ||
-        url.includes('/reel/') && !url.match(/\/reel\/\d+/);
-}
+
 
 // Build embed URL for Facebook video plugin
 function buildEmbedUrl(videoUrl: string): string {
     const videoId = extractVideoId(videoUrl);
 
     if (videoId) {
-        // If we have a video ID, use the watch format which works better for embedding
         const watchUrl = `https://www.facebook.com/watch/?v=${videoId}`;
-        // autoplay=1 enables autoplay, mute=1 is required for autoplay to work in browsers
-        return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(watchUrl)}&show_text=false&width=350&height=622&autoplay=1&mute=1`;
+        return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(watchUrl)}&show_text=false&width=350&height=622&autoplay=1&mute=0`;
     }
 
-    // Fallback: try to embed the original URL
-    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoUrl)}&show_text=false&width=350&height=622&autoplay=1&mute=1`;
+    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoUrl)}&show_text=false&width=350&height=622&autoplay=1&mute=0`;
 }
 
 export function FacebookEmbed({ url, caption, thumbnailUrl }: FacebookEmbedProps) {
-    const [isLoading, setIsLoading] = useState(true);
-    const [embedUrl, setEmbedUrl] = useState<string | null>(null);
-    const [showFallback, setShowFallback] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const videoId = extractVideoId(url);
-    const isShort = isShortUrl(url);
+    const embedUrl = videoId ? buildEmbedUrl(url) : null;
 
-    useEffect(() => {
-        // If it's a short URL without extractable ID, show fallback card
-        if (isShort && !videoId) {
-            setShowFallback(true);
-            setIsLoading(false);
+    // Handle play button click
+    const handlePlay = () => {
+        if (!embedUrl) {
+            // Open in Facebook if we can't embed
+            window.open(url, '_blank');
             return;
         }
+        setIsLoading(true);
+        setIsPlaying(true);
+    };
 
-        // Build the embed URL
-        setEmbedUrl(buildEmbedUrl(url));
-    }, [url, isShort, videoId]);
-
-    // After 5 seconds, if still loading, show fallback
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            if (isLoading) {
-                setShowFallback(true);
-                setIsLoading(false);
-            }
-        }, 5000);
-
-        return () => clearTimeout(timeout);
-    }, [isLoading]);
-
-    // Fallback card - beautiful link to Facebook
-    if (showFallback || !embedUrl) {
+    // Click-to-play overlay (initial state)
+    if (!isPlaying) {
         return (
-            <a
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="absolute inset-0 flex flex-col group"
+            <div
+                className="absolute inset-0 flex flex-col cursor-pointer group"
+                onClick={handlePlay}
             >
                 {/* Background - thumbnail or gradient */}
                 {thumbnailUrl ? (
@@ -114,36 +90,40 @@ export function FacebookEmbed({ url, caption, thumbnailUrl }: FacebookEmbedProps
                         />
                     </div>
                 ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#1877F2] via-[#166fe5] to-[#0a5dc2]" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#1877F2] via-[#166fe5] to-[#0a5dc2]">
+                        {/* Animated background pattern */}
+                        <div className="absolute inset-0 opacity-10">
+                            <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white rounded-full blur-3xl animate-pulse" />
+                            <div className="absolute bottom-1/3 right-1/4 w-24 h-24 bg-white rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
+                        </div>
+                    </div>
                 )}
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors" />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors" />
 
-                {/* Contenido */}
+                {/* Content */}
                 <div className="relative z-10 flex-1 flex flex-col items-center justify-center p-4">
-                    <div className="w-20 h-20 bg-[#1877F2] rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-[#1877F2]/30 group-hover:scale-110 transition-transform">
-                        <svg className="w-12 h-12 text-white" viewBox="0 0 24 24" fill="currentColor">
+                    {/* Facebook logo */}
+                    <div className="w-16 h-16 bg-[#1877F2] rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-[#1877F2]/40">
+                        <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                         </svg>
                     </div>
 
-                    <span className="text-white font-bold text-xl mb-3">Ver en Facebook</span>
-
-                    <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 group-hover:bg-white/30 transition-colors">
-                        <Play className="w-8 h-8 text-white ml-1" fill="white" />
+                    {/* Play button - prominent */}
+                    <div className="w-20 h-20 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center mb-4 shadow-2xl group-hover:scale-110 group-hover:bg-white transition-all duration-300">
+                        <Play className="w-10 h-10 text-[#1877F2] ml-1" fill="#1877F2" />
                     </div>
 
-                    <div className="flex items-center gap-2 text-white/70 text-sm">
-                        <span>Toca para reproducir</span>
-                        <ExternalLink className="w-4 h-4" />
-                    </div>
+                    <span className="text-white font-bold text-lg mb-1">Reproducir video</span>
+                    <span className="text-white/70 text-sm">Toca para ver en Facebook</span>
                 </div>
 
-                {/* Caption */}
+                {/* Caption at bottom */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent">
                     {caption && (
-                        <p className="text-white text-sm line-clamp-3 mb-2">{caption}</p>
+                        <p className="text-white text-sm line-clamp-2 mb-2">{caption}</p>
                     )}
                     <div className="flex items-center gap-2 text-blue-400 text-xs font-medium">
                         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -152,12 +132,13 @@ export function FacebookEmbed({ url, caption, thumbnailUrl }: FacebookEmbedProps
                         <span>facebook.com</span>
                     </div>
                 </div>
-            </a>
+            </div>
         );
     }
 
+    // Playing state - show iframe
     return (
-        <div className="relative w-full h-full bg-black flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-black flex items-center justify-center overflow-hidden">
             {/* Loading state */}
             {isLoading && (
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-gradient-to-br from-[#1877F2] to-[#0a5dc2]">
@@ -169,26 +150,30 @@ export function FacebookEmbed({ url, caption, thumbnailUrl }: FacebookEmbedProps
             )}
 
             {/* Facebook Video iFrame */}
-            <iframe
-                src={embedUrl}
-                className="w-full h-full border-0"
-                style={{
-                    overflow: 'hidden',
-                    border: 'none',
-                    minHeight: '100%'
-                }}
-                scrolling="no"
-                frameBorder="0"
-                allowFullScreen={true}
-                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-                onLoad={() => setIsLoading(false)}
-                onError={() => {
-                    setIsLoading(false);
-                    setShowFallback(true);
-                }}
-            />
+            {embedUrl && (
+                <iframe
+                    src={embedUrl}
+                    className="w-full h-full border-0"
+                    style={{
+                        overflow: 'hidden',
+                        border: 'none',
+                        minHeight: '100%'
+                    }}
+                    scrolling="no"
+                    frameBorder="0"
+                    allowFullScreen={true}
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    onLoad={() => setIsLoading(false)}
+                    onError={() => {
+                        setIsLoading(false);
+                        setIsPlaying(false);
+                        // Open in Facebook as fallback
+                        window.open(url, '_blank');
+                    }}
+                />
+            )}
 
-            {/* Fallback link */}
+            {/* Open in Facebook button */}
             <a
                 href={url}
                 target="_blank"
