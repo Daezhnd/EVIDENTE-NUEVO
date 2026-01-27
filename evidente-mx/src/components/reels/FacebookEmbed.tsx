@@ -53,11 +53,12 @@ function buildEmbedUrl(videoUrl: string): string {
     if (videoId) {
         // If we have a video ID, use the watch format which works better for embedding
         const watchUrl = `https://www.facebook.com/watch/?v=${videoId}`;
-        return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(watchUrl)}&show_text=false&width=350&height=622`;
+        // autoplay=1 enables autoplay, mute=1 is required for autoplay to work in browsers
+        return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(watchUrl)}&show_text=false&width=350&height=622&autoplay=1&mute=1`;
     }
 
     // Fallback: try to embed the original URL
-    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoUrl)}&show_text=false&width=350&height=622`;
+    return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoUrl)}&show_text=false&width=350&height=622&autoplay=1&mute=1`;
 }
 
 export function FacebookEmbed({ url, caption, thumbnailUrl }: FacebookEmbedProps) {
