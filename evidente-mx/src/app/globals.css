@@ -5,14 +5,14 @@
 :root {
   --background: #ffffff;
   --foreground: #111827;
-  --primary: #0099ba;
-  --primary-hover: #007a96;
+  --primary: #009cb6;
+  --primary-hover: #007d92;
   --secondary: #0067b2;
   --secondary-hover: #00528e;
 }
 
 .dark {
-  --background: #030712;
+  --background: #021726;
   --foreground: #f9fafb;
 }
 
@@ -22,7 +22,7 @@
   --color-primary: var(--primary);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
-  --color-evident: #0099ba;
+  --color-evident: #009cb6;
   --color-evident-dark: #0067b2;
 }
 
@@ -31,9 +31,9 @@ html {
 }
 
 ::selection {
-  background-color: rgba(0, 153, 186, 0.2);
-  /* Primary #0099ba/20 */
-  color: #0099ba;
+  background-color: rgba(0, 156, 182, 0.2);
+  /* Primary #009cb6/20 */
+  color: #009cb6;
 }
 
 
