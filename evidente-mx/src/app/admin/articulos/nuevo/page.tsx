@@ -13,7 +13,7 @@ export default async function NewArticlePage() {
     <div className="min-h-screen bg-gray-50 flex">
       <AdminSidebar />
       
-      <main className="flex-1 p-8 ml-64">
+      <main className="flex-1 p-4 pt-20 sm:p-6 sm:pt-20 md:p-8 md:pt-8 md:ml-64">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Nuevo Artículo</h1>

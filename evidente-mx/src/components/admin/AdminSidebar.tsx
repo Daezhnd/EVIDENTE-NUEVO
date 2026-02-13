@@ -10,7 +10,9 @@ import {
   Video,
   Users,
   Settings,
-  ChevronLeft
+  ChevronLeft,
+  Menu,
+  X
 } from 'lucide-react';
 import { LogoutButton } from './LogoutButton';
 
@@ -36,6 +38,7 @@ interface AdminSidebarProps {
 export function AdminSidebar({ userRole: propUserRole }: AdminSidebarProps) {
   const pathname = usePathname();
   const [userRole, setUserRole] = useState<string | null>(propUserRole || null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (propUserRole) return;
@@ -57,6 +60,10 @@ export function AdminSidebar({ userRole: propUserRole }: AdminSidebarProps) {
     fetchUserRole();
   }, [propUserRole]);
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   const isActive = (href: string) => {
     if (href === '/admin') {
       return pathname === '/admin';
@@ -71,48 +78,108 @@ export function AdminSidebar({ userRole: propUserRole }: AdminSidebarProps) {
     return userRole && item.requiredRoles.includes(userRole);
   });
 
+  const linkClassName = (href: string) => `flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(href)
+    ? 'bg-[#0067b2] text-white'
+    : 'text-gray-400 hover:text-white hover:bg-gray-800'
+    }`;
+
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-gray-900 text-white flex flex-col z-50">
-      {/* Logo */}
-      <div className="p-6 border-b border-gray-800">
-        <Link href="/admin" className="flex items-center gap-2">
-          <span className="text-xl font-bold">
+    <>
+      {/* Mobile header */}
+      <div className="md:hidden fixed left-0 top-0 right-0 z-40 bg-gray-900/95 backdrop-blur border-b border-gray-800">
+        <div className="h-16 px-4 flex items-center justify-between">
+          <Link href="/admin" className="text-lg font-bold text-white">
             Evidente<span className="text-blue-500">.mx</span>
-          </span>
-        </Link>
-        <p className="text-xs text-gray-500 mt-1">Panel de Administración</p>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-        {filteredMenuItems.map((item) => (
-          <Link
-            key={item.name}
-            href={item.href}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.href)
-                ? 'bg-[#0067b2] text-white'
-                : 'text-gray-400 hover:text-white hover:bg-gray-800'
-              }`}
-          >
-            <item.icon className="w-5 h-5" />
-            <span className="font-medium">{item.name}</span>
           </Link>
-        ))}
-      </nav>
-
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-800 space-y-2">
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <span className="font-medium">Volver al sitio</span>
-        </Link>
-
-        <LogoutButton />
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-700 px-3 py-2 text-sm font-medium text-white"
+            aria-label={isMobileMenuOpen ? 'Cerrar menú de administración' : 'Abrir menú de administración'}
+            aria-expanded={isMobileMenuOpen}
+          >
+            {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            Menú
+          </button>
+        </div>
       </div>
-    </aside>
+
+      {/* Mobile drawer */}
+      <div
+        className={`md:hidden fixed inset-0 z-40 bg-black/50 transition-opacity ${isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        onClick={() => setIsMobileMenuOpen(false)}
+      />
+      <aside
+        className={`md:hidden fixed top-16 left-0 right-0 bottom-0 z-50 bg-gray-900 text-white flex flex-col transition-transform duration-200 ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full pointer-events-none'
+          }`}
+      >
+        <div className="p-4 border-b border-gray-800">
+          <p className="text-sm text-gray-400">Panel de Administración</p>
+        </div>
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {filteredMenuItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={linkClassName(item.href)}
+            >
+              <item.icon className="w-5 h-5" />
+              <span className="font-medium">{item.name}</span>
+            </Link>
+          ))}
+        </nav>
+        <div className="p-4 border-t border-gray-800 space-y-2">
+          <Link
+            href="/"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+            <span className="font-medium">Volver al sitio</span>
+          </Link>
+          <LogoutButton />
+        </div>
+      </aside>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-gray-900 text-white flex-col z-50">
+        <div className="p-6 border-b border-gray-800">
+          <Link href="/admin" className="flex items-center gap-2">
+            <span className="text-xl font-bold">
+              Evidente<span className="text-blue-500">.mx</span>
+            </span>
+          </Link>
+          <p className="text-xs text-gray-500 mt-1">Panel de Administración</p>
+        </div>
+
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          {filteredMenuItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={linkClassName(item.href)}
+            >
+              <item.icon className="w-5 h-5" />
+              <span className="font-medium">{item.name}</span>
+            </Link>
+          ))}
+        </nav>
+
+        <div className="p-4 border-t border-gray-800 space-y-2">
+          <Link
+            href="/"
+            className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+          >
+            <ChevronLeft className="w-5 h-5" />
+            <span className="font-medium">Volver al sitio</span>
+          </Link>
+
+          <LogoutButton />
+        </div>
+      </aside>
+    </>
   );
 }
 

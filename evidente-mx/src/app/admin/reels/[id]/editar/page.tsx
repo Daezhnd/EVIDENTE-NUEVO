@@ -40,7 +40,7 @@ export default async function EditReelPage({ params }: EditReelPageProps) {
     <div className="min-h-screen bg-gray-50 flex">
       <AdminSidebar />
 
-      <main className="flex-1 ml-64">
+      <main className="flex-1 p-4 pt-20 sm:p-6 sm:pt-20 md:p-8 md:pt-8 md:ml-64">
         <ReelForm reel={reel} isEditing={true} />
       </main>
     </div>
