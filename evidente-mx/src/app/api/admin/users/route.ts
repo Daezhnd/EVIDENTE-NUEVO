@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 
-// Helper para verificar rol del usuario
+// Helper para verificar rol
 async function verifyUserRole(supabase: Awaited<ReturnType<typeof createClient>>, userId: string, allowedRoles: string[]): Promise<boolean> {
   const { data: profile } = await supabase
     .from('profiles')
