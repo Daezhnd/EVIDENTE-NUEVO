@@ -82,11 +82,11 @@ export function Navbar() {
 
             <Link
               href="/admin"
-              className="hidden sm:flex items-center gap-1 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="inline-flex items-center gap-1 px-2 sm:px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
               aria-label="Panel de administración"
             >
               <User className="w-4 h-4" aria-hidden="true" />
-              Admin
+              <span className="hidden sm:inline">Admin</span>
             </Link>
           </div>
         </div>
@@ -128,6 +128,14 @@ export function Navbar() {
             >
               <Play className="w-4 h-4" />
               Reels
+            </Link>
+            <Link
+              href="/admin"
+              onClick={() => setIsMenuOpen(false)}
+              className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-red-600 font-medium"
+            >
+              <User className="w-4 h-4" />
+              Admin
             </Link>
           </nav>
         </div>
