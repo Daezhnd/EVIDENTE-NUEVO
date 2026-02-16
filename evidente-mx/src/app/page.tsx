@@ -43,7 +43,7 @@ export default async function HomePage() {
       {/* Sidebar de Reels - Fijo en el lateral derecho */}
       <ReelsSidebar reels={reels} />
 
-      {/* Hero: Split Imagen | Texto */}
+      {/* Hero: Spit Imagen | Texto */}
 
       {/* (Publicidad movida al feed) */}
 
