@@ -44,7 +44,7 @@ export function LogoHeader() {
                                     href="https://www.facebook.com/EVIDENTE.MX"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-gray-400 hover:text-blue-600 transition-colors"
+                                    className="text-gray-400 hover:text-red-600 transition-colors"
                                 >
                                     <FacebookIcon className="w-5 h-5" />
                                 </a>
@@ -52,7 +52,7 @@ export function LogoHeader() {
                                     href="https://www.instagram.com/evidentemx/"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-gray-400 hover:text-pink-600 transition-colors"
+                                    className="text-gray-400 hover:text-red-600 transition-colors"
                                 >
                                     <InstagramIcon className="w-5 h-5" />
                                 </a>

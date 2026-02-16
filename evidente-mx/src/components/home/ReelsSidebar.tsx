@@ -131,7 +131,7 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
                           <span>{currentReelIndex + 1} / {reels.length}</span>
                           <button
                             onClick={() => setIsFullscreen(true)}
-                            className="text-blue-400 hover:text-blue-300 font-medium"
+                            className="text-red-400 hover:text-red-300 font-medium"
                           >
                             Ver completo
                           </button>
@@ -228,7 +228,7 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
                             }
                           }}
                         >
-                          <div className="w-20 h-20 bg-[#0067b2]/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-[#00528e] hover:scale-110 transition-all">
+                          <div className="w-20 h-20 bg-red-600/80 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-700 hover:scale-110 transition-all">
                             <Play className="w-10 h-10 text-white ml-1" fill="white" />
                           </div>
                         </div>
@@ -335,7 +335,7 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
                     setCurrentReelIndex(idx);
                     setIsPlaying(false);
                   }}
-                  className={`h-1.5 rounded-full transition-all ${idx === currentReelIndex ? 'bg-blue-500 w-8' : 'bg-white/30 w-1.5 hover:bg-white/50'
+                  className={`h-1.5 rounded-full transition-all ${idx === currentReelIndex ? 'bg-red-500 w-8' : 'bg-white/30 w-1.5 hover:bg-white/50'
                     }`}
                 />
               ))}
@@ -365,7 +365,7 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
                     setCurrentReelIndex(idx);
                     setIsPlaying(false);
                   }}
-                  className={`w-full flex gap-3 p-2 rounded-lg transition-colors ${idx === currentReelIndex ? 'bg-[#0067b2]/30' : 'hover:bg-gray-800'
+                  className={`w-full flex gap-3 p-2 rounded-lg transition-colors ${idx === currentReelIndex ? 'bg-red-600/30' : 'hover:bg-gray-800'
                     }`}
                 >
                   <div className="relative w-16 aspect-[9/16] rounded-lg overflow-hidden flex-shrink-0">
@@ -376,13 +376,13 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
                       className="object-cover"
                     />
                     {idx === currentReelIndex && (
-                      <div className="absolute inset-0 bg-[#0067b2]/50 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-red-600/50 flex items-center justify-center">
                         <Play className="w-4 h-4 text-white" fill="white" />
                       </div>
                     )}
                   </div>
                   <div className="flex-1 text-left min-w-0">
-                    <p className={`font-medium text-sm line-clamp-2 ${idx === currentReelIndex ? 'text-blue-400' : 'text-white'}`}>
+                    <p className={`font-medium text-sm line-clamp-2 ${idx === currentReelIndex ? 'text-red-400' : 'text-white'}`}>
                       {reel.caption || 'Sin descripción'}
                     </p>
                   </div>
@@ -398,10 +398,10 @@ export function ReelsSidebar({ reels }: ReelsSidebarProps) {
       {/* ═══════════════════════════════════════════════════════════════════ */}
       <button
         onClick={() => setIsFullscreen(true)}
-        className="lg:hidden fixed bottom-24 right-4 z-40 w-14 h-14 bg-[#0067b2] rounded-full shadow-lg shadow-[#0067b2]/30 flex items-center justify-center"
+        className="lg:hidden fixed bottom-24 right-4 z-40 w-14 h-14 bg-red-600 rounded-full shadow-lg shadow-red-900/30 flex items-center justify-center"
       >
         <Play className="w-6 h-6 text-white ml-0.5" fill="white" />
-        <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-[#0067b2] text-xs font-bold rounded-full flex items-center justify-center">
+        <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-red-600 text-xs font-bold rounded-full flex items-center justify-center">
           {reels.length}
         </span>
       </button>

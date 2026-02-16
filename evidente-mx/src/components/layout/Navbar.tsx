@@ -8,8 +8,8 @@ import { ThemeToggleCompact } from '@/components/ui/ThemeToggle';
 const categories = [
   { name: 'Inicio', href: '/', borderColor: 'border-gray-400 dark:border-gray-500', hoverBg: 'hover:bg-gray-100 dark:hover:bg-gray-800/50' },
   { name: 'Destacadas', href: '/categoria/destacadas', borderColor: 'border-red-500', hoverBg: 'hover:bg-red-50 dark:hover:bg-red-900/30' },
-  { name: 'Internacionales', href: '/categoria/internacionales', borderColor: 'border-cyan-500', hoverBg: 'hover:bg-cyan-50 dark:hover:bg-cyan-900/30' },
-  { name: 'Entretenimiento', href: '/categoria/entretenimiento', borderColor: 'border-purple-500', hoverBg: 'hover:bg-purple-50 dark:hover:bg-purple-900/30' },
+  { name: 'Internacionales', href: '/categoria/internacionales', borderColor: 'border-green-500', hoverBg: 'hover:bg-green-50 dark:hover:bg-green-900/30' },
+  { name: 'Entretenimiento', href: '/categoria/entretenimiento', borderColor: 'border-yellow-500', hoverBg: 'hover:bg-yellow-50 dark:hover:bg-yellow-900/30' },
 ];
 
 export function Navbar() {
@@ -47,13 +47,13 @@ export function Navbar() {
             </Link>
             <Link
               href="/categoria/internacionales"
-              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-cyan-300 rounded-lg hover:bg-cyan-200 dark:hover:bg-cyan-800/60"
+              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-800/60"
             >
               Internacionales
             </Link>
             <Link
               href="/categoria/entretenimiento"
-              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-800/60"
+              className="px-3 py-2 text-sm font-bold tracking-wide text-gray-600 dark:text-gray-300 transition-all border-t-2 border-yellow-300 rounded-lg hover:bg-yellow-200 dark:hover:bg-yellow-800/60"
             >
               Entretenimiento
             </Link>
@@ -73,7 +73,7 @@ export function Navbar() {
 
             <button
               onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:text-evident dark:hover:text-blue-400 transition-colors"
+              className="p-2 text-gray-600 dark:text-gray-400 hover:text-evident dark:hover:text-red-400 transition-colors"
               aria-label={isSearchOpen ? "Cerrar búsqueda" : "Abrir búsqueda"}
               aria-expanded={isSearchOpen}
             >

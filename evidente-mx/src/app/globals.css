@@ -5,10 +5,10 @@
 :root {
   --background: #ffffff;
   --foreground: #111827;
-  --primary: #009cb6;
-  --primary-hover: #007d92;
-  --secondary: #0067b2;
-  --secondary-hover: #00528e;
+  --primary: #dc2626;
+  --primary-hover: #b91c1c;
+  --secondary: #111111;
+  --secondary-hover: #000000;
 }
 
 .dark {
@@ -22,8 +22,8 @@
   --color-primary: var(--primary);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
-  --color-evident: #009cb6;
-  --color-evident-dark: #0067b2;
+  --color-evident: #dc2626;
+  --color-evident-dark: #111111;
 }
 
 html {
@@ -31,9 +31,8 @@ html {
 }
 
 ::selection {
-  background-color: rgba(0, 156, 182, 0.2);
-  /* Primary #009cb6/20 */
-  color: #009cb6;
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #dc2626;
 }
 
 

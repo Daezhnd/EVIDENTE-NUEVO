@@ -41,9 +41,9 @@ function getDisplayCategory(category: string | unknown): string {
 
 function getCategoryColor(displayCategory: string): string {
     const colors: Record<string, string> = {
-        'Noticias': 'text-blue-700 bg-blue-50 dark:text-blue-300 dark:bg-[#0067b2]/30',
-        'Internacionales': 'text-cyan-700 bg-cyan-50 dark:text-cyan-300 dark:bg-cyan-900/30',
-        'Entretenimiento': 'text-purple-700 bg-purple-50 dark:text-purple-300 dark:bg-purple-900/30',
+        'Noticias': 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/30',
+        'Internacionales': 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/30',
+        'Entretenimiento': 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/30',
         'Destacadas': 'text-red-700 bg-red-50 dark:text-red-300 dark:bg-red-900/30',
         'default': 'text-gray-700 bg-gray-50 dark:text-gray-300 dark:bg-gray-800',
     };
@@ -214,7 +214,7 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                                 </div>
                                             </div>
 
-                                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 leading-tight mb-4 group-hover:text-evident dark:group-hover:text-blue-400 transition-colors">
+                                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-50 leading-tight mb-4 group-hover:text-evident dark:group-hover:text-red-400 transition-colors">
                                                 {article.title}
                                             </h2>
 
@@ -222,7 +222,7 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                                 {article.excerpt || article.summary}
                                             </p>
 
-                                            <div className="flex items-center text-evident dark:text-blue-400 font-bold text-sm tracking-wide group-hover:translate-x-1 transition-transform w-fit">
+                                            <div className="flex items-center text-evident dark:text-red-400 font-bold text-sm tracking-wide group-hover:translate-x-1 transition-transform w-fit">
                                                 LEER ARTÍCULO
                                                 <ArrowRight className="w-4 h-4 ml-2" />
                                             </div>
@@ -255,10 +255,10 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                             href="/categoria/destacadas"
                             className="flex justify-center items-center gap-2 pt-12 pb-8 group cursor-pointer"
                         >
-                            <span className="text-gray-400 group-hover:text-[#0067b2] transition-colors text-sm mr-2">Ver más noticias</span>
-                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-[#0067b2] rounded-full animate-bounce transition-colors" />
-                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-[#0067b2] rounded-full animate-bounce transition-colors" style={{ animationDelay: '75ms' }} />
-                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-[#0067b2] rounded-full animate-bounce transition-colors" style={{ animationDelay: '150ms' }} />
+                            <span className="text-gray-400 group-hover:text-red-600 transition-colors text-sm mr-2">Ver más noticias</span>
+                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-red-600 rounded-full animate-bounce transition-colors" />
+                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-red-600 rounded-full animate-bounce transition-colors" style={{ animationDelay: '75ms' }} />
+                            <div className="w-2 h-2 bg-gray-400 group-hover:bg-red-600 rounded-full animate-bounce transition-colors" style={{ animationDelay: '150ms' }} />
                         </Link>
                     )}
                 </div>

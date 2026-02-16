@@ -50,11 +50,11 @@ export function PollWidget() {
                                     value={option.id}
                                     checked={selectedOption === option.id}
                                     onChange={() => setSelectedOption(option.id)}
-                                    className="appearance-none w-5 h-5 rounded-full border-2 border-gray-500 checked:border-blue-500 bg-transparent transition-colors"
+                                    className="appearance-none w-5 h-5 rounded-full border-2 border-gray-500 checked:border-red-500 bg-transparent transition-colors"
                                 />
                                 {selectedOption === option.id && (
                                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                        <div className="w-2.5 h-2.5 bg-blue-500 rounded-full"></div>
+                                        <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
                                     </div>
                                 )}
                             </div>
@@ -69,7 +69,7 @@ export function PollWidget() {
                         disabled={!selectedOption}
                         className={`w-full py-2.5 rounded font-medium mt-4 transition-all
               ${selectedOption
-                                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-[#0067b2]/50'
+                                ? 'bg-red-600 hover:bg-black text-white shadow-lg shadow-red-900/50'
                                 : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                             }
             `}
@@ -98,7 +98,7 @@ export function PollWidget() {
                                 <span>Más caro (65%)</span>
                             </div>
                             <div className="w-full bg-gray-700 rounded-full h-1.5">
-                                <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: '65%' }}></div>
+                                <div className="bg-red-500 h-1.5 rounded-full" style={{ width: '65%' }}></div>
                             </div>
                         </div>
                         <div className="text-left text-xs text-gray-400">

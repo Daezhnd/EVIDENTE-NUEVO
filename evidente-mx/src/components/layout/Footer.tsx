@@ -7,13 +7,13 @@ export function Footer() {
     <footer className="bg-[#1a1b1f] text-gray-400 font-sans">
       {/* Top Colorful Border */}
       <div className="flex h-1">
-        <div className="flex-1 bg-purple-500"></div>
-        <div className="flex-1 bg-blue-500"></div>
-        <div className="flex-1 bg-cyan-500"></div>
-        <div className="flex-1 bg-green-500"></div>
-        <div className="flex-1 bg-yellow-500"></div>
-        <div className="flex-1 bg-orange-500"></div>
+        <div className="flex-1 bg-white"></div>
+        <div className="flex-1 bg-gray-400"></div>
         <div className="flex-1 bg-red-500"></div>
+        <div className="flex-1 bg-black"></div>
+        <div className="flex-1 bg-red-700"></div>
+        <div className="flex-1 bg-gray-500"></div>
+        <div className="flex-1 bg-white"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -45,7 +45,7 @@ export function Footer() {
 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-500 hover:text-blue-600 transition-colors"
+                className="text-gray-500 hover:text-red-500 transition-colors"
               >
                 <Facebook className="w-6 h-6" />
               </a>
@@ -53,7 +53,7 @@ export function Footer() {
                 href="https://www.instagram.com/evidentemx/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-500 hover:text-pink-600 transition-colors"
+                className="text-gray-500 hover:text-red-500 transition-colors"
               >
                 <Instagram className="w-6 h-6" />
               </a>

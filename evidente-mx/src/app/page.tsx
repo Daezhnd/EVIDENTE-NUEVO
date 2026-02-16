@@ -29,7 +29,7 @@ export default async function HomePage() {
           <p className="text-gray-500 mb-6">Aún no hay artículos publicados.</p>
           <a
             href="/admin/articulos/nuevo"
-            className="inline-block px-6 py-3 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e]"
+            className="inline-block px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-black transition-colors"
           >
             Crear primer artículo
           </a>
