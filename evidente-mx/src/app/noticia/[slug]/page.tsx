@@ -60,6 +60,35 @@ interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
+function buildShareDescription(article: Article): string {
+  const summary = article.summary?.trim();
+  if (summary) return summary;
+
+  const excerpt = article.excerpt?.trim();
+  if (excerpt) return excerpt;
+
+  const plainContent = (article.content || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!plainContent) {
+    return 'Lee esta nota en Evidente.mx';
+  }
+
+  return plainContent.length > 170
+    ? `${plainContent.slice(0, 167)}...`
+    : plainContent;
+}
+
+function buildAbsoluteUrl(pathOrUrl: string): string {
+  try {
+    return new URL(pathOrUrl, 'https://evidente.mx').toString();
+  } catch {
+    return 'https://evidente.mx/favicon.png';
+  }
+}
+
 async function getArticleBySlug(slug: string): Promise<Article | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
@@ -95,20 +124,40 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     return { title: 'Artículo no encontrado | Evidente.mx' };
   }
 
+  const articleUrl = buildAbsoluteUrl(`/noticia/${article.slug}`);
+  const imageUrl = article.image_url
+    ? buildAbsoluteUrl(article.image_url)
+    : 'https://evidente.mx/favicon.png';
+  const description = buildShareDescription(article);
+
   return {
-    title: `${article.title} | Evidente.mx`,
-    description: article.summary,
+    title: article.title,
+    description,
+    alternates: {
+      canonical: articleUrl,
+    },
     openGraph: {
       title: article.title,
-      description: article.summary || '',
-      images: article.image_url ? [article.image_url] : [],
+      description,
+      url: articleUrl,
+      siteName: 'Evidente.mx',
+      locale: 'es_MX',
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: article.title,
+        },
+      ],
       type: 'article',
+      publishedTime: article.published_at || undefined,
     },
     twitter: {
       card: 'summary_large_image',
       title: article.title,
-      description: article.summary || '',
-      images: article.image_url ? [article.image_url] : [],
+      description,
+      images: [imageUrl],
     },
   };
 }
