@@ -10,15 +10,18 @@ export function GlobalCampaignBanner() {
   const pathname = usePathname();
   const isHomePage = pathname === '/';
   const sidePositionClass = isHomePage
-    ? 'right-[320px] 2xl:right-[340px]'
+    ? 'right-[67px] 2xl:right-[47px] top-[calc(60vh-417px)] 2xl:top-[calc(60vh-457px)]'
     : 'right-4';
+  const verticalPositionClass = isHomePage
+    ? ''
+    : 'top-1/2 -translate-y-1/2';
 
   if (pathname?.startsWith('/admin')) {
     return null;
   }
 
   return (
-    <aside className={`hidden xl:block fixed ${sidePositionClass} top-1/2 -translate-y-1/2 z-40`}>
+    <aside className={`hidden xl:block fixed ${sidePositionClass} ${verticalPositionClass} z-40`}>
       <a
         href={bannerUrl}
         target="_blank"
