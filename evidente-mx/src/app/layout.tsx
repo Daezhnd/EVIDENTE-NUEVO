@@ -5,6 +5,7 @@ import { LogoHeader } from "@/components/layout/LogoHeader";
 import { Navbar } from "@/components/layout/Navbar";
 import { BreakingNewsTicker } from "@/components/layout/BreakingNewsTicker";
 import { Footer } from "@/components/layout/Footer";
+import { GlobalCampaignBanner } from "@/components/ads/GlobalCampaignBanner";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { getRecentArticlesForTicker } from "@/lib/api";
@@ -119,6 +120,7 @@ export default async function RootLayout({
           <Navbar />
           {/* Ticker de últimas noticias debajo del nav */}
           <BreakingNewsTicker news={tickerNews} />
+          <GlobalCampaignBanner />
           <main className="min-h-screen">
             {children}
           </main>
