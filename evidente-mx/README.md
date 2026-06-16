@@ -22,8 +22,8 @@ Portal de noticias moderno construido con Next.js 16, React 19, Supabase y Tailw
 
 1. **Clonar el repositorio**
 ```bash
-git clone https://github.com/tu-usuario/evidente-mx.git
-cd evidente-mx
+git clone https://github.com/Daezhnd/EVIDENTE-NUEVO.git
+cd EVIDENTE-NUEVO/evidente-mx
 ```
 
 2. **Instalar dependencias**
