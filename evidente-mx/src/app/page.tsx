@@ -2,6 +2,7 @@ import { HeroCombo } from '@/components/home/HeroCombo';
 import { SocialFeed } from '@/components/home/SocialFeed';
 import { ReelsSidebar } from '@/components/home/ReelsSidebar';
 import { AdBanner } from '@/components/ads/AdBanner';
+import { CampaignBannerInline } from '@/components/ads/GlobalCampaignBanner';
 import { PollWidget } from '@/components/widgets/PollWidget';
 import {
   getFeaturedArticles,
@@ -51,6 +52,7 @@ export default async function HomePage() {
         mainArticle={mainArticle}
         secondaryArticles={secondaryArticles}
       />
+      <CampaignBannerInline />
 
       {/* Feed Red Social + Sidebar Widgets */}
       <section className="bg-gray-50 dark:bg-gray-950">
