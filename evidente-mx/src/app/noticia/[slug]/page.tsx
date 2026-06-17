@@ -10,6 +10,7 @@ import { Clock, Eye, Share2, Facebook, Twitter, Linkedin, ArrowLeft, MessageCirc
 import { ViewCounter } from '@/components/articles/ViewCounter';
 import { ArticleHeroImage } from '@/components/articles/ArticleHeroImage';
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
+import { CampaignBannerInline } from '@/components/ads/GlobalCampaignBanner';
 
 /**
  * Formatea contenido de texto plano a HTML si es necesario
@@ -314,6 +315,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <Linkedin className="w-4 h-4" />
           </a>
         </div>
+
+        <CampaignBannerInline />
 
         {/* Contenido del artículo */}
         <div
