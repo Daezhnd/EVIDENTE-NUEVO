@@ -1,59 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient as createServerClient } from '@supabase/supabase-js';
 import { generateSlug, validateArticle } from '@/lib/utils';
-
-const VALID_CATEGORIES = [
-  'Destacadas',
-  'Internacionales',
-  'Entretenimiento',
-  'Noticias',
-  'Deportes',
-  'Turismo',
-] as const;
-
-type ArticleCategory = (typeof VALID_CATEGORIES)[number];
-
-interface ArticlePayload {
-  title: string;
-  slug?: string;
-  summary: string;
-  content: string;
-  image_url?: string | null;
-  video_url?: string | null;
-  category?: ArticleCategory;
-  is_published?: boolean;
-}
-
-function verifyApiKey(request: NextRequest): boolean {
-  const apiKey = process.env.API_SECRET_KEY;
-  if (!apiKey) return false;
-
-  const authHeader = request.headers.get('authorization');
-  if (!authHeader?.startsWith('Bearer ')) return false;
-
-  return authHeader.slice(7) === apiKey;
-}
-
-function getSupabaseAdmin() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !serviceKey) {
-    throw new Error('Faltan variables de entorno de Supabase');
-  }
-
-  return createServerClient(url, serviceKey);
-}
-
-function validateCategory(category: string): category is ArticleCategory {
-  return VALID_CATEGORIES.includes(category as ArticleCategory);
-}
+import {
+  VALID_CATEGORIES,
+  getSupabaseAdmin,
+  resolvePublishedAtInput,
+  validateCategory,
+  verifyApiKey,
+} from '@/lib/article-api';
+import type { ArticlePayload } from '@/lib/article-api';
+import type { ValidationError } from '@/lib/utils';
 
 function buildArticleData(article: ArticlePayload) {
   const slug = article.slug || generateSlug(article.title);
   const isPublished = article.is_published ?? false;
+  const publishedAtInput = resolvePublishedAtInput(article as unknown as Record<string, unknown>);
+  const explicitPublishedAt = publishedAtInput.provided && !publishedAtInput.error
+    ? publishedAtInput.value
+    : undefined;
+  const publishedAt = explicitPublishedAt ?? (isPublished ? new Date().toISOString() : null);
 
-  return {
+  const data: {
+    title: string;
+    slug: string;
+    summary: string;
+    content: string;
+    image_url: string | null;
+    video_url: string | null;
+    category: string;
+    is_published: boolean;
+    published_at: string | null;
+    created_at?: string;
+  } = {
     title: article.title.trim(),
     slug,
     summary: article.summary.trim(),
@@ -62,8 +39,67 @@ function buildArticleData(article: ArticlePayload) {
     video_url: article.video_url || null,
     category: article.category || 'Noticias',
     is_published: isPublished,
-    published_at: isPublished ? new Date().toISOString() : null,
+    published_at: publishedAt,
   };
+
+  if (explicitPublishedAt) {
+    data.created_at = explicitPublishedAt;
+  }
+
+  return data;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function validatePayload(article: unknown): ValidationError[] {
+  const errors: ValidationError[] = [];
+
+  if (!isRecord(article)) {
+    return [{ field: 'general', message: 'El artículo debe ser un objeto' }];
+  }
+
+  const publishedAtInput = resolvePublishedAtInput(article);
+  if (publishedAtInput.error) {
+    errors.push(publishedAtInput.error);
+  }
+
+  // Campos requeridos
+  if (
+    !isNonEmptyString(article.title) ||
+    !isNonEmptyString(article.summary) ||
+    !isNonEmptyString(article.content)
+  ) {
+    errors.push({ field: 'general', message: 'title, summary y content son requeridos' });
+    return errors;
+  }
+
+  // Validar categoría si fue enviada
+  if (article.category && (typeof article.category !== 'string' || !validateCategory(article.category))) {
+    errors.push({
+      field: 'category',
+      message: `Categoría inválida. Opciones: ${VALID_CATEGORIES.join(', ')}`,
+    });
+    return errors;
+  }
+
+  // Validaciones de contenido (longitud, XSS, etc.)
+  const slug = typeof article.slug === 'string' && article.slug
+    ? article.slug
+    : generateSlug(article.title);
+  errors.push(...validateArticle({
+    title: article.title,
+    slug,
+    summary: article.summary,
+    content: article.content,
+  }));
+
+  return errors;
 }
 
 // POST: Crear uno o varios artículos
@@ -75,8 +111,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const articles: ArticlePayload[] = Array.isArray(body) ? body : [body];
+    const body: unknown = await request.json();
+    const articles = Array.isArray(body) ? body : [body];
 
     if (articles.length === 0) {
       return NextResponse.json({ error: 'No se enviaron artículos' }, { status: 400 });
@@ -93,39 +129,7 @@ export async function POST(request: NextRequest) {
     const errors: { index: number; errors: { field: string; message: string }[] }[] = [];
 
     for (let i = 0; i < articles.length; i++) {
-      const article = articles[i];
-
-      // Campos requeridos
-      if (!article.title || !article.summary || !article.content) {
-        errors.push({
-          index: i,
-          errors: [{ field: 'general', message: 'title, summary y content son requeridos' }],
-        });
-        continue;
-      }
-
-      // Validar categoría si fue enviada
-      if (article.category && !validateCategory(article.category)) {
-        errors.push({
-          index: i,
-          errors: [
-            {
-              field: 'category',
-              message: `Categoría inválida. Opciones: ${VALID_CATEGORIES.join(', ')}`,
-            },
-          ],
-        });
-        continue;
-      }
-
-      // Validaciones de contenido (longitud, XSS, etc.)
-      const slug = article.slug || generateSlug(article.title);
-      const validationErrors = validateArticle({
-        title: article.title,
-        slug,
-        summary: article.summary,
-        content: article.content,
-      });
+      const validationErrors = validatePayload(articles[i]);
 
       if (validationErrors.length > 0) {
         errors.push({ index: i, errors: validationErrors });
@@ -141,7 +145,7 @@ export async function POST(request: NextRequest) {
 
     // Insertar en Supabase
     const supabase = getSupabaseAdmin();
-    const rows = articles.map(buildArticleData);
+    const rows = (articles as ArticlePayload[]).map(buildArticleData);
 
     const { data, error: insertError } = await supabase
       .from('articles')
