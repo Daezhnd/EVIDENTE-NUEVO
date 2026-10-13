@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { refreshPublicContent } from '@/app/admin/actions';
 import { Reel } from '@/types/database';
 import { formatDistanceToNow, formatNumber } from '@/lib/utils';
 import { Edit, Trash2, Play, Eye, Heart, RefreshCw, Loader2 } from 'lucide-react';
@@ -70,6 +71,7 @@ export function ReelsGrid({ userRole: propUserRole }: ReelsGridProps) {
       console.error('Error deleting reel:', error);
       alert('Error al eliminar el reel');
     } else {
+      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
       setReels(prev => prev.filter(r => r.id !== id));
     }
   };
@@ -86,6 +88,7 @@ export function ReelsGrid({ userRole: propUserRole }: ReelsGridProps) {
       console.error('Error deleting reels:', error);
       alert('Error al eliminar los reels seleccionados');
     } else {
+      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
       setReels(prev => prev.filter(r => !selectedIds.includes(r.id)));
       setSelectedIds([]);
     }

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { ArticleCard } from '@/components/articles/ArticleCard';
 import { Pagination } from '@/components/ui/Pagination';
 import { ArticleCategory, Article } from '@/types/database';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/public';
 
 // Mapeo de slugs a categorías
 const categoryMap: Record<string, ArticleCategory> = {
@@ -140,5 +140,4 @@ export function generateStaticParams() {
   return Object.keys(categoryMap).map((slug) => ({ slug }));
 }
 
-// Revalidar cada 60 segundos
-export const revalidate = 60;
+export const revalidate = 300;

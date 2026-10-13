@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { ReelPlayer } from '@/components/reels/ReelPlayer';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/public';
 import { Reel } from '@/types/database';
 
 export const metadata: Metadata = {
@@ -58,4 +58,4 @@ export default async function ReelsPage() {
   );
 }
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;

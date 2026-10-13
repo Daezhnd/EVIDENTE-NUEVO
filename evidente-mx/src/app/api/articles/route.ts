@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { generateSlug, validateArticle } from '@/lib/utils';
 import {
   VALID_CATEGORIES,
@@ -164,6 +165,12 @@ export async function POST(request: NextRequest) {
         { error: 'Error al insertar artículos', detail: insertError.message },
         { status: 500 }
       );
+    }
+
+    try {
+      revalidateTag('public-content');
+    } catch (error) {
+      console.error('Error al actualizar la caché pública:', error);
     }
 
     return NextResponse.json({

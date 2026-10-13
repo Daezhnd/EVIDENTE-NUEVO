@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/public';
 import { formatDate, formatDistanceToNow, calculateReadingTime } from '@/lib/utils';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { ArticleCard } from '@/components/articles/ArticleCard';
@@ -363,5 +363,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   );
 }
 
-// Revalidar cada 60 segundos para mostrar contenido actualizado
-export const revalidate = 60;
+// Las noticias nuevas se generan al primer acceso y se conservan en ISR.
+export function generateStaticParams() {
+  return [];
+}
+
+export const revalidate = 300;

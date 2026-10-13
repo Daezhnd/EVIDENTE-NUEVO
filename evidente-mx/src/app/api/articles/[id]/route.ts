@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidateTag } from 'next/cache';
 import { generateSlug, validateArticle } from '@/lib/utils';
 import {
   VALID_CATEGORIES,
@@ -240,6 +241,12 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       return handleSupabaseError(updateError, 'Error al actualizar artículo');
     }
 
+    try {
+      revalidateTag('public-content');
+    } catch (error) {
+      console.error('Error al actualizar la caché pública:', error);
+    }
+
     return NextResponse.json({ success: true, article: data });
   } catch (error) {
     console.error('Error en PATCH /api/articles/[id]:', error);
@@ -269,6 +276,12 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
 
     if (!data) {
       return NextResponse.json({ error: 'Artículo no encontrado' }, { status: 404 });
+    }
+
+    try {
+      revalidateTag('public-content');
+    } catch (error) {
+      console.error('Error al actualizar la caché pública:', error);
     }
 
     return NextResponse.json({ success: true });

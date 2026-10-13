@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Reel } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
+import { refreshPublicContent } from '@/app/admin/actions';
 import { generateThumbnailFromUrl } from '@/lib/video-utils';
 import { VideoUploader } from './VideoUploader';
 import {
@@ -130,6 +131,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
         // console.log('Reel creado:', data);
       }
 
+      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
       router.push('/admin/reels');
       router.refresh();
     } catch (err: unknown) {

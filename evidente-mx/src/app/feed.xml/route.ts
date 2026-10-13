@@ -1,6 +1,8 @@
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/public';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://evidente.mx';
+
+export const revalidate = 300;
 
 export async function GET() {
   const supabase = await createClient();
@@ -49,7 +51,7 @@ export async function GET() {
   return new Response(rss, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      'Cache-Control': 'public, max-age=0, s-maxage=300',
     },
   });
 }

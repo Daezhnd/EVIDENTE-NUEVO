@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
+import { refreshPublicContent } from '@/app/admin/actions';
 import { formatDistanceToNow } from '@/lib/utils';
 import { Article } from '@/types/database';
 import { Edit, Trash2, ExternalLink, Loader2, RefreshCw } from 'lucide-react';
@@ -84,6 +85,7 @@ export function ArticlesTable({ userRole: propUserRole }: ArticlesTableProps) {
         .eq('id', id);
 
       if (error) throw error;
+      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
       setArticles(prev => prev.filter(a => a.id !== id));
     } catch (e) {
       console.error('Error eliminando artículo:', e);

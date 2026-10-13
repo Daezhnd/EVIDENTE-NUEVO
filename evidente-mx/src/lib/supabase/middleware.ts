@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function updateSession(request: NextRequest) {
-  // En middleware no podemos usar el env helper porque se ejecuta en edge
+  // Variables necesarias para validar y renovar la sesión.
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -44,6 +44,8 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  supabaseResponse.headers.set('Cache-Control', 'private, no-store');
+
   // Proteger rutas de admin con verificación de rol
   if (request.nextUrl.pathname.startsWith('/admin')) {
     // Permitir acceso a la página de login sin autenticación
@@ -52,7 +54,10 @@ export async function updateSession(request: NextRequest) {
       if (user) {
         const url = request.nextUrl.clone();
         url.pathname = '/admin';
-        return NextResponse.redirect(url);
+        const response = NextResponse.redirect(url);
+        supabaseResponse.cookies.getAll().forEach(cookie => response.cookies.set(cookie));
+        response.headers.set('Cache-Control', 'private, no-store');
+        return response;
       }
       return supabaseResponse;
     }
@@ -61,7 +66,10 @@ export async function updateSession(request: NextRequest) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = '/admin/login';
-      return NextResponse.redirect(url);
+      const response = NextResponse.redirect(url);
+      supabaseResponse.cookies.getAll().forEach(cookie => response.cookies.set(cookie));
+      response.headers.set('Cache-Control', 'private, no-store');
+      return response;
     }
     
     // Verificar rol del usuario (admin o editor)

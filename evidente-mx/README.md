@@ -134,6 +134,8 @@ npm run build    # Build de producción
 npm run start    # Iniciar producción
 npm run lint     # Ejecutar ESLint
 node scripts/check-newsletter.mjs  # Verificar newsletter sin servicios externos
+node scripts/check-content-revalidation.mjs  # Verificar permisos e invalidación
+node scripts/check-public-cache.mjs  # Verificar caché pública y alcance del middleware
 ```
 
 ## 🚀 Deploy
@@ -151,6 +153,13 @@ administrador, una publicación y una subida de archivos antes de cambiar las
 variables de Production. La nueva base de datos no incluye noticias, usuarios ni
 archivos del proyecto anterior. Conserva el acceso al correo de la nueva cuenta de
 Supabase y un método de inicio de sesión independiente de la cuenta de GitHub.
+
+Las lecturas públicas usan una caché de 300 segundos. Guardar, publicar, retirar,
+importar o eliminar artículos y reels desde el panel o la API invalida la caché
+pública. Si la invalidación falla, la escritura sigue guardada y la renovación
+automática actúa como respaldo; los cambios directos en el dashboard de Supabase
+también esperan esta renovación. Las sesiones, borradores y llamadas que escriben
+datos no se comparten en la caché pública.
 
 ### Otras plataformas
 

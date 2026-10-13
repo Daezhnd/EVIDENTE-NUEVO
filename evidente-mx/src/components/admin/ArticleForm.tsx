@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Article, ArticleCategory } from '@/types/database';
 import { generateSlug, validateArticle, ValidationError } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
+import { refreshPublicContent } from '@/app/admin/actions';
 import {
   Save,
   Eye,
@@ -108,6 +109,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
         if (insertError) throw insertError;
       }
 
+      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
       router.push('/admin/articulos');
       router.refresh();
     } catch (err: unknown) {

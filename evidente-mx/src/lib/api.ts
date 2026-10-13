@@ -3,7 +3,7 @@
  * Evidente.mx - Portal de Noticias
  */
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/public';
 import { logError } from '@/lib/errors';
 import type {
   Article,
