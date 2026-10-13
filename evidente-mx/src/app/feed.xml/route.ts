@@ -13,7 +13,8 @@ export async function GET() {
     .select('title, slug, summary, published_at, category')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(50);
+    .limit(50)
+    .throwOnError();
 
   const rssItems = (articles || [])
     .map((article) => {

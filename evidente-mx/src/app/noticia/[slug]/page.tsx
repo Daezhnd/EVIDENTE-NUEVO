@@ -92,14 +92,15 @@ function buildAbsoluteUrl(pathOrUrl: string): string {
 
 async function getArticleBySlug(slug: string): Promise<Article | null> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('articles')
     .select('*')
     .eq('slug', slug)
     .eq('is_published', true)
-    .single();
+    .maybeSingle()
+    .throwOnError();
 
-  if (error || !data) return null;
+  if (!data) return null;
   return data;
 }
 
@@ -112,7 +113,8 @@ async function getRelatedArticles(category: string, excludeId: string): Promise<
     .eq('is_published', true)
     .neq('id', excludeId)
     .order('published_at', { ascending: false })
-    .limit(3);
+    .limit(3)
+    .throwOnError();
 
   return data || [];
 }

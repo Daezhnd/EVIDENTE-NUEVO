@@ -188,18 +188,3 @@ export function validateArticle(data: ArticleValidation): ValidationError[] {
 
   return errors;
 }
-
-/**
- * Sanitiza HTML básico para prevenir XSS
- */
-export function sanitizeHtml(html: string): string {
-  // Permitir solo tags básicos de formato
-  // Remover scripts y eventos
-  const clean = html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/javascript:/gi, '');
-
-  // Esto es una sanitización básica - en producción usar DOMPurify
-  return clean;
-}

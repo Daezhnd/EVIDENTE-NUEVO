@@ -24,7 +24,8 @@ async function searchArticles(query: string): Promise<Article[]> {
     .eq('is_published', true)
     .or(`title.ilike.%${query}%,summary.ilike.%${query}%,content.ilike.%${query}%`)
     .order('published_at', { ascending: false })
-    .limit(20);
+    .limit(20)
+    .throwOnError();
 
   return data || [];
 }

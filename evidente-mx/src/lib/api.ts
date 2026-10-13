@@ -31,18 +31,14 @@ export async function getFeaturedArticles(limit: number = 3): Promise<Article[]>
   const supabase = await createClient();
 
   // Primero intentar obtener de "Destacadas"
-  const { data: destacadas, error } = await supabase
+  const { data: destacadas } = await supabase
     .from('articles')
     .select('*')
     .eq('category', 'Destacadas')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    logError('getFeaturedArticles', error);
-    return [];
-  }
+    .limit(limit)
+    .throwOnError();
 
   if (destacadas && destacadas.length > 0) {
     return destacadas;
@@ -54,7 +50,8 @@ export async function getFeaturedArticles(limit: number = 3): Promise<Article[]>
     .select('*')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(limit);
+    .limit(limit)
+    .throwOnError();
 
   return recientes || [];
 }
@@ -68,18 +65,14 @@ export async function getArticlesByCategory(
 ): Promise<Article[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('articles')
     .select('*')
     .eq('category', category)
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    logError(`getArticlesByCategory:${category}`, error);
-    return [];
-  }
+    .limit(limit)
+    .throwOnError();
 
   return data || [];
 }
@@ -96,18 +89,14 @@ export async function getArticlesByCategoryPaginated(
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  const { data, error, count } = await supabase
+  const { data, count } = await supabase
     .from('articles')
     .select('*', { count: 'exact' })
     .eq('category', category)
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .range(from, to);
-
-  if (error) {
-    logError(`getArticlesByCategoryPaginated:${category}`, error);
-    return { data: [], count: 0, page, pageSize, totalPages: 0 };
-  }
+    .range(from, to)
+    .throwOnError();
 
   const totalCount = count || 0;
 
@@ -131,17 +120,13 @@ export async function getAllArticlesPaginated(
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  const { data, error, count } = await supabase
+  const { data, count } = await supabase
     .from('articles')
     .select('*', { count: 'exact' })
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .range(from, to);
-
-  if (error) {
-    logError('getAllArticlesPaginated', error);
-    return { data: [], count: 0, page, pageSize, totalPages: 0 };
-  }
+    .range(from, to)
+    .throwOnError();
 
   const totalCount = count || 0;
 
@@ -160,17 +145,13 @@ export async function getAllArticlesPaginated(
 export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor | null> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('public_articles')
     .select('*')
     .eq('slug', slug)
     .eq('is_published', true)
-    .single();
-
-  if (error) {
-    logError('getArticleBySlug', error);
-    return null;
-  }
+    .maybeSingle()
+    .throwOnError();
 
   if (!data) return null;
 
@@ -204,19 +185,15 @@ export async function getRelatedArticles(
 ): Promise<Article[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('articles')
     .select('*')
     .eq('category', category)
     .eq('is_published', true)
     .neq('id', excludeId)
     .order('published_at', { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    logError('getRelatedArticles', error);
-    return [];
-  }
+    .limit(limit)
+    .throwOnError();
 
   return data || [];
 }
@@ -228,17 +205,13 @@ export async function getRelatedArticles(
 export async function getRecentArticlesForTicker(limit: number = 10): Promise<{ id: string; title: string; slug: string }[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('articles')
     .select('id, title, slug')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    logError('getRecentArticlesForTicker', error);
-    return [];
-  }
+    .limit(limit)
+    .throwOnError();
 
   return data || [];
 }
@@ -250,17 +223,13 @@ export async function getRecentArticlesForTicker(limit: number = 10): Promise<{ 
 export async function getLatestArticles(limit: number = 12): Promise<Article[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('articles')
     .select('*')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    logError('getLatestArticles', error);
-    return [];
-  }
+    .limit(limit)
+    .throwOnError();
 
   return data || [];
 }
@@ -275,17 +244,13 @@ export async function getLatestArticles(limit: number = 12): Promise<Article[]> 
 export async function getReels(limit: number = 10): Promise<Reel[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('reels')
     .select('*')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(limit);
-
-  if (error) {
-    logError('getReels', error);
-    return [];
-  }
+    .limit(limit)
+    .throwOnError();
 
   return data || [];
 }
@@ -301,17 +266,13 @@ export async function getReelsPaginated(
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
-  const { data, error, count } = await supabase
+  const { data, count } = await supabase
     .from('reels')
     .select('*', { count: 'exact' })
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .range(from, to);
-
-  if (error) {
-    logError('getReelsPaginated', error);
-    return { data: [], count: 0, page, pageSize, totalPages: 0 };
-  }
+    .range(from, to)
+    .throwOnError();
 
   const totalCount = count || 0;
 
@@ -330,17 +291,13 @@ export async function getReelsPaginated(
 export async function getReelById(id: string): Promise<ReelWithAuthor | null> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('public_reels')
     .select('*')
     .eq('id', id)
     .eq('is_published', true)
-    .single();
-
-  if (error) {
-    logError('getReelById', error);
-    return null;
-  }
+    .maybeSingle()
+    .throwOnError();
 
   if (!data) return null;
 
@@ -384,18 +341,14 @@ export async function searchArticles(
     return { data: [], count: 0, page, pageSize, totalPages: 0 };
   }
 
-  const { data, error, count } = await supabase
+  const { data, count } = await supabase
     .from('articles')
     .select('*', { count: 'exact' })
     .eq('is_published', true)
     .or(`title.ilike.%${sanitizedQuery}%,summary.ilike.%${sanitizedQuery}%,content.ilike.%${sanitizedQuery}%`)
     .order('published_at', { ascending: false })
-    .range(from, to);
-
-  if (error) {
-    logError('searchArticles', error);
-    return { data: [], count: 0, page, pageSize, totalPages: 0 };
-  }
+    .range(from, to)
+    .throwOnError();
 
   const totalCount = count || 0;
 

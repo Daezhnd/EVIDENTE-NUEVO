@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Article, ArticleCategory } from '@/types/database';
 import { generateSlug, validateArticle, ValidationError } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { refreshPublicContent } from '@/app/admin/actions';
 import {
   Save,
@@ -35,6 +36,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
   const [isPreview, setIsPreview] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [hasCustomSlug, setHasCustomSlug] = useState(Boolean(article?.slug));
 
   const [formData, setFormData] = useState({
     title: article?.title || '',
@@ -51,7 +53,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
     setFormData(prev => ({
       ...prev,
       title: value,
-      slug: prev.slug || generateSlug(value),
+      slug: hasCustomSlug ? prev.slug : generateSlug(value),
     }));
   };
 
@@ -184,7 +186,10 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
               <input
                 type="text"
                 value={formData.slug}
-                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                onChange={(e) => {
+                  setHasCustomSlug(Boolean(e.target.value));
+                  setFormData(prev => ({ ...prev, slug: e.target.value }));
+                }}
                 placeholder="url-del-articulo"
                 className="flex-1 min-w-0 px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
               />
@@ -228,7 +233,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
             {isPreview ? (
               <div
                 className="prose max-w-none p-4 border border-gray-200 rounded-lg min-h-[300px] bg-gray-50"
-                dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-400">Sin contenido...</p>' }}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(formData.content || '<p class="text-gray-400">Sin contenido...</p>') }}
               />
             ) : (
               <textarea

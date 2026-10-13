@@ -6,7 +6,7 @@
  * antes de renderizarlo con dangerouslySetInnerHTML.
  */
 
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 // Configuración de DOMPurify
 const ALLOWED_TAGS = [
@@ -41,9 +41,6 @@ const ALLOWED_ATTR = [
   'colspan', 'rowspan',
 ];
 
-// URLs permitidas para src y href
-const ALLOWED_URI_REGEXP = /^(?:(?:(?:f|ht)tps?|mailto|tel|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i;
-
 /**
  * Sanitiza HTML para prevenir ataques XSS
  * @param dirty - HTML sin sanitizar
@@ -52,27 +49,10 @@ const ALLOWED_URI_REGEXP = /^(?:(?:(?:f|ht)tps?|mailto|tel|data):|[^a-z]|[a-z+.\
 export function sanitizeHtml(dirty: string): string {
   if (!dirty) return '';
   
-  // En el servidor, DOMPurify necesita una instancia de window
-  // Por eso usamos isomorphic-dompurify o verificamos el entorno
-  if (typeof window === 'undefined') {
-    // En el servidor, hacemos una sanitización básica
-    // y confiamos en que el cliente hará la sanitización completa
-    return dirty
-      // Remover scripts
-      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-      // Remover event handlers
-      .replace(/\s*on\w+\s*=\s*["'][^"']*["']/gi, '')
-      // Remover javascript: urls
-      .replace(/javascript:/gi, '');
-  }
-  
+  // El adaptador reutiliza un DOM en servidor y el DOM nativo en el navegador.
   return DOMPurify.sanitize(dirty, {
     ALLOWED_TAGS,
     ALLOWED_ATTR,
-    ALLOWED_URI_REGEXP,
-    // Forzar enlaces externos a abrirse en nueva pestaña
-    ADD_ATTR: ['target'],
-    // Remover tags vacíos
     KEEP_CONTENT: true,
   });
 }

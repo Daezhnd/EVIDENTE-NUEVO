@@ -15,7 +15,8 @@ async function getReels(limit: number = 20): Promise<Reel[]> {
     .select('*')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .limit(limit);
+    .limit(limit)
+    .throwOnError();
   
   return data || [];
 }

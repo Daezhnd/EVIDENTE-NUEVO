@@ -13,7 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .from('articles')
     .select('slug, updated_at, published_at')
     .eq('is_published', true)
-    .order('published_at', { ascending: false });
+    .order('published_at', { ascending: false })
+    .throwOnError();
 
   // URLs de artículos
   const articleUrls: MetadataRoute.Sitemap = (articles || []).map((article) => ({

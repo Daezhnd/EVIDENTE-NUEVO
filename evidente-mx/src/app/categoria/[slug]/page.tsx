@@ -41,7 +41,8 @@ async function getArticlesByCategory(
     .from('articles')
     .select('*', { count: 'exact', head: true })
     .eq('category', category)
-    .eq('is_published', true);
+    .eq('is_published', true)
+    .throwOnError();
 
   const total = count || 0;
   const totalPages = Math.ceil(total / pageSize);
@@ -56,7 +57,8 @@ async function getArticlesByCategory(
     .eq('category', category)
     .eq('is_published', true)
     .order('published_at', { ascending: false })
-    .range(from, to);
+    .range(from, to)
+    .throwOnError();
 
   return { articles: data || [], totalPages, total };
 }

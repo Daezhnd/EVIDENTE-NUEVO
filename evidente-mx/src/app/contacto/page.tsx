@@ -1,195 +1,65 @@
-'use client';
+import { Metadata } from 'next';
+import { Mail, MessageCircle, MapPin, ArrowUpRight } from 'lucide-react';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle } from 'lucide-react';
+export const metadata: Metadata = {
+  title: 'Contacto | Evidente.mx',
+  description: 'Contacta a Evidente.mx por correo o a través de nuestras redes sociales.',
+};
 
 export default function ContactoPage() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simular envío (aquí conectarías con tu backend/API)
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-  };
-
-  if (isSubmitted) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="text-center max-w-md">
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-green-600" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-3">¡Mensaje enviado!</h1>
-          <p className="text-gray-600 mb-6">
-            Gracias por contactarnos. Te responderemos lo antes posible.
-          </p>
-          <Link
-            href="/"
-            className="inline-block px-6 py-3 bg-[#0067b2] text-white rounded-lg hover:bg-[#00528e] transition-colors"
-          >
-            Volver al inicio
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       <div className="bg-[#0067b2] text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Contáctanos</h1>
           <p className="text-blue-100 text-lg max-w-2xl mx-auto">
-            ¿Tienes una noticia, sugerencia o comentario? Nos encantaría escucharte.
+            ¿Tienes una noticia, sugerencia o comentario? Escríbenos directamente.
           </p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-3 gap-8">
-          {/* Info de contacto */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Mail className="w-5 h-5 text-[#0067b2]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Email</h3>
-                  <a href="mailto:contacto@evidente.mx" className="text-[#0067b2] hover:underline">
-                    contacto@evidente.mx
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Phone className="w-5 h-5 text-[#0067b2]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Teléfono</h3>
-                  <a href="tel:+525512345678" className="text-gray-600 hover:text-[#0067b2]">
-                    +52 55 1234 5678
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-5 h-5 text-[#0067b2]" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Ubicación</h3>
-                  <p className="text-gray-600">Ciudad de México, México</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-blue-50 rounded-xl p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">¿Tienes una noticia?</h3>
-              <p className="text-sm text-gray-600">
-                Si tienes información de interés público, envíanosla. Verificamos todos los datos antes de publicar.
+        <div className="grid md:grid-cols-2 gap-6">
+          <a
+            href="mailto:contacto@evidente.mx"
+            className="bg-white dark:bg-gray-900 rounded-xl p-6 md:p-8 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow"
+          >
+            <Mail className="w-7 h-7 text-[#0067b2] flex-shrink-0" />
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Correo electrónico</h2>
+              <p className="text-[#0067b2] break-all">contacto@evidente.mx</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">
+                Abre tu aplicación de correo para redactar y enviar el mensaje.
               </p>
             </div>
-          </div>
+          </a>
 
-          {/* Formulario */}
-          <div className="md:col-span-2">
-            <form onSubmit={handleSubmit} className="bg-white rounded-xl p-6 md:p-8 shadow-sm space-y-6">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="nombre" className="block text-sm font-medium text-gray-700 mb-1">
-                    Nombre *
-                  </label>
-                  <input
-                    type="text"
-                    id="nombre"
-                    name="nombre"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
-                    placeholder="Tu nombre"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
-                    placeholder="tu@email.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="asunto" className="block text-sm font-medium text-gray-700 mb-1">
-                  Asunto *
-                </label>
-                <select
-                  id="asunto"
-                  name="asunto"
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent"
-                >
-                  <option value="">Selecciona un asunto</option>
-                  <option value="noticia">Enviar una noticia</option>
-                  <option value="sugerencia">Sugerencia</option>
-                  <option value="correccion">Corrección de artículo</option>
-                  <option value="publicidad">Publicidad</option>
-                  <option value="otro">Otro</option>
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="mensaje" className="block text-sm font-medium text-gray-700 mb-1">
-                  Mensaje *
-                </label>
-                <textarea
-                  id="mensaje"
-                  name="mensaje"
-                  rows={6}
-                  required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0067b2] focus:border-transparent resize-none"
-                  placeholder="Escribe tu mensaje aquí..."
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 py-3 px-6 bg-[#0067b2] text-white font-medium rounded-lg hover:bg-[#00528e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Enviando...
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5" />
-                    Enviar mensaje
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
+          <a
+            href="https://www.facebook.com/EVIDENTE.MX"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white dark:bg-gray-900 rounded-xl p-6 md:p-8 shadow-sm flex items-start gap-4 hover:shadow-md transition-shadow"
+          >
+            <MessageCircle className="w-7 h-7 text-[#0067b2] flex-shrink-0" />
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Facebook</h2>
+              <p className="text-[#0067b2] flex items-center gap-2">
+                Visita EVIDENTE.MX <ArrowUpRight className="w-4 h-4" aria-hidden="true" />
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">
+                Abre nuestra página y utiliza la opción de mensaje de Facebook.
+              </p>
+            </div>
+          </a>
         </div>
+
+        <div className="mt-8 flex items-center gap-2 text-gray-600 dark:text-gray-400">
+          <MapPin className="w-5 h-5" aria-hidden="true" />
+          <p>Chihuahua, Chihuahua, México.</p>
+        </div>
+        <p className="mt-6 text-sm text-gray-600 dark:text-gray-400">
+          Para enviar información de interés público, incluye los datos y las fuentes disponibles.
+        </p>
       </div>
     </div>
   );

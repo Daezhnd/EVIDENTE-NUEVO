@@ -1,10 +1,10 @@
 # Evidente.mx - Portal de Noticias
 
-Portal de noticias moderno construido con Next.js 16, React 19, Supabase y Tailwind CSS.
+Portal de noticias moderno construido con Next.js 15, React 19, Supabase y Tailwind CSS.
 
 ## 🚀 Características
 
-- **Frontend moderno**: Next.js 16 con App Router y React 19
+- **Frontend moderno**: Next.js 15 con App Router y React 19
 - **Base de datos**: Supabase (PostgreSQL)
 - **Autenticación**: Supabase Auth
 - **Estilos**: Tailwind CSS 4
@@ -14,7 +14,7 @@ Portal de noticias moderno construido con Next.js 16, React 19, Supabase y Tailw
 
 ## 📋 Requisitos
 
-- Node.js 18+
+- Node.js 24.15+ dentro de la rama 24 (igual que el proyecto en Vercel)
 - npm o yarn
 - Cuenta en [Supabase](https://supabase.com)
 
@@ -78,6 +78,25 @@ npm run dev
 ```
 
 Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+
+## Comprobaciones
+
+Los scripts ejecutan el código real con respuestas o servicios simulados; no escriben
+datos en Supabase de producción.
+
+```bash
+node scripts/check-sanitize.mjs
+node scripts/check-article-form.mjs
+node scripts/check-public-errors.mjs
+node scripts/check-public-cache.mjs
+node scripts/check-content-revalidation.mjs
+node scripts/check-newsletter.mjs
+```
+
+El override de PostCSS corrige la versión vulnerable incluida por Next 15; retirarlo
+cuando Next incorpore una versión corregida. La cadena de ESLint conserva un aviso
+de `braces` sin parche publicado (GHSA-vfj7-8cjw-p6xm). Es una dependencia de
+desarrollo y no debe recibir patrones de archivos de usuarios externos.
 
 ## 📁 Estructura del Proyecto
 
