@@ -161,14 +161,8 @@ export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor 
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('articles')
-    .select(`
-      *,
-      profiles:author_id (
-        full_name,
-        avatar_url
-      )
-    `)
+    .from('public_articles')
+    .select('*')
     .eq('slug', slug)
     .eq('is_published', true)
     .single();
@@ -180,15 +174,11 @@ export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor 
 
   if (!data) return null;
 
-  // Transformar la respuesta para incluir autor (desestructurar para excluir profiles)
-  const { profiles, ...articleData } = data;
-  const article: ArticleWithAuthor = {
-    ...articleData,
-    author_name: profiles?.full_name || undefined,
-    author_avatar: profiles?.avatar_url || undefined,
+  return {
+    ...data,
+    author_name: data.author_name || undefined,
+    author_avatar: data.author_avatar || undefined,
   };
-
-  return article;
 }
 
 /**
@@ -341,13 +331,8 @@ export async function getReelById(id: string): Promise<ReelWithAuthor | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('reels')
-    .select(`
-      *,
-      profiles:author_id (
-        full_name
-      )
-    `)
+    .from('public_reels')
+    .select('*')
     .eq('id', id)
     .eq('is_published', true)
     .single();
@@ -359,14 +344,10 @@ export async function getReelById(id: string): Promise<ReelWithAuthor | null> {
 
   if (!data) return null;
 
-  // Desestructurar para excluir profiles del objeto final
-  const { profiles, ...reelData } = data;
-  const reel: ReelWithAuthor = {
-    ...reelData,
-    author_name: profiles?.full_name || undefined,
+  return {
+    ...data,
+    author_name: data.author_name || undefined,
   };
-
-  return reel;
 }
 
 // =============================================

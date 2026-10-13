@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { getSupabaseAdmin } from '@/lib/article-api';
 
 export async function POST(request: Request) {
   try {
@@ -21,14 +21,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const supabase = await createClient();
+    const supabase = getSupabaseAdmin();
 
     // Verificar si ya existe
-    const { data: existing } = await supabase
+    const { data: existing, error: lookupError } = await supabase
       .from('newsletter_subscribers')
       .select('id, is_active')
       .eq('email', email.toLowerCase())
-      .single();
+      .maybeSingle();
+
+    if (lookupError) throw lookupError;
 
     if (existing) {
       if (existing.is_active) {
@@ -38,10 +40,12 @@ export async function POST(request: Request) {
         );
       } else {
         // Reactivar suscripción
-        await supabase
+        const { error: updateError } = await supabase
           .from('newsletter_subscribers')
           .update({ is_active: true, unsubscribed_at: null })
           .eq('id', existing.id);
+
+        if (updateError) throw updateError;
 
         return NextResponse.json({ 
           success: true, 

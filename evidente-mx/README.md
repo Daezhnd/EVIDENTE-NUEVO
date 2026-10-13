@@ -40,13 +40,37 @@ Edita `.env.local` con tus credenciales de Supabase:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key
+SUPABASE_SERVICE_ROLE_KEY=tu-service-role-key
+API_SECRET_KEY=un-secreto-aleatorio-para-la-api-de-articulos
 ```
+
+La URL y ambas claves de Supabase deben pertenecer al mismo proyecto. La clave pública
+`anon` (o `publishable`) se utiliza con las políticas RLS. `SUPABASE_SERVICE_ROLE_KEY`
+es la clave `service_role` (o `secret`), exclusiva del servidor: la usan la API de
+artículos y el newsletter. `API_SECRET_KEY` es un secreto independiente para los
+clientes que publican artículos mediante `Authorization: Bearer <secreto>`.
+Nunca añadas `NEXT_PUBLIC_` a las claves privadas ni guardes `.env.local` en Git.
 
 4. **Configurar la base de datos**
 
-Ejecuta los scripts SQL en tu proyecto de Supabase:
-- `supabase/schema.sql` - Estructura de tablas
-- `supabase/seed.sql` - Datos de ejemplo (opcional)
+Para un proyecto nuevo y vacío, ejecuta `supabase/schema.sql` completo en el SQL
+Editor de Supabase. Incluye tablas, permisos RLS, funciones y buckets de almacenamiento.
+No ejecutes `supabase/seed.sql` si quieres empezar sin noticias de ejemplo.
+
+En Authentication → Users, crea el primer usuario con un correo y contraseña que
+controles, y confirma el correo. Copia su UUID y asigna el rol desde el SQL Editor:
+
+```sql
+update public.profiles set role = 'admin' where id = 'UUID-DEL-USUARIO';
+```
+
+Configura Authentication → URL Configuration con el dominio de producción como
+Site URL. Inicia sesión en `/admin/login` con ese correo y contraseña.
+
+El panel de usuarios existente mantiene registros en `public.users`; su botón
+"Invitar usuario" todavía no crea cuentas en Supabase Auth ni envía invitaciones.
+Para dar acceso real a otro editor, crea su usuario en Authentication → Users y
+asigna su rol en `public.profiles` desde el SQL Editor.
 
 5. **Iniciar el servidor de desarrollo**
 ```bash
@@ -87,7 +111,9 @@ src/
 
 - **articles**: Artículos de noticias
 - **reels**: Videos cortos estilo reel
-- **users**: Usuarios del sistema
+- **profiles**: Roles de los usuarios de Supabase Auth
+- **users**: Registro del panel de usuarios existente
+- **newsletter_subscribers**: Suscriptores privados del newsletter
 
 ### Categorías disponibles
 
@@ -107,6 +133,7 @@ npm run dev      # Servidor de desarrollo
 npm run build    # Build de producción
 npm run start    # Iniciar producción
 npm run lint     # Ejecutar ESLint
+node scripts/check-newsletter.mjs  # Verificar newsletter sin servicios externos
 ```
 
 ## 🚀 Deploy
@@ -114,8 +141,16 @@ npm run lint     # Ejecutar ESLint
 ### Vercel (Recomendado)
 
 1. Conecta tu repositorio en [Vercel](https://vercel.com)
-2. Configura las variables de entorno
-3. Deploy automático en cada push
+2. Configura las cuatro variables de `.env.example` para Production (y para Preview
+   solo si ese entorno debe usar el mismo proyecto).
+3. Genera un nuevo deployment después de cambiar las variables; las variables
+   `NEXT_PUBLIC_*` se incorporan durante el build.
+
+Para cambiar de Supabase desde cero, prepara y prueba el esquema, el acceso de
+administrador, una publicación y una subida de archivos antes de cambiar las
+variables de Production. La nueva base de datos no incluye noticias, usuarios ni
+archivos del proyecto anterior. Conserva el acceso al correo de la nueva cuenta de
+Supabase y un método de inicio de sesión independiente de la cuenta de GitHub.
 
 ### Otras plataformas
 

@@ -9,6 +9,7 @@ import { GlobalCampaignBanner } from "@/components/ads/GlobalCampaignBanner";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { getRecentArticlesForTicker } from "@/lib/api";
+import { env } from "@/lib/env";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -106,9 +107,9 @@ export default async function RootLayout({
     <html lang="es" suppressHydrationWarning>
       <head>
         {/* Preconnect hints for faster resource loading */}
-        <link rel="preconnect" href="https://fnlvkexkimhgptasngbw.supabase.co" />
+        <link rel="preconnect" href={env.supabase.url} />
         <link rel="preconnect" href="https://cdn.jwplayer.com" />
-        <link rel="dns-prefetch" href="https://fnlvkexkimhgptasngbw.supabase.co" />
+        <link rel="dns-prefetch" href={env.supabase.url} />
         <link rel="dns-prefetch" href="https://cdn.jwplayer.com" />
       </head>
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors`}>
