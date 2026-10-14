@@ -34,7 +34,7 @@ async function getArticlesByCategory(
   page: number = 1,
   pageSize: number = 9
 ): Promise<{ articles: Article[]; totalPages: number; total: number }> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
 
   // Obtener el total
   const { count } = await supabase

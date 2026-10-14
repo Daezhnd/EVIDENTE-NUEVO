@@ -79,13 +79,17 @@ export function ArticlesTable({ userRole: propUserRole }: ArticlesTableProps) {
 
     try {
       const supabase = createClient();
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('articles')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .select('slug,is_published');
 
       if (error) throw error;
-      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
+      const publicSlugs = (data || []).filter(article => article.is_published).map(article => article.slug);
+      if (publicSlugs.length > 0) {
+        await refreshPublicContent('articles', publicSlugs).catch(error => console.error('Error al actualizar la caché pública:', error));
+      }
       setArticles(prev => prev.filter(a => a.id !== id));
     } catch (e) {
       console.error('Error eliminando artículo:', e);

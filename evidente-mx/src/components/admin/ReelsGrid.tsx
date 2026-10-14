@@ -65,13 +65,15 @@ export function ReelsGrid({ userRole: propUserRole }: ReelsGridProps) {
     if (!confirm('¿Estás seguro de eliminar este reel?')) return;
 
     const supabase = createClient();
-    const { error } = await supabase.from('reels').delete().eq('id', id);
+    const { data, error } = await supabase.from('reels').delete().eq('id', id).select('is_published');
 
     if (error) {
       console.error('Error deleting reel:', error);
       alert('Error al eliminar el reel');
     } else {
-      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
+      if (data?.some(reel => reel.is_published)) {
+        await refreshPublicContent('reels').catch(error => console.error('Error al actualizar la caché pública:', error));
+      }
       setReels(prev => prev.filter(r => r.id !== id));
     }
   };
@@ -82,13 +84,15 @@ export function ReelsGrid({ userRole: propUserRole }: ReelsGridProps) {
     if (!confirm(`¿Estás seguro de eliminar ${selectedIds.length} reels seleccionados?`)) return;
 
     const supabase = createClient();
-    const { error } = await supabase.from('reels').delete().in('id', selectedIds);
+    const { data, error } = await supabase.from('reels').delete().in('id', selectedIds).select('is_published');
 
     if (error) {
       console.error('Error deleting reels:', error);
       alert('Error al eliminar los reels seleccionados');
     } else {
-      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
+      if (data?.some(reel => reel.is_published)) {
+        await refreshPublicContent('reels').catch(error => console.error('Error al actualizar la caché pública:', error));
+      }
       setReels(prev => prev.filter(r => !selectedIds.includes(r.id)));
       setSelectedIds([]);
     }

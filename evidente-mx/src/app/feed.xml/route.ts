@@ -5,7 +5,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://evidente.mx';
 export const revalidate = 300;
 
 export async function GET() {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
 
   // Obtener artículos recientes
   const { data: articles } = await supabase

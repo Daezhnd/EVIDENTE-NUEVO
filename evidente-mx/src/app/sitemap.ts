@@ -6,7 +6,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://evidente.mx';
 export const revalidate = 300;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
 
   // Obtener todos los artículos publicados
   const { data: articles } = await supabase

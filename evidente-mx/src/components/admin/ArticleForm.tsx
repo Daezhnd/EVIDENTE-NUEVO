@@ -91,27 +91,49 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
         is_published: publish,
         published_at: publish ? new Date().toISOString() : null,
       };
+      let previousArticle: Pick<Article, 'slug' | 'is_published'> | null = null;
+      let savedArticle: Pick<Article, 'slug' | 'is_published'> | null = null;
 
       if (isEditing && article?.id) {
+        const { data: currentArticle } = await supabase
+          .from('articles')
+          .select('slug,is_published')
+          .eq('id', article.id)
+          .maybeSingle()
+          .throwOnError();
+        if (!currentArticle) throw new Error('Artículo no encontrado o sin permisos para editarlo');
+        previousArticle = currentArticle;
+
         // Actualizar artículo existente
-        const { error: updateError } = await supabase
+        const { data, error: updateError } = await supabase
           .from('articles')
           .update(articleData)
           .eq('id', article.id)
-          .select();
+          .select('slug,is_published')
+          .single();
 
         if (updateError) throw updateError;
+        savedArticle = data;
       } else {
         // Crear nuevo artículo
-        const { error: insertError } = await supabase
+        const { data, error: insertError } = await supabase
           .from('articles')
           .insert([articleData])
-          .select();
+          .select('slug,is_published')
+          .single();
 
         if (insertError) throw insertError;
+        savedArticle = data;
       }
+      if (!savedArticle) throw new Error('No se pudo confirmar el artículo guardado');
 
-      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
+      const publicSlugs = [
+        ...(previousArticle?.is_published ? [previousArticle.slug] : []),
+        ...(savedArticle.is_published ? [savedArticle.slug] : []),
+      ];
+      if (publicSlugs.length > 0) {
+        await refreshPublicContent('articles', publicSlugs).catch(error => console.error('Error al actualizar la caché pública:', error));
+      }
       router.push('/admin/articulos');
       router.refresh();
     } catch (err: unknown) {

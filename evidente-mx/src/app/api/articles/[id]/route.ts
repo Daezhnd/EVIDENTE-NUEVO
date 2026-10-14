@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
+import { invalidatePublicContent } from '@/lib/content-cache';
 import { generateSlug, validateArticle } from '@/lib/utils';
 import {
   VALID_CATEGORIES,
@@ -21,6 +21,7 @@ interface ExistingArticle {
   slug: string;
   summary: string;
   content: string;
+  is_published: boolean;
 }
 
 interface ArticleUpdateData {
@@ -205,7 +206,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     const supabase = getSupabaseAdmin();
     const { data: existing, error: fetchError } = await supabase
       .from('articles')
-      .select('title, slug, summary, content')
+      .select('title, slug, summary, content, is_published')
       .eq('id', id)
       .maybeSingle();
 
@@ -241,11 +242,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       return handleSupabaseError(updateError, 'Error al actualizar artículo');
     }
 
-    try {
-      revalidateTag('public-content');
-    } catch (error) {
-      console.error('Error al actualizar la caché pública:', error);
-    }
+    invalidatePublicContent('articles', [existing, data].filter(article => article.is_published).map(article => article.slug));
 
     return NextResponse.json({ success: true, article: data });
   } catch (error) {
@@ -267,7 +264,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       .from('articles')
       .delete()
       .eq('id', id)
-      .select('id')
+      .select('id, slug, is_published')
       .maybeSingle();
 
     if (error) {
@@ -278,11 +275,7 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'Artículo no encontrado' }, { status: 404 });
     }
 
-    try {
-      revalidateTag('public-content');
-    } catch (error) {
-      console.error('Error al actualizar la caché pública:', error);
-    }
+    invalidatePublicContent('articles', data.is_published ? [data.slug] : []);
 
     return NextResponse.json({ success: true });
   } catch (error) {

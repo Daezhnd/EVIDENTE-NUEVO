@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { revalidateTag } from 'next/cache';
+import { invalidatePublicContent } from '@/lib/content-cache';
 import { generateSlug, validateArticle } from '@/lib/utils';
 import {
   VALID_CATEGORIES,
@@ -167,11 +167,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    try {
-      revalidateTag('public-content');
-    } catch (error) {
-      console.error('Error al actualizar la caché pública:', error);
-    }
+    invalidatePublicContent('articles', (data || []).filter(article => article.is_published).map(article => article.slug));
 
     return NextResponse.json({
       success: true,

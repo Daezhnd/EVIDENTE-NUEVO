@@ -17,7 +17,7 @@ interface SearchPageProps {
 async function searchArticles(query: string): Promise<Article[]> {
   if (!query || query.length < 2) return [];
   
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
   const { data } = await supabase
     .from('articles')
     .select('*')

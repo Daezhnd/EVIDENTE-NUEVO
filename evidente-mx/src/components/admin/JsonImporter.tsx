@@ -199,6 +199,7 @@ export function JsonImporter() {
     const supabase = createClient();
     let success = 0;
     let failed = 0;
+    const publicSlugs: string[] = [];
 
     const updatedArticles = [...processedArticles];
 
@@ -236,10 +237,11 @@ export function JsonImporter() {
           published_at: article.is_published ? article.published_at : null,
         };
 
-        const { error } = await supabase.from('articles').insert([insertData]).select();
+        const { data, error } = await supabase.from('articles').insert([insertData]).select('slug,is_published');
 
         if (error) throw error;
 
+        publicSlugs.push(...(data || []).filter(inserted => inserted.is_published).map(inserted => inserted.slug));
         updatedArticles[i] = { ...article, slug: finalSlug, status: 'success' };
         success++;
       } catch (e) {
@@ -260,8 +262,8 @@ export function JsonImporter() {
       setProcessedArticles([...updatedArticles]);
     }
 
-    if (success > 0) {
-      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
+    if (publicSlugs.length > 0) {
+      await refreshPublicContent('articles', publicSlugs).catch(error => console.error('Error al actualizar la caché pública:', error));
     }
     setImportResults({ success, failed });
     setIsImporting(false);

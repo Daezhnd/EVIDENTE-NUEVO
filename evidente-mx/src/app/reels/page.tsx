@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 async function getReels(limit: number = 20): Promise<Reel[]> {
-  const supabase = await createClient();
+  const supabase = await createClient(['reels:list']);
   const { data } = await supabase
     .from('reels')
     .select('*')

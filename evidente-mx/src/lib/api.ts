@@ -4,6 +4,7 @@
  */
 
 import { createClient } from '@/lib/supabase/public';
+import { articleCacheTag } from '@/lib/content-tags';
 import { logError } from '@/lib/errors';
 import type {
   Article,
@@ -28,7 +29,7 @@ const PAGE_SIZE = 9;
  * Si no hay artículos en "Destacadas", devuelve los más recientes
  */
 export async function getFeaturedArticles(limit: number = 3): Promise<Article[]> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
 
   // Primero intentar obtener de "Destacadas"
   const { data: destacadas } = await supabase
@@ -63,7 +64,7 @@ export async function getArticlesByCategory(
   category: ArticleCategory,
   limit: number = 3
 ): Promise<Article[]> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
 
   const { data } = await supabase
     .from('articles')
@@ -85,7 +86,7 @@ export async function getArticlesByCategoryPaginated(
   page: number = 1,
   pageSize: number = PAGE_SIZE
 ): Promise<PaginatedResponse<Article>> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
@@ -116,7 +117,7 @@ export async function getAllArticlesPaginated(
   page: number = 1,
   pageSize: number = PAGE_SIZE
 ): Promise<PaginatedResponse<Article>> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
@@ -143,7 +144,7 @@ export async function getAllArticlesPaginated(
  * Obtener un artículo por su slug
  */
 export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor | null> {
-  const supabase = await createClient();
+  const supabase = await createClient([articleCacheTag(slug)]);
 
   const { data } = await supabase
     .from('public_articles')
@@ -221,7 +222,7 @@ export async function getRecentArticlesForTicker(limit: number = 10): Promise<{ 
  * Para el feed dinámico de la página principal
  */
 export async function getLatestArticles(limit: number = 12): Promise<Article[]> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
 
   const { data } = await supabase
     .from('articles')
@@ -242,7 +243,7 @@ export async function getLatestArticles(limit: number = 12): Promise<Article[]> 
  * Obtener reels publicados
  */
 export async function getReels(limit: number = 10): Promise<Reel[]> {
-  const supabase = await createClient();
+  const supabase = await createClient(['reels:list']);
 
   const { data } = await supabase
     .from('reels')
@@ -262,7 +263,7 @@ export async function getReelsPaginated(
   page: number = 1,
   pageSize: number = 6
 ): Promise<PaginatedResponse<Reel>> {
-  const supabase = await createClient();
+  const supabase = await createClient(['reels:list']);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 
@@ -289,7 +290,7 @@ export async function getReelsPaginated(
  * Obtener un reel por ID
  */
 export async function getReelById(id: string): Promise<ReelWithAuthor | null> {
-  const supabase = await createClient();
+  const supabase = await createClient(['reels:list']);
 
   const { data } = await supabase
     .from('public_reels')
@@ -320,7 +321,7 @@ export async function searchArticles(
   page: number = 1,
   pageSize: number = PAGE_SIZE
 ): Promise<PaginatedResponse<Article>> {
-  const supabase = await createClient();
+  const supabase = await createClient(['articles:list']);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 

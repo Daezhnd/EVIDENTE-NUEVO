@@ -103,35 +103,54 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
         is_published: publish,
         published_at: publish ? new Date().toISOString() : null,
       };
+      let previousReel: Pick<Reel, 'is_published'> | null = null;
+      let savedReel: Pick<Reel, 'is_published'> | null = null;
 
       // console.log('Intentando guardar reel:', reelData);
 
       if (isEditing && reel?.id) {
+        const { data: currentReel } = await supabase
+          .from('reels')
+          .select('is_published')
+          .eq('id', reel.id)
+          .maybeSingle()
+          .throwOnError();
+        if (!currentReel) throw new Error('Reel no encontrado o sin permisos para editarlo');
+        previousReel = currentReel;
+
         // Actualizar reel existente
-        const { error: updateError } = await supabase
+        const { data, error: updateError } = await supabase
           .from('reels')
           .update(reelData)
-          .eq('id', reel.id);
+          .eq('id', reel.id)
+          .select('is_published')
+          .single();
 
         if (updateError) {
           console.error('Error de Supabase (update):', updateError);
           throw new Error(updateError.message || updateError.details || JSON.stringify(updateError));
         }
+        savedReel = data;
       } else {
         // Crear nuevo reel
-        const { error: insertError } = await supabase
+        const { data, error: insertError } = await supabase
           .from('reels')
           .insert([reelData])
-          .select();
+          .select('is_published')
+          .single();
 
         if (insertError) {
           console.error('Error de Supabase (insert):', insertError);
           throw new Error(insertError.message || insertError.details || JSON.stringify(insertError));
         }
+        savedReel = data;
         // console.log('Reel creado:', data);
       }
+      if (!savedReel) throw new Error('No se pudo confirmar el reel guardado');
 
-      await refreshPublicContent().catch(error => console.error('Error al actualizar la caché pública:', error));
+      if (previousReel?.is_published || savedReel.is_published) {
+        await refreshPublicContent('reels').catch(error => console.error('Error al actualizar la caché pública:', error));
+      }
       router.push('/admin/reels');
       router.refresh();
     } catch (err: unknown) {

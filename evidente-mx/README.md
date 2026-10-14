@@ -164,6 +164,8 @@ npm run lint     # Ejecutar ESLint
 node scripts/check-newsletter.mjs  # Verificar newsletter sin servicios externos
 node scripts/check-content-revalidation.mjs  # Verificar permisos e invalidación
 node scripts/check-public-cache.mjs  # Verificar caché pública y alcance del middleware
+node scripts/check-article-cache-writes.mjs  # Verificar invalidación de la API sin escribir datos
+node scripts/check-cache-isolation.mjs  # Probar caché real de Next con datos aislados en localhost
 ```
 
 ## 🚀 Deploy
@@ -182,12 +184,16 @@ variables de Production. La nueva base de datos no incluye noticias, usuarios ni
 archivos del proyecto anterior. Conserva el acceso al correo de la nueva cuenta de
 Supabase y un método de inicio de sesión independiente de la cuenta de GitHub.
 
-Las lecturas públicas usan una caché de 300 segundos. Guardar, publicar, retirar,
-importar o eliminar artículos y reels desde el panel o la API invalida la caché
-pública. Si la invalidación falla, la escritura sigue guardada y la renovación
-automática actúa como respaldo; los cambios directos en el dashboard de Supabase
-también esperan esta renovación. Las sesiones, borradores y llamadas que escriben
-datos no se comparten en la caché pública.
+Las lecturas públicas usan una caché de 300 segundos. Un cambio en artículos
+publicados desde el panel o la API invalida los listados (`articles:list`) y las
+direcciones afectadas (`article:<slug>`), incluidas la anterior y la nueva al
+renombrar. Los cambios en reels publicados invalidan únicamente `reels:list`.
+Guardar o eliminar borradores no invalida contenido público. El ticker y los
+relacionados conservan su TTL de 300 segundos para no regenerar noticias ajenas
+por cada publicación. Si la invalidación falla, la escritura sigue guardada y la
+renovación automática actúa como respaldo; los cambios directos en el dashboard
+de Supabase también esperan esta renovación. Las sesiones, borradores y llamadas
+que escriben datos no se comparten en la caché pública.
 
 ### Otras plataformas
 

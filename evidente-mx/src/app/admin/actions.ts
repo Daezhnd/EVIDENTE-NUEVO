@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { requireRole } from '@/lib/auth';
-import { revalidateTag } from 'next/cache';
+import { invalidatePublicContent } from '@/lib/content-cache';
 import { redirect } from 'next/navigation';
 
 export async function signOut() {
@@ -11,11 +11,7 @@ export async function signOut() {
   redirect('/admin/login');
 }
 
-export async function refreshPublicContent() {
+export async function refreshPublicContent(type: 'articles' | 'reels', slugs: string[] = []) {
   await requireRole(['admin', 'editor', 'publisher']);
-  try {
-    revalidateTag('public-content');
-  } catch (error) {
-    console.error('Error al actualizar la caché pública:', error);
-  }
+  invalidatePublicContent(type, slugs);
 }

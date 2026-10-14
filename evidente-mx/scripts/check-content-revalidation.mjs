@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import Module from 'node:module';
 import path from 'node:path';
@@ -34,10 +35,8 @@ const auth = loadTs('src/lib/auth.ts', {
   '@/lib/supabase/server': server,
   'next/navigation': navigation,
 });
-const { refreshPublicContent } = loadTs('src/app/admin/actions.ts', {
-  '@/lib/supabase/server': server,
-  '@/lib/auth': auth,
-  'next/navigation': navigation,
+const contentCache = loadTs('src/lib/content-cache.ts', {
+  '@/lib/content-tags': loadTs('src/lib/content-tags.ts', {}),
   'next/cache': {
     revalidateTag: tag => {
       if (cacheFailure) throw new Error('Temporary cache failure');
@@ -45,21 +44,73 @@ const { refreshPublicContent } = loadTs('src/app/admin/actions.ts', {
     },
   },
 });
+const { refreshPublicContent } = loadTs('src/app/admin/actions.ts', {
+  '@/lib/supabase/server': server,
+  '@/lib/auth': auth,
+  '@/lib/content-cache': contentCache,
+  'next/navigation': navigation,
+});
 
-await assert.rejects(refreshPublicContent(), /redirect:\/admin\/login/);
+await assert.rejects(refreshPublicContent('articles', ['article-before']), /redirect:\/admin\/login/);
+await assert.rejects(refreshPublicContent('invalid', null), /redirect:\/admin\/login/);
 assert.deepEqual(tags, []);
 role = 'viewer';
-await assert.rejects(refreshPublicContent(), /redirect:\/admin$/);
+await assert.rejects(refreshPublicContent('reels'), /redirect:\/admin$/);
 assert.deepEqual(tags, []);
 for (const allowedRole of ['admin', 'editor', 'publisher']) {
   role = allowedRole;
-  await refreshPublicContent();
+  tags.length = 0;
+  await refreshPublicContent('articles', ['article-before', 'article-after', 'article-before']);
+  assert.deepEqual(tags, ['articles:list', 'article:article-before', 'article:article-after']);
 }
-assert.deepEqual(tags, ['public-content', 'public-content', 'public-content']);
+tags.length = 0;
+await refreshPublicContent('articles');
+await refreshPublicContent('articles', []);
+assert.deepEqual(tags, []);
+await refreshPublicContent('articles', ['draft-published']);
+assert.deepEqual(tags, ['articles:list', 'article:draft-published']);
+tags.length = 0;
+await refreshPublicContent('reels');
+await refreshPublicContent('reels', ['should-not-invalidate-an-article']);
+assert.deepEqual(tags, ['reels:list', 'reels:list']);
+
+tags.length = 0;
+for (const [type, slugs] of [
+  ['all', []], [null, []], ['articles', null], ['articles', 'single-slug'],
+  ['articles', [null]], ['articles', [42]], ['articles', ['']],
+  ['articles', ['valid-first', '']], ['reels', [false]],
+]) {
+  await assert.rejects(refreshPublicContent(type, slugs), /inválid/);
+  assert.deepEqual(tags, []);
+}
+await refreshPublicContent('articles', ['a'.repeat(248)]);
+assert.equal(tags[1].length, 256);
+assert.deepEqual(tags, ['articles:list', `article:${'a'.repeat(248)}`]);
+
+const longSlugs = ['a'.repeat(249), 'a'.repeat(1000), `${'a'.repeat(999)}b`];
+const longTags = longSlugs.map(slug => `article:hash:${createHash('sha256').update(slug).digest('hex')}`);
+assert.equal(new Set(longTags).size, longTags.length);
+for (let attempt = 0; attempt < 2; attempt++) {
+  tags.length = 0;
+  await refreshPublicContent('articles', [...longSlugs, longSlugs[0]]);
+  assert.deepEqual(tags, ['articles:list', ...longTags]);
+  assert.ok(tags.every(tag => tag.length <= 256));
+}
+
+tags.length = 0;
 cacheFailure = true;
-await assert.doesNotReject(refreshPublicContent());
-assert.equal(tags.length, 3);
-process.stdout.write('Invalidación: anónimo/viewer denegados, 3 roles autorizados y fallo de caché tolerado.\n');
+const originalConsoleError = console.error;
+const cacheWarnings = [];
+console.error = (...args) => cacheWarnings.push(args);
+try {
+  await assert.doesNotReject(refreshPublicContent('articles', ['saved-article']));
+  assert.deepEqual(tags, []);
+  assert.equal(cacheWarnings.length, 1);
+  assert.match(String(cacheWarnings[0][1]), /Temporary cache failure/);
+} finally {
+  console.error = originalConsoleError;
+}
+process.stdout.write('Invalidación: permisos, old/new deduplicados, borradores sin invalidar, reels aislados, slugs largos acotados, input inválido rechazado y fallo de caché tolerado.\n');
 
 const nextServer = Module.createRequire(import.meta.url)('next/server');
 const { NextRequest, NextResponse } = nextServer;

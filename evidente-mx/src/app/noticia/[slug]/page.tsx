@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/public';
+import { articleCacheTag } from '@/lib/content-tags';
 import { formatDate, formatDistanceToNow, calculateReadingTime } from '@/lib/utils';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { ArticleCard } from '@/components/articles/ArticleCard';
@@ -91,7 +92,7 @@ function buildAbsoluteUrl(pathOrUrl: string): string {
 }
 
 async function getArticleBySlug(slug: string): Promise<Article | null> {
-  const supabase = await createClient();
+  const supabase = await createClient([articleCacheTag(slug)]);
   const { data } = await supabase
     .from('articles')
     .select('*')
