@@ -81,8 +81,9 @@ Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
 ## Comprobaciones
 
-Los scripts ejecutan el código real con respuestas o servicios simulados; no escriben
-datos en Supabase de producción.
+Los primeros scripts ejecutan el código real con respuestas o servicios simulados.
+La prueba de runtime levanta el build local, sólo lee Supabase y requiere una noticia
+publicada. Ninguno escribe datos en Supabase de producción.
 
 ```bash
 node scripts/check-sanitize.mjs
@@ -91,10 +92,18 @@ node scripts/check-public-errors.mjs
 node scripts/check-public-cache.mjs
 node scripts/check-content-revalidation.mjs
 node scripts/check-newsletter.mjs
+node --no-experimental-require-module scripts/check-sanitize.mjs
+npm run build
+node scripts/check-runtime.mjs
 ```
 
 El override de PostCSS corrige la versión vulnerable incluida por Next 15; retirarlo
-cuando Next incorpore una versión corregida. La cadena de ESLint conserva un aviso
+cuando Next incorpore una versión corregida. El override de jsdom aplica el ajuste
+de compatibilidad recomendado por isomorphic-dompurify para CommonJS en Vercel
+(kkomelin/isomorphic-dompurify#394); DOMPurify conserva la versión corregida actual.
+El adaptador se mantiene externo en el servidor para conservar la carga nativa de
+sus módulos CommonJS.
+La cadena de ESLint conserva un aviso
 de `braces` sin parche publicado (GHSA-vfj7-8cjw-p6xm). Es una dependencia de
 desarrollo y no debe recibir patrones de archivos de usuarios externos.
 

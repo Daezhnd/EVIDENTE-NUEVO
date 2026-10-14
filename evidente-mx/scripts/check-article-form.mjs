@@ -7,7 +7,7 @@ import ts from 'typescript';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = Module.createRequire(import.meta.url);
-const { JSDOM } = require('jsdom');
+const { JSDOM } = Module.createRequire(require.resolve('isomorphic-dompurify'))('jsdom');
 const browser = new JSDOM('<div id="root"></div>', { url: 'https://editor-test.invalid' });
 for (const name of ['window', 'document', 'navigator', 'HTMLElement', 'HTMLInputElement', 'HTMLTextAreaElement', 'Event']) {
   Object.defineProperty(globalThis, name, { configurable: true, value: browser.window[name] });

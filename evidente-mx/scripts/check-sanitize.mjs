@@ -7,8 +7,9 @@ import ts from 'typescript';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = Module.createRequire(import.meta.url);
-const { JSDOM } = require('jsdom');
-const createDOMPurify = require('dompurify');
+const purifierRequire = Module.createRequire(require.resolve('isomorphic-dompurify'));
+const { JSDOM } = purifierRequire('jsdom');
+const createDOMPurify = purifierRequire('dompurify');
 const browser = new JSDOM('');
 function loadSanitizer(purifier) {
   const filename = path.join(root, 'src/lib/sanitize.ts');

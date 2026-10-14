@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // El DOM de servidor usa módulos CommonJS que deben conservar su carga nativa.
+  serverExternalPackages: ['isomorphic-dompurify'],
   experimental: {
     reactCompiler: true,
   },

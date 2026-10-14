@@ -36,6 +36,9 @@
     "typescript": "^5"
   },
   "overrides": {
+    "isomorphic-dompurify": {
+      "jsdom": "25.0.1"
+    },
     "next": {
       "postcss": "8.5.30"
     }
