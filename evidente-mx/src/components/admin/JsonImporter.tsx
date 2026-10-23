@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { refreshPublicContent } from '@/app/admin/actions';
 import { generateSlug } from '@/lib/utils';
+import { parseIsoDateTime } from '@/lib/article-api';
 import { ArticleCategory } from '@/types/database';
 import {
   Upload,
@@ -30,6 +31,9 @@ interface ImportedArticle {
   categoria?: string;
   is_published?: boolean;
   published?: boolean;
+  published_at?: string;
+  fecha?: string;
+  date?: string;
 }
 
 interface ProcessedArticle {
@@ -41,9 +45,29 @@ interface ProcessedArticle {
   category: ArticleCategory;
   is_published: boolean;
   published_at: string | null;
+  has_custom_date?: boolean;
   status: 'pending' | 'success' | 'error';
   error?: string;
 }
+
+// Hora de Ciudad de México (sin horario de verano desde 2022)
+const MEXICO_OFFSET = '-06:00';
+
+// Acepta ISO 8601 completo, o fecha (y hora) sin zona, que se toma como hora de México
+const parseImportDate = (value: unknown): { value: string } | { error: string } => {
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    let candidate = trimmed;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) {
+      candidate = `${trimmed}T12:00:00${MEXICO_OFFSET}`;
+    } else if (/^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2})?$/.test(trimmed)) {
+      candidate = `${trimmed.replace(' ', 'T')}${MEXICO_OFFSET}`;
+    }
+    const result = parseIsoDateTime(candidate, 'published_at');
+    if (!result.error && result.value) return { value: result.value };
+  }
+  return { error: `Fecha inválida: "${String(value)}". Usa AAAA-MM-DD o ISO 8601` };
+};
 
 // const validCategories: ArticleCategory[] = ['Destacadas', 'Noticias', 'Deportes', 'Turismo'];
 
@@ -86,13 +110,15 @@ const exampleJson = `[
     "content": "Primer párrafo del artículo con información importante.\\n\\nSegundo párrafo con más detalles sobre la noticia.\\n\\nTercer párrafo con conclusiones.",
     "image_url": "https://ejemplo.com/imagen.jpg",
     "category": "Noticias",
-    "is_published": true
+    "is_published": true,
+    "fecha": "2024-03-15"
   },
   {
     "title": "Segunda noticia",
     "summary": "Otro resumen",
     "content": "<p>También puedes usar HTML directamente.</p><p>Cada párrafo en su tag.</p>",
-    "category": "Deportes"
+    "category": "Deportes",
+    "published_at": "2023-11-02T18:30:00-06:00"
   }
 ]`;
 
@@ -173,6 +199,11 @@ export function JsonImporter() {
           };
         }
 
+        const rawDate = item.published_at ?? item.fecha ?? item.date;
+        const parsedDate = rawDate === undefined || rawDate === null || rawDate === ''
+          ? { value: new Date().toISOString() }
+          : parseImportDate(rawDate);
+
         return {
           title: item.title.trim(),
           slug: generateSlug(item.title),
@@ -181,8 +212,10 @@ export function JsonImporter() {
           image_url: item.image_url || item.image || null,
           category: normalizeCategory(item.category || item.categoria),
           is_published: item.is_published ?? item.published ?? true,
-          published_at: new Date().toISOString(),
-          status: 'pending' as const,
+          published_at: 'value' in parsedDate ? parsedDate.value : null,
+          has_custom_date: rawDate !== undefined && rawDate !== null && rawDate !== '',
+          status: 'error' in parsedDate ? 'error' as const : 'pending' as const,
+          error: 'error' in parsedDate ? parsedDate.error : undefined,
         };
       });
 
@@ -234,7 +267,9 @@ export function JsonImporter() {
           image_url: article.image_url,
           category: article.category,
           is_published: article.is_published,
-          published_at: article.is_published ? article.published_at : null,
+          published_at: article.is_published || article.has_custom_date ? article.published_at : null,
+          // Igual que la API: con fecha explícita, también se usa como fecha de creación
+          ...(article.has_custom_date && article.published_at ? { created_at: article.published_at } : {}),
         };
 
         const { data, error } = await supabase.from('articles').insert([insertData]).select('slug,is_published');
@@ -350,6 +385,7 @@ export function JsonImporter() {
               <li><code className="bg-gray-200 px-1 rounded">image_url</code> o <code className="bg-gray-200 px-1 rounded">image</code> - URL de imagen</li>
               <li><code className="bg-gray-200 px-1 rounded">category</code> o <code className="bg-gray-200 px-1 rounded">categoria</code> - Categoría</li>
               <li><code className="bg-gray-200 px-1 rounded">is_published</code> - Publicar automáticamente</li>
+              <li><code className="bg-gray-200 px-1 rounded">published_at</code> o <code className="bg-gray-200 px-1 rounded">fecha</code> - Fecha de publicación (ej. <code className="bg-gray-200 px-1 rounded">2024-03-15</code> o <code className="bg-gray-200 px-1 rounded">2024-03-15T10:30</code>, hora de México). Si no se indica, se usa la fecha actual</li>
             </ul>
           </div>
         </div>
@@ -389,6 +425,11 @@ export function JsonImporter() {
                           </span>
                           {article.is_published && (
                             <span className="text-xs text-green-600">Publicar</span>
+                          )}
+                          {article.published_at && (
+                            <span className="text-xs text-gray-500">
+                              {new Date(article.published_at).toLocaleString('es-MX', { timeZone: 'America/Mexico_City', dateStyle: 'medium', timeStyle: 'short' })}
+                            </span>
                           )}
                         </div>
                         {article.error && (
