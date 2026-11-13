@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { createClient, ARTICLE_REVALIDATE } from '@/lib/supabase/public';
 import { articleCacheTag } from '@/lib/content-tags';
+import { ARTICLE_LIST_COLUMNS } from '@/lib/api';
 import { formatDate, calculateReadingTime } from '@/lib/utils';
 import { RelativeTime } from '@/components/ui/RelativeTime';
 import { sanitizeHtml } from '@/lib/sanitize';
@@ -110,7 +111,7 @@ async function getRelatedArticles(category: string, excludeId: string): Promise<
   const supabase = await createClient([], ARTICLE_REVALIDATE);
   const { data } = await supabase
     .from('articles')
-    .select('*')
+    .select(ARTICLE_LIST_COLUMNS)
     .eq('category', category)
     .eq('is_published', true)
     .neq('id', excludeId)

@@ -81,6 +81,7 @@ export function Navbar() {
             </button>
 
             <Link
+              prefetch={false}
               href="/admin"
               className="inline-flex items-center gap-1 px-2 sm:px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
               aria-label="Panel de administración"
@@ -130,6 +131,7 @@ export function Navbar() {
               Reels
             </Link>
             <Link
+              prefetch={false}
               href="/admin"
               onClick={() => setIsMenuOpen(false)}
               className="flex items-center gap-2 px-3 py-2 text-gray-700 hover:text-red-600 font-medium"

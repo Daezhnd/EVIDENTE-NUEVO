@@ -20,6 +20,11 @@ export type { Article, ArticleWithAuthor, ArticleCategory, Reel, ReelWithAuthor,
 
 const PAGE_SIZE = 9;
 
+// Vercel cobra la caché ISR por unidades de 8 KB. Los listados no muestran el cuerpo de la
+// noticia, así que no se pide: traerlo multiplicaba el tamaño de cada escritura y lectura.
+export const ARTICLE_LIST_COLUMNS =
+  'id, title, slug, summary, image_url, video_url, category, author_id, is_published, views_count, published_at, created_at, updated_at' as const;
+
 // =============================================
 // ARTÍCULOS
 // =============================================
@@ -34,7 +39,7 @@ export async function getFeaturedArticles(limit: number = 3): Promise<Article[]>
   // Primero intentar obtener de "Destacadas"
   const { data: destacadas } = await supabase
     .from('articles')
-    .select('*')
+    .select(ARTICLE_LIST_COLUMNS)
     .eq('category', 'Destacadas')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
@@ -48,7 +53,7 @@ export async function getFeaturedArticles(limit: number = 3): Promise<Article[]>
   // Fallback: obtener los más recientes de cualquier categoría
   const { data: recientes } = await supabase
     .from('articles')
-    .select('*')
+    .select(ARTICLE_LIST_COLUMNS)
     .eq('is_published', true)
     .order('published_at', { ascending: false })
     .limit(limit)
@@ -68,7 +73,7 @@ export async function getArticlesByCategory(
 
   const { data } = await supabase
     .from('articles')
-    .select('*')
+    .select(ARTICLE_LIST_COLUMNS)
     .eq('category', category)
     .eq('is_published', true)
     .order('published_at', { ascending: false })
@@ -92,7 +97,7 @@ export async function getArticlesByCategoryPaginated(
 
   const { data, count } = await supabase
     .from('articles')
-    .select('*', { count: 'exact' })
+    .select(ARTICLE_LIST_COLUMNS, { count: 'exact' })
     .eq('category', category)
     .eq('is_published', true)
     .order('published_at', { ascending: false })
@@ -131,7 +136,7 @@ export async function getAllArticlesPaginated(
 
   const { data, count } = await supabase
     .from('articles')
-    .select('*', { count: 'exact' })
+    .select(ARTICLE_LIST_COLUMNS, { count: 'exact' })
     .eq('is_published', true)
     .order('published_at', { ascending: false })
     .range(from, to)
@@ -196,7 +201,7 @@ export async function getRelatedArticles(
 
   const { data } = await supabase
     .from('articles')
-    .select('*')
+    .select(ARTICLE_LIST_COLUMNS)
     .eq('category', category)
     .eq('is_published', true)
     .neq('id', excludeId)
@@ -236,7 +241,7 @@ export async function getLatestArticles(limit: number = 12): Promise<Article[]> 
 
   const { data } = await supabase
     .from('articles')
-    .select('*')
+    .select(ARTICLE_LIST_COLUMNS)
     .eq('is_published', true)
     .order('published_at', { ascending: false })
     .limit(limit)
@@ -355,7 +360,7 @@ export async function searchArticles(
 
   const { data, count } = await supabase
     .from('articles')
-    .select('*', { count: 'exact' })
+    .select(ARTICLE_LIST_COLUMNS, { count: 'exact' })
     .eq('is_published', true)
     .or(`title.ilike.%${sanitizedQuery}%,summary.ilike.%${sanitizedQuery}%,content.ilike.%${sanitizedQuery}%`)
     .order('published_at', { ascending: false })

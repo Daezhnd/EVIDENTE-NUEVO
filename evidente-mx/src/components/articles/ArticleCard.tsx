@@ -48,7 +48,7 @@ export function ArticleCard({
   if (variant === 'compact') {
     return (
       <motion.div whileHover={{ y: -2, x: 2 }} transition={{ type: "spring", stiffness: 400, damping: 17 }}>
-        <Link href={`/noticia/${article.slug}`} className="group flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all duration-300">
+        <Link prefetch={false} href={`/noticia/${article.slug}`} className="group flex gap-4 p-3 rounded-xl hover:bg-gray-50 transition-all duration-300">
           {/* Imagen */}
           <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-xl">
             {article.image_url ? (
@@ -87,7 +87,7 @@ export function ArticleCard({
   if (variant === 'featured') {
     return (
       <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.3, ease: "easeOut" }} className="h-full">
-        <Link href={`/noticia/${article.slug}`} className="group relative block h-full card-hover">
+        <Link prefetch={false} href={`/noticia/${article.slug}`} className="group relative block h-full card-hover">
           {/* Imagen de fondo */}
           <div className="absolute inset-0 overflow-hidden rounded-2xl">
             {article.image_url ? (
@@ -145,7 +145,7 @@ export function ArticleCard({
   // Variante default - rediseñada con efectos modernos
   return (
     <motion.div whileHover={{ y: -8 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
-      <Link href={`/noticia/${article.slug}`} className="group block card-hover">
+      <Link prefetch={false} href={`/noticia/${article.slug}`} className="group block card-hover">
         {/* Imagen */}
         <div className="relative aspect-[16/10] overflow-hidden rounded-2xl mb-4">
           {article.image_url ? (

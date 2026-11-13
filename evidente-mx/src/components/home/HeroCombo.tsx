@@ -31,7 +31,7 @@ export function HeroCombo({ mainArticle }: HeroComboProps) {
 
         {/* Lado izquierdo - IMAGEN */}
         <div className="absolute inset-0 w-full lg:w-[60%] h-full">
-          <Link href={`/noticia/${mainArticle.slug}`} className="block h-full w-full group relative">
+          <Link prefetch={false} href={`/noticia/${mainArticle.slug}`} className="block h-full w-full group relative">
             <Image
               src={mainArticle.image_url || '/placeholder.svg'}
               alt={mainArticle.title}
@@ -83,7 +83,7 @@ export function HeroCombo({ mainArticle }: HeroComboProps) {
             </div>
 
             {/* Título Grande */}
-            <Link href={`/noticia/${mainArticle.slug}`} className="group block mb-6">
+            <Link prefetch={false} href={`/noticia/${mainArticle.slug}`} className="group block mb-6">
               <h1 className="text-4xl xl:text-5xl font-black text-gray-900 leading-[1.1] group-hover:text-evident transition-colors">
                 {mainArticle.title}
               </h1>
@@ -106,6 +106,7 @@ export function HeroCombo({ mainArticle }: HeroComboProps) {
 
             {/* CTA */}
             <Link
+              prefetch={false}
               href={`/noticia/${mainArticle.slug}`}
               className="inline-flex items-center gap-2 px-6 py-3 bg-evident text-white font-semibold hover:bg-evident-dark transition-colors w-fit group"
             >

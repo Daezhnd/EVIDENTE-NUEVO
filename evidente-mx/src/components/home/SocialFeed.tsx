@@ -175,7 +175,7 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                     transition={{ duration: 0.6, delay: index * 0.1, ease: "easeOut" }}
                                     className="group bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-800"
                                 >
-                                    <Link href={`/noticia/${article.slug}`} className="flex flex-col md:flex-row h-full">
+                                    <Link prefetch={false} href={`/noticia/${article.slug}`} className="flex flex-col md:flex-row h-full">
 
                                         {/* Imagen o Video a la izquierda (Desktop) - 40% ancho fijo */}
                                         <div className="md:w-5/12 lg:w-4/12 relative aspect-video md:aspect-auto">

@@ -69,7 +69,9 @@ export function BreakingNewsTicker({ news: initialNews }: BreakingNewsTickerProp
           <div className="flex-1 overflow-hidden mx-4">
             <div className="ticker-content animate-ticker">
               {duplicatedNews.map((item, index) => (
+                // Sin precarga: son 80 enlaces repetidos y cada precarga es una petición a Vercel.
                 <Link
+                  prefetch={false}
                   key={`${item.id}-${index}`}
                   href={`/noticia/${item.slug}`}
                   className="inline-flex items-center gap-2 px-6 text-white/90 hover:text-white transition-colors whitespace-nowrap group"

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/public';
+import { ARTICLE_LIST_COLUMNS } from '@/lib/api';
 import { Article } from '@/types/database';
 import { Search, Clock, ArrowRight } from 'lucide-react';
 
@@ -21,7 +22,7 @@ async function searchArticles(query: string): Promise<Article[]> {
   const supabase = await createClient([], 0);
   const { data } = await supabase
     .from('articles')
-    .select('*')
+    .select(ARTICLE_LIST_COLUMNS)
     .eq('is_published', true)
     .or(`title.ilike.%${query}%,summary.ilike.%${query}%,content.ilike.%${query}%`)
     .order('published_at', { ascending: false })
