@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Article } from '@/types/database';
-import { formatDistanceToNow } from '@/lib/utils';
+import { RelativeTime } from '@/components/ui/RelativeTime';
 import { Clock, Eye, ArrowUpRight, Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -75,7 +75,7 @@ export function ArticleCard({
             {article.published_at && (
               <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
                 <Clock className="w-3 h-3" />
-                {formatDistanceToNow(article.published_at)}
+                <RelativeTime date={article.published_at} />
               </p>
             )}
           </div>
@@ -124,7 +124,7 @@ export function ArticleCard({
                 {article.published_at && (
                   <span className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
-                    {formatDistanceToNow(article.published_at)}
+                    <RelativeTime date={article.published_at} />
                   </span>
                 )}
                 <span className="flex items-center gap-1">
@@ -196,7 +196,7 @@ export function ArticleCard({
               {article.published_at && (
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
-                  {formatDistanceToNow(article.published_at)}
+                  <RelativeTime date={article.published_at} />
                 </span>
               )}
               <span className="flex items-center gap-1">

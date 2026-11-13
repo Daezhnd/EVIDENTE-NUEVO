@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/public';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://evidente.mx';
 
-export const revalidate = 300;
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient(['articles:list']);

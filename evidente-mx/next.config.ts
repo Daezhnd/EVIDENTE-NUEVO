@@ -6,6 +6,21 @@ const nextConfig: NextConfig = {
   experimental: {
     reactCompiler: true,
   },
+  async rewrites() {
+    return {
+      // La paginación conserva su URL pública (?page=N) pero se sirve desde una ruta con
+      // caché; leer searchParams obligaba a ejecutar una función en cada visita.
+      beforeFiles: [
+        {
+          source: '/categoria/:slug',
+          has: [{ type: 'query', key: 'page', value: '(?<page>[1-9]\\d{0,2})' }],
+          destination: '/categoria/:slug/pagina/:page',
+        },
+      ],
+      afterFiles: [],
+      fallback: [],
+    };
+  },
   images: {
     // === OPTIMIZACIONES PARA REDUCIR COSTOS DE VERCEL ===
     // Solo webp (reduce transformaciones a la mitad vs avif+webp)

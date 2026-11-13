@@ -46,10 +46,18 @@ globalThis.fetch = async (input, init) => {
   });
 };
 
-function assertRead(request, tags) {
+const LIST = 3600;
+const ARTICLE = 2592000;
+function assertRead(request, tags, revalidate = LIST) {
   assert.ok(['GET', 'HEAD'].includes(request.init.method));
-  assert.equal(request.init.cache, 'force-cache');
-  assert.deepEqual(request.init.next, { revalidate: 300, tags });
+  if (revalidate === 0) {
+    // Las búsquedas no se guardan: cada término crearía una entrada nueva.
+    assert.equal(request.init.cache, 'no-store');
+    assert.equal(request.init.next, undefined);
+  } else {
+    assert.equal(request.init.cache, 'force-cache');
+    assert.deepEqual(request.init.next, { revalidate, tags });
+  }
   assert.equal(request.init.headers.get('Authorization'), 'Bearer public-test-key');
   assert.equal(request.init.headers.get('Cookie'), null);
 }
@@ -59,6 +67,8 @@ try {
   const publicClient = loadTs('src/lib/supabase/public.ts');
   aliases['@/lib/supabase/public'] = publicClient;
   const { createClient } = publicClient;
+  assert.equal(publicClient.LIST_REVALIDATE, LIST);
+  assert.equal(publicClient.ARTICLE_REVALIDATE, ARTICLE);
   const client = createClient();
   const result = await client.from('articles').select('id').eq('is_published', true);
   assert.equal(result.error, null);
@@ -87,28 +97,42 @@ try {
     ['categoría paginada', () => api.getArticlesByCategoryPaginated('Noticias'), [['articles:list']]],
     ['todos paginados', () => api.getAllArticlesPaginated(), [['articles:list']]],
     ['últimas', () => api.getLatestArticles(), [['articles:list']]],
-    ['búsqueda API', () => api.searchArticles('noticia'), [['articles:list']]],
-    ['artículo API', () => api.getArticleBySlug(article.slug), [[`article:${article.slug}`]]],
-    ['relacionados API', () => api.getRelatedArticles('Noticias', article.id), [[]]],
-    ['ticker', () => api.getRecentArticlesForTicker(), [[]]],
+    ['búsqueda API', () => api.searchArticles('noticia'), [undefined], 0],
+    ['artículo API', () => api.getArticleBySlug(article.slug), [[`article:${article.slug}`]], ARTICLE],
+    ['relacionados API', () => api.getRelatedArticles('Noticias', article.id), [[]], ARTICLE],
+    ['ticker', () => api.getRecentArticlesForTicker(), [[]], ARTICLE],
     ['reels', () => api.getReels(), [['reels:list']]],
     ['reels paginados', () => api.getReelsPaginated(), [['reels:list']]],
     ['reel por ID', () => api.getReelById(article.id), [['reels:list']]],
-    ['metadatos noticia', () => news.generateMetadata(params), [[`article:${article.slug}`]]],
-    ['noticia y relacionados', () => news.default(params), [[`article:${article.slug}`], []]],
-    ['página búsqueda', () => loadTs('src/app/buscar/page.tsx').default({ searchParams: Promise.resolve({ q: 'noticia' }) }), [['articles:list']]],
+    ['metadatos noticia', () => news.generateMetadata(params), [[`article:${article.slug}`]], ARTICLE],
+    ['noticia y relacionados', () => news.default(params), [[`article:${article.slug}`], []], ARTICLE],
+    ['página búsqueda', () => loadTs('src/app/buscar/page.tsx').default({ searchParams: Promise.resolve({ q: 'noticia' }) }), [undefined], 0],
     ['página categoría', () => loadTs('src/app/categoria/[slug]/page.tsx').default({
-      params: Promise.resolve({ slug: 'noticias' }), searchParams: Promise.resolve({ page: '1' }),
-    }), [['articles:list'], ['articles:list']]],
+      params: Promise.resolve({ slug: 'noticias' }),
+    }), [['articles:list']]],
+    ['página categoría paginada', () => loadTs('src/app/categoria/[slug]/pagina/[page]/page.tsx').default({
+      params: Promise.resolve({ slug: 'noticias', page: '1' }),
+    }), [['articles:list']]],
     ['página reels', () => loadTs('src/app/reels/page.tsx').default(), [['reels:list']]],
     ['RSS', () => loadTs('src/app/feed.xml/route.ts').GET(), [['articles:list']]],
     ['sitemap', () => loadTs('src/app/sitemap.ts').default(), [['articles:list']]],
   ];
-  for (const [label, reader, expectedTags] of readers) {
+  for (const [label, reader, expectedTags, revalidate] of readers) {
     requests.length = 0;
     await reader();
     assert.deepEqual(requests.map(({ init }) => init.next?.tags), expectedTags, label);
-    requests.forEach((request, index) => assertRead(request, expectedTags[index]));
+    requests.forEach((request, index) => assertRead(request, expectedTags[index], revalidate));
+  }
+  // Los plazos de cada ruta deben coincidir con los de sus consultas; el menor manda.
+  for (const [file, seconds] of [
+    ['src/app/page.tsx', LIST], ['src/app/reels/page.tsx', LIST], ['src/app/sitemap.ts', LIST],
+    ['src/app/feed.xml/route.ts', LIST], ['src/app/categoria/[slug]/page.tsx', LIST],
+    ['src/app/categoria/[slug]/pagina/[page]/page.tsx', LIST], ['src/app/noticia/[slug]/page.tsx', ARTICLE],
+  ]) {
+    assert.match(readFileSync(path.join(root, file), 'utf8'), new RegExp(`^export const revalidate = ${seconds};$`, 'm'), file);
+  }
+  for (const file of ['src/app/categoria/[slug]/page.tsx', 'src/app/categoria/[slug]/pagina/[page]/page.tsx']) {
+    assert.doesNotMatch(readFileSync(path.join(root, file), 'utf8'), /searchParams/, `${file}: searchParams impide la caché`);
   }
   featuredFallback = true;
   requests.length = 0;
@@ -128,7 +152,7 @@ try {
       requests.length = 0;
       await reader();
       assert.equal(requests.length, 1);
-      assertRead(requests[0], [tag]);
+      assertRead(requests[0], [tag], ARTICLE);
       assert.equal(new URL(requests[0].input).searchParams.get('slug'), `eq.${slug}`);
     }
   }
@@ -147,4 +171,4 @@ for (const url of ['/admin', '/admin/login', '/admin/articulos/nuevo', '/api/adm
 for (const url of ['/', '/noticia/test', '/categoria/noticias?page=2', '/buscar?q=nota', '/reels', '/sitemap.xml', '/api/articles', '/favicon.png']) {
   assert.equal(unstable_doesMiddlewareMatch({ config, nextConfig: {}, url }), false, url);
 }
-process.stdout.write('PASS: 19 lectores reales con etiquetas acotadas, slugs largos con hash estable, GET/HEAD anónimos por 300s, POST sin caché y middleware privado.\n');
+process.stdout.write('PASS: 20 lectores reales con etiquetas acotadas, slugs largos con hash estable, listados por 1 h, noticias por 30 días, búsqueda y POST sin caché, y middleware privado.\n');

@@ -184,13 +184,17 @@ variables de Production. La nueva base de datos no incluye noticias, usuarios ni
 archivos del proyecto anterior. Conserva el acceso al correo de la nueva cuenta de
 Supabase y un método de inicio de sesión independiente de la cuenta de GitHub.
 
-Las lecturas públicas usan una caché de 300 segundos. Un cambio en artículos
+Las lecturas públicas usan una caché de 1 hora en portada, categorías, reels, RSS
+y sitemap, y de 30 días en cada noticia (plazos cortos hacían que cada visita de un
+rastreador regenerara la página y agotara las escrituras ISR de Vercel). Un cambio en artículos
 publicados desde el panel o la API invalida los listados (`articles:list`) y las
 direcciones afectadas (`article:<slug>`), incluidas la anterior y la nueva al
 renombrar. Los cambios en reels publicados invalidan únicamente `reels:list`.
 Guardar o eliminar borradores no invalida contenido público. El ticker y los
-relacionados conservan su TTL de 300 segundos para no regenerar noticias ajenas
-por cada publicación. Si la invalidación falla, la escritura sigue guardada y la
+relacionados usan el plazo de 30 días para no regenerar noticias ajenas por cada
+publicación; el ticker, el contador de vistas y las fechas relativas se actualizan
+en el navegador. La paginación `/categoria/<slug>?page=N` se reescribe a una ruta
+con caché y la búsqueda no se guarda. Si la invalidación falla, la escritura sigue guardada y la
 renovación automática actúa como respaldo; los cambios directos en el dashboard
 de Supabase también esperan esta renovación. Las sesiones, borradores y llamadas
 que escriben datos no se comparten en la caché pública.

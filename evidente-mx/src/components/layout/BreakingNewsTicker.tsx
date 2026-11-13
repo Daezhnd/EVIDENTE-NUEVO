@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Newspaper, ChevronRight } from 'lucide-react';
+import { env } from '@/lib/env';
 
 interface BreakingNews {
   id: string;
@@ -13,7 +15,35 @@ interface BreakingNewsTickerProps {
   news: BreakingNews[];
 }
 
-export function BreakingNewsTicker({ news }: BreakingNewsTickerProps) {
+export function BreakingNewsTicker({ news: initialNews }: BreakingNewsTickerProps) {
+  const [news, setNews] = useState(initialNews);
+
+  // El HTML llega desde una caché de larga duración; los titulares se refrescan aquí,
+  // directo desde Supabase, para no regenerar todas las páginas con cada publicación.
+  useEffect(() => {
+    if (!env.supabase.url || !env.supabase.anonKey) return;
+    const controller = new AbortController();
+    const limit = Math.max(initialNews.length, 8);
+    const url = `${env.supabase.url}/rest/v1/articles?select=id,title,slug&is_published=eq.true&order=published_at.desc&limit=${limit}`;
+
+    fetch(url, {
+      headers: { apikey: env.supabase.anonKey, Authorization: `Bearer ${env.supabase.anonKey}` },
+      signal: controller.signal,
+    })
+      .then(response => (response.ok ? response.json() : null))
+      .then((rows: BreakingNews[] | null) => {
+        if (!Array.isArray(rows) || rows.length === 0) return;
+        setNews(current =>
+          current.length === rows.length && current.every((item, index) => item.id === rows[index].id && item.title === rows[index].title && item.slug === rows[index].slug)
+            ? current
+            : rows
+        );
+      })
+      .catch(() => { /* Se conservan los titulares del servidor. */ });
+
+    return () => controller.abort();
+  }, [initialNews.length]);
+
   if (!news || news.length === 0) return null;
 
   // Duplicamos 10 veces para asegurar scroll infinito súper fluido sin cortes

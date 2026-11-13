@@ -3,7 +3,7 @@
  * Evidente.mx - Portal de Noticias
  */
 
-import { createClient } from '@/lib/supabase/public';
+import { createClient, ARTICLE_REVALIDATE } from '@/lib/supabase/public';
 import { articleCacheTag } from '@/lib/content-tags';
 import { logError } from '@/lib/errors';
 import type {
@@ -97,7 +97,15 @@ export async function getArticlesByCategoryPaginated(
     .eq('is_published', true)
     .order('published_at', { ascending: false })
     .range(from, to)
-    .throwOnError();
+    .throwOnError()
+    .then(
+      result => result,
+      (error: { code?: string }) => {
+        // PGRST103: la página pedida está más allá del último artículo; no es una falla.
+        if (error?.code === 'PGRST103') return { data: [] as Article[], count: 0 };
+        throw error;
+      }
+    );
 
   const totalCount = count || 0;
 
@@ -144,7 +152,7 @@ export async function getAllArticlesPaginated(
  * Obtener un artículo por su slug
  */
 export async function getArticleBySlug(slug: string): Promise<ArticleWithAuthor | null> {
-  const supabase = await createClient([articleCacheTag(slug)]);
+  const supabase = await createClient([articleCacheTag(slug)], ARTICLE_REVALIDATE);
 
   const { data } = await supabase
     .from('public_articles')
@@ -184,7 +192,7 @@ export async function getRelatedArticles(
   excludeId: string,
   limit: number = 3
 ): Promise<Article[]> {
-  const supabase = await createClient();
+  const supabase = await createClient([], ARTICLE_REVALIDATE);
 
   const { data } = await supabase
     .from('articles')
@@ -204,7 +212,9 @@ export async function getRelatedArticles(
  * Devuelve solo id, title y slug para optimizar
  */
 export async function getRecentArticlesForTicker(limit: number = 10): Promise<{ id: string; title: string; slug: string }[]> {
-  const supabase = await createClient();
+  // El layout comparte esta consulta con todas las rutas: un plazo corto o una etiqueta de
+  // listado obligaría a regenerar cada noticia. El ticker se refresca en el navegador.
+  const supabase = await createClient([], ARTICLE_REVALIDATE);
 
   const { data } = await supabase
     .from('articles')
@@ -321,7 +331,8 @@ export async function searchArticles(
   page: number = 1,
   pageSize: number = PAGE_SIZE
 ): Promise<PaginatedResponse<Article>> {
-  const supabase = await createClient(['articles:list']);
+  // Sin caché: cada término distinto crearía una entrada nueva.
+  const supabase = await createClient([], 0);
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
 

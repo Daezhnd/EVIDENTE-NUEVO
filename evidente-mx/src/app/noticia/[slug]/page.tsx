@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/public';
+import { createClient, ARTICLE_REVALIDATE } from '@/lib/supabase/public';
 import { articleCacheTag } from '@/lib/content-tags';
-import { formatDate, formatDistanceToNow, calculateReadingTime } from '@/lib/utils';
+import { formatDate, calculateReadingTime } from '@/lib/utils';
+import { RelativeTime } from '@/components/ui/RelativeTime';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { ArticleCard } from '@/components/articles/ArticleCard';
 import { Article } from '@/types/database';
@@ -92,7 +93,7 @@ function buildAbsoluteUrl(pathOrUrl: string): string {
 }
 
 async function getArticleBySlug(slug: string): Promise<Article | null> {
-  const supabase = await createClient([articleCacheTag(slug)]);
+  const supabase = await createClient([articleCacheTag(slug)], ARTICLE_REVALIDATE);
   const { data } = await supabase
     .from('articles')
     .select('*')
@@ -106,7 +107,7 @@ async function getArticleBySlug(slug: string): Promise<Article | null> {
 }
 
 async function getRelatedArticles(category: string, excludeId: string): Promise<Article[]> {
-  const supabase = await createClient();
+  const supabase = await createClient([], ARTICLE_REVALIDATE);
   const { data } = await supabase
     .from('articles')
     .select('*')
@@ -247,7 +248,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <>
                 <span className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
-                  {formatDistanceToNow(article.published_at)}
+                  <RelativeTime date={article.published_at} />
                 </span>
                 <span className="hidden sm:inline">•</span>
                 <span className="hidden sm:inline">
@@ -263,7 +264,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <span>•</span>
             <span className="flex items-center gap-1">
               <Eye className="w-4 h-4" />
-              {((article.views_count ?? article.views) || 0).toLocaleString()} vistas
+              <ViewCounter articleId={article.id} initialViews={(article.views_count ?? article.views) || 0} /> vistas
             </span>
           </div>
         </header>
@@ -360,8 +361,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       )}
       {/* Indicador de scroll para pantallas pequeñas */}
       <ScrollIndicator />
-      {/* Contador de vistas (invisible) */}
-      <ViewCounter articleId={article.id} />
     </article>
   );
 }
@@ -371,4 +370,5 @@ export function generateStaticParams() {
   return [];
 }
 
-export const revalidate = 300;
+// 30 días (igual que ARTICLE_REVALIDATE). Las ediciones invalidan la noticia al instante por etiqueta.
+export const revalidate = 2592000;

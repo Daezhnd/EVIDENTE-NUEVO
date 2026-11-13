@@ -96,5 +96,5 @@ export default async function HomePage() {
   );
 }
 
-// Revalidar cada 5 minutos para reducir llamadas a la base de datos
-export const revalidate = 300;
+// Respaldo de 1 hora; publicar o editar invalida la portada al instante por etiqueta.
+export const revalidate = 3600;

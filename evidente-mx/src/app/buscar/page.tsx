@@ -17,7 +17,8 @@ interface SearchPageProps {
 async function searchArticles(query: string): Promise<Article[]> {
   if (!query || query.length < 2) return [];
   
-  const supabase = await createClient(['articles:list']);
+  // Sin caché: cada término distinto crearía una entrada nueva.
+  const supabase = await createClient([], 0);
   const { data } = await supabase
     .from('articles')
     .select('*')
