@@ -34,6 +34,7 @@ export default function NotFound() {
           </Link>
 
           <Link
+            prefetch={false}
             href="/buscar"
             className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-gray-700 rounded-lg border border-gray-300 hover:border-gray-400 transition-colors font-medium"
           >

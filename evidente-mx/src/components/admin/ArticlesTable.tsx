@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/supabase/client';
 import { refreshPublicContent } from '@/app/admin/actions';
+import { reportPublicRefreshFailure } from '@/lib/public-refresh';
 import { formatDistanceToNow } from '@/lib/utils';
 import { Article } from '@/types/database';
 import { Edit, Trash2, ExternalLink, Loader2, RefreshCw } from 'lucide-react';
@@ -88,7 +89,7 @@ export function ArticlesTable({ userRole: propUserRole }: ArticlesTableProps) {
       if (error) throw error;
       const publicSlugs = (data || []).filter(article => article.is_published).map(article => article.slug);
       if (publicSlugs.length > 0) {
-        await refreshPublicContent('articles', publicSlugs).catch(error => console.error('Error al actualizar la caché pública:', error));
+        await refreshPublicContent('articles', publicSlugs).catch(reportPublicRefreshFailure);
       }
       setArticles(prev => prev.filter(a => a.id !== id));
     } catch (e) {

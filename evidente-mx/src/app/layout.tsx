@@ -10,6 +10,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { BackToTop } from "@/components/ui/BackToTop";
 import { getRecentArticlesForTicker } from "@/lib/api";
 import { env } from "@/lib/env";
+import { RSS_ALTERNATE, SITE_URL } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -30,7 +31,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://evidente.mx'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Evidente.mx | Portal de Noticias",
     template: "%s | Evidente.mx",
@@ -59,13 +60,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'es_MX',
-    url: 'https://evidente.mx',
+    // Relativo a cada ruta, igual que el canónico.
+    url: './',
     siteName: 'Evidente.mx',
     title: 'Evidente.mx | Portal de Noticias',
     description: 'Tu fuente confiable de noticias en México.',
     images: [
       {
-        url: 'https://evidente.mx/favicon.png',
+        url: `${SITE_URL}/favicon.png`,
         width: 512,
         height: 512,
         alt: 'Evidente.mx - Portal de Noticias',
@@ -76,14 +78,13 @@ export const metadata: Metadata = {
     card: 'summary',
     title: 'Evidente.mx | Portal de Noticias',
     description: 'Tu fuente confiable de noticias en México.',
-    images: ['https://evidente.mx/favicon.png'],
+    images: [`${SITE_URL}/favicon.png`],
     creator: '@evidentemx',
   },
   alternates: {
-    canonical: 'https://evidente.mx',
-    types: {
-      'application/rss+xml': 'https://evidente.mx/feed.xml',
-    },
+    // Relativo a cada ruta: un valor fijo declaraba la portada como canónica de todas las páginas.
+    canonical: './',
+    types: RSS_ALTERNATE,
   },
   verification: {
     // Agregar cuando tengas las claves

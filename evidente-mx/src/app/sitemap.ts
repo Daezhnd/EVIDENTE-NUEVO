@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@/lib/supabase/public';
+import { SITE_URL } from '@/lib/site';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://evidente.mx';
+const BASE_URL = SITE_URL;
 
 export const revalidate = 3600;
 
@@ -11,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Obtener todos los artículos publicados
   const { data: articles } = await supabase
     .from('articles')
-    .select('slug, updated_at, published_at')
+    .select('slug, published_at')
     .eq('is_published', true)
     .order('published_at', { ascending: false })
     .throwOnError();
@@ -19,52 +20,57 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // URLs de artículos
   const articleUrls: MetadataRoute.Sitemap = (articles || []).map((article) => ({
     url: `${BASE_URL}/noticia/${article.slug}`,
-    lastModified: new Date(article.updated_at || article.published_at),
+    // `updated_at` cambia con cada visita (contador de vistas); la fecha de publicación es estable.
+    lastModified: new Date(article.published_at),
     changeFrequency: 'weekly',
     priority: 0.8,
   }));
+
+  // La salida solo debe cambiar cuando cambia el contenido: una fecha `new Date()` hacía
+  // distinta cada regeneración y obligaba a reescribir el sitemap completo en la caché.
+  const latest = articles?.[0]?.published_at ? new Date(articles[0].published_at) : undefined;
 
   // URLs estáticas
   const staticUrls: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
-      lastModified: new Date(),
+      lastModified: latest,
       changeFrequency: 'hourly',
       priority: 1,
     },
     {
       url: `${BASE_URL}/categoria/destacadas`,
-      lastModified: new Date(),
+      lastModified: latest,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/categoria/noticias`,
-      lastModified: new Date(),
+      lastModified: latest,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/categoria/deportes`,
-      lastModified: new Date(),
+      lastModified: latest,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/categoria/turismo`,
-      lastModified: new Date(),
+      lastModified: latest,
       changeFrequency: 'daily',
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/reels`,
-      lastModified: new Date(),
+      lastModified: latest,
       changeFrequency: 'daily',
       priority: 0.7,
     },
     {
       url: `${BASE_URL}/contacto`,
-      lastModified: new Date(),
+      lastModified: latest,
       changeFrequency: 'monthly',
       priority: 0.5,
     },

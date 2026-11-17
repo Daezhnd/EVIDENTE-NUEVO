@@ -17,6 +17,8 @@ export function Pagination({
   if (totalPages <= 1) return null;
 
   const buildUrl = (page: number) => {
+    // La primera página es la URL limpia: `?page=1` duplicaba la misma página en caché.
+    if (page === 1 && Object.keys(queryParams).length === 0) return baseUrl;
     const params = new URLSearchParams({ ...queryParams, page: page.toString() });
     return `${baseUrl}?${params.toString()}`;
   };
@@ -60,6 +62,7 @@ export function Pagination({
       {/* Botón anterior */}
       {currentPage > 1 ? (
         <Link
+          prefetch={false}
           href={buildUrl(currentPage - 1)}
           className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
         >
@@ -91,6 +94,7 @@ export function Pagination({
 
           return (
             <Link
+              prefetch={false}
               key={page}
               href={buildUrl(page)}
               className={`min-w-[40px] h-10 flex items-center justify-center text-sm font-medium rounded-lg transition-colors ${
@@ -109,6 +113,7 @@ export function Pagination({
       {/* Botón siguiente */}
       {currentPage < totalPages ? (
         <Link
+          prefetch={false}
           href={buildUrl(currentPage + 1)}
           className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-gray-100 rounded-lg transition-colors"
         >

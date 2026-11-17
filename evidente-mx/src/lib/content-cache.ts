@@ -14,7 +14,8 @@ export function invalidatePublicContent(type: 'articles' | 'reels', slugs: strin
       for (const slug of new Set(slugs)) revalidateTag(articleCacheTag(slug));
     }
   } catch (error) {
-    // La escritura ya se guardó; la renovación de 300 segundos sirve de respaldo.
+    // La escritura ya se guardó. El respaldo es la renovación por tiempo: 1 hora en listados
+    // y 30 días en cada noticia.
     console.error('Error al actualizar la caché pública:', error);
   }
 }

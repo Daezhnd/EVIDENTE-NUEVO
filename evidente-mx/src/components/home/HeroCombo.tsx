@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { RelativeTime } from '@/components/ui/RelativeTime';
 import Image from 'next/image';
 import { Article } from '@/types/database';
 import { Clock, ArrowRight } from 'lucide-react';
@@ -10,14 +11,6 @@ interface HeroComboProps {
   secondaryArticles: Article[];
 }
 
-function timeAgo(date: string): string {
-  const now = new Date();
-  const d = new Date(date);
-  const diff = Math.floor((now.getTime() - d.getTime()) / (1000 * 60));
-  if (diff < 60) return `${diff}m`;
-  if (diff < 1440) return `${Math.floor(diff / 60)}h`;
-  return `${Math.floor(diff / 1440)}d`;
-}
 
 import { ScrollIndicator } from '@/components/ui/ScrollIndicator';
 
@@ -58,7 +51,7 @@ export function HeroCombo({ mainArticle }: HeroComboProps) {
               </h1>
               <div className="flex items-center gap-3 text-white/80 text-xs font-medium uppercase tracking-wider">
                 <Clock className="w-3 h-3" />
-                <span>{timeAgo(mainArticle.published_at || mainArticle.created_at)}</span>
+                <span><RelativeTime short date={mainArticle.published_at || mainArticle.created_at} /></span>
               </div>
             </div>
           </Link>
@@ -98,7 +91,7 @@ export function HeroCombo({ mainArticle }: HeroComboProps) {
             <div className="flex items-center gap-4 text-sm text-gray-400 mb-8">
               <span className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4" />
-                {timeAgo(mainArticle.published_at || mainArticle.created_at)}
+                <RelativeTime short date={mainArticle.published_at || mainArticle.created_at} />
               </span>
               <span className="w-1 h-1 bg-gray-300 rounded-full" />
               <span>{(mainArticle.views || 0).toLocaleString()} lecturas</span>

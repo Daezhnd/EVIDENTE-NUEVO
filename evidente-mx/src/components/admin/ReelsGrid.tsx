@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { refreshPublicContent } from '@/app/admin/actions';
+import { reportPublicRefreshFailure } from '@/lib/public-refresh';
 import { Reel } from '@/types/database';
 import { formatDistanceToNow, formatNumber } from '@/lib/utils';
 import { Edit, Trash2, Play, Eye, Heart, RefreshCw, Loader2 } from 'lucide-react';
@@ -72,7 +73,7 @@ export function ReelsGrid({ userRole: propUserRole }: ReelsGridProps) {
       alert('Error al eliminar el reel');
     } else {
       if (data?.some(reel => reel.is_published)) {
-        await refreshPublicContent('reels').catch(error => console.error('Error al actualizar la caché pública:', error));
+        await refreshPublicContent('reels').catch(reportPublicRefreshFailure);
       }
       setReels(prev => prev.filter(r => r.id !== id));
     }
@@ -91,7 +92,7 @@ export function ReelsGrid({ userRole: propUserRole }: ReelsGridProps) {
       alert('Error al eliminar los reels seleccionados');
     } else {
       if (data?.some(reel => reel.is_published)) {
-        await refreshPublicContent('reels').catch(error => console.error('Error al actualizar la caché pública:', error));
+        await refreshPublicContent('reels').catch(reportPublicRefreshFailure);
       }
       setReels(prev => prev.filter(r => !selectedIds.includes(r.id)));
       setSelectedIds([]);

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { RelativeTime } from '@/components/ui/RelativeTime';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Article } from '@/types/database';
@@ -16,14 +17,6 @@ interface SocialFeedProps {
     showLoading?: boolean;
 }
 
-function timeAgo(date: string): string {
-    const now = new Date();
-    const d = new Date(date);
-    const diff = Math.floor((now.getTime() - d.getTime()) / (1000 * 60));
-    if (diff < 60) return `${diff}m`;
-    if (diff < 1440) return `${Math.floor(diff / 60)}h`;
-    return `${Math.floor(diff / 1440)}d`;
-}
 
 // Función para mapear categorías antiguas a 'Internacionales' visualmente
 function getDisplayCategory(category: string | unknown): string {
@@ -210,7 +203,7 @@ export function SocialFeed({ articles, showHeader = true, startIndex = 0, showLo
                                                 </span>
                                                 <div className="flex items-center gap-2 text-gray-400 text-xs font-bold tracking-widest uppercase">
                                                     <Clock className="w-4 h-4" />
-                                                    <span>{timeAgo(article.published_at || article.created_at)}</span>
+                                                    <span><RelativeTime short date={article.published_at || article.created_at} /></span>
                                                 </div>
                                             </div>
 

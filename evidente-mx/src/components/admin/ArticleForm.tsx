@@ -8,6 +8,7 @@ import { generateSlug, validateArticle, ValidationError } from '@/lib/utils';
 import { createClient } from '@/lib/supabase/client';
 import { sanitizeHtml } from '@/lib/sanitize';
 import { refreshPublicContent } from '@/app/admin/actions';
+import { reportPublicRefreshFailure } from '@/lib/public-refresh';
 import {
   Save,
   Eye,
@@ -132,7 +133,7 @@ export function ArticleForm({ article, isEditing = false }: ArticleFormProps) {
         ...(savedArticle.is_published ? [savedArticle.slug] : []),
       ];
       if (publicSlugs.length > 0) {
-        await refreshPublicContent('articles', publicSlugs).catch(error => console.error('Error al actualizar la caché pública:', error));
+        await refreshPublicContent('articles', publicSlugs).catch(reportPublicRefreshFailure);
       }
       router.push('/admin/articulos');
       router.refresh();

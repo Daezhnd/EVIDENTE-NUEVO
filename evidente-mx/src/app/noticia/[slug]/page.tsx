@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { createClient, ARTICLE_REVALIDATE } from '@/lib/supabase/public';
 import { articleCacheTag } from '@/lib/content-tags';
+import { RSS_ALTERNATE, SITE_URL } from '@/lib/site';
 import { ARTICLE_LIST_COLUMNS } from '@/lib/api';
 import { formatDate, calculateReadingTime } from '@/lib/utils';
 import { RelativeTime } from '@/components/ui/RelativeTime';
@@ -87,9 +88,9 @@ function buildShareDescription(article: Article): string {
 
 function buildAbsoluteUrl(pathOrUrl: string): string {
   try {
-    return new URL(pathOrUrl, 'https://evidente.mx').toString();
+    return new URL(pathOrUrl, SITE_URL).toString();
   } catch {
-    return 'https://evidente.mx/favicon.png';
+    return `${SITE_URL}/favicon.png`;
   }
 }
 
@@ -133,7 +134,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   const articleUrl = buildAbsoluteUrl(`/noticia/${article.slug}`);
   const imageUrl = article.image_url
     ? buildAbsoluteUrl(article.image_url)
-    : 'https://evidente.mx/favicon.png';
+    : `${SITE_URL}/favicon.png`;
   const description = buildShareDescription(article);
 
   return {
@@ -141,6 +142,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     description,
     alternates: {
       canonical: articleUrl,
+      types: RSS_ALTERNATE,
     },
     openGraph: {
       title: article.title,
@@ -284,7 +286,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             Compartir:
           </span>
           <a
-            href={`https://wa.me/?text=${encodeURIComponent(article.title + ' - https://evidente.mx/noticia/' + article.slug)}`}
+            href={`https://wa.me/?text=${encodeURIComponent(`${article.title} - ${SITE_URL}/noticia/${article.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
@@ -293,7 +295,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <MessageCircle className="w-4 h-4" />
           </a>
           <a
-            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`https://evidente.mx/noticia/${article.slug}`)}`}
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${SITE_URL}/noticia/${article.slug}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
@@ -302,7 +304,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <Facebook className="w-4 h-4" />
           </a>
           <a
-            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`https://evidente.mx/noticia/${article.slug}`)}&text=${encodeURIComponent(article.title)}`}
+            href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(`${SITE_URL}/noticia/${article.slug}`)}&text=${encodeURIComponent(article.title)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-sky-500 text-white rounded-full hover:bg-sky-600 transition-colors"
@@ -311,7 +313,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             <Twitter className="w-4 h-4" />
           </a>
           <a
-            href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://evidente.mx/noticia/${article.slug}`)}&title=${encodeURIComponent(article.title)}`}
+            href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`${SITE_URL}/noticia/${article.slug}`)}&title=${encodeURIComponent(article.title)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 bg-blue-700 text-white rounded-full hover:bg-[#00528e] transition-colors"

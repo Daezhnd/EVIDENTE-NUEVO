@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { CategoryListing } from '@/components/articles/CategoryListing';
 import { getArticlesByCategoryPaginated } from '@/lib/api';
 import { CATEGORY_PAGE_SIZE, categoryDescriptions, categoryMap } from '@/lib/categories';
+import { RSS_ALTERNATE } from '@/lib/site';
 
 interface CategoryPaginatedPageProps {
   params: Promise<{ slug: string; page: string }>;
@@ -26,6 +27,7 @@ export async function generateMetadata({ params }: CategoryPaginatedPageProps): 
     description: categoryDescriptions[category],
     alternates: {
       canonical: page === '1' ? `/categoria/${slug}` : `/categoria/${slug}?page=${page}`,
+      types: RSS_ALTERNATE,
     },
   };
 }

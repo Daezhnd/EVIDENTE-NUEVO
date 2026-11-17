@@ -23,7 +23,7 @@ export function SiteSettings() {
   const [config, setConfig] = useState<SiteConfig>({
     siteName: 'Evidente.mx',
     siteDescription: 'Portal de noticias de México',
-    siteUrl: 'https://evidente.mx',
+    siteUrl: 'https://www.evidente.mx',
     contactEmail: 'contacto@evidente.mx',
     contactPhone: '+52 555 123 4567',
     address: 'Ciudad de México, México',

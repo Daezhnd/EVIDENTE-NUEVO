@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Reel } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
 import { refreshPublicContent } from '@/app/admin/actions';
+import { reportPublicRefreshFailure } from '@/lib/public-refresh';
 import { generateThumbnailFromUrl } from '@/lib/video-utils';
 import { VideoUploader } from './VideoUploader';
 import {
@@ -149,7 +150,7 @@ export function ReelForm({ reel, isEditing = false }: ReelFormProps) {
       if (!savedReel) throw new Error('No se pudo confirmar el reel guardado');
 
       if (previousReel?.is_published || savedReel.is_published) {
-        await refreshPublicContent('reels').catch(error => console.error('Error al actualizar la caché pública:', error));
+        await refreshPublicContent('reels').catch(reportPublicRefreshFailure);
       }
       router.push('/admin/reels');
       router.refresh();

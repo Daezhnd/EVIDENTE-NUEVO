@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/public';
+import { SITE_URL } from '@/lib/site';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://evidente.mx';
+const BASE_URL = SITE_URL;
 
 export const revalidate = 3600;
 
@@ -31,6 +32,9 @@ export async function GET() {
     })
     .join('\n');
 
+  // Fecha de la nota más reciente, no la hora actual: así el RSS solo cambia con el contenido.
+  const lastBuildDate = new Date(articles?.[0]?.published_at ?? 0).toUTCString();
+
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
@@ -38,7 +42,7 @@ export async function GET() {
     <link>${BASE_URL}</link>
     <description>Tu fuente confiable de noticias en México. Cobertura de noticias destacadas, deportes y turismo.</description>
     <language>es-MX</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
     <image>
       <url>${BASE_URL}/logo.png</url>

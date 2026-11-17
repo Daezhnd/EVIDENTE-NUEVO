@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { refreshPublicContent } from '@/app/admin/actions';
+import { reportPublicRefreshFailure } from '@/lib/public-refresh';
 import { generateSlug } from '@/lib/utils';
 import { parseIsoDateTime } from '@/lib/article-api';
 import { ArticleCategory } from '@/types/database';
@@ -298,7 +299,7 @@ export function JsonImporter() {
     }
 
     if (publicSlugs.length > 0) {
-      await refreshPublicContent('articles', publicSlugs).catch(error => console.error('Error al actualizar la caché pública:', error));
+      await refreshPublicContent('articles', publicSlugs).catch(reportPublicRefreshFailure);
     }
     setImportResults({ success, failed });
     setIsImporting(false);
